@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!-- 판매자 테스트폼-->>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -53,18 +53,32 @@
                         <p class="lead fw-normal text-muted mb-0">Sale's TestForm</p>
                     </div>
                     <div class="row gx-5">
-                        <div class="col-lg-6">
-                            <div class="position-relative mb-5">
-                                <img class="img-fluid rounded-3 mb-3" src="https://dummyimage.com/600x400/343a40/6c757d" alt="..." />
-                                <a class="btn btn-lg btn-secondary" href="#!">상품 분류 </a>
+                        <div class="col-lg-5">
+                            <div class="position-relative mb-5">                                    
+                                <div id="drop-file" class="drag-file">
+                                    <div id='View_area' class = "position-relative mb-5"></div>
+                                    <input type="file" name="profile_pt" id="profile_pt" onchange="previewImage(this,'View_area')">
+                                </div> 
                             </div>
-                        <div class="col-lg-6">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="position-relative mb-5">
-                        <a class="h3 fw-bolder text-decoration-none link-dark strerched-link" href="#!">Main Category</a>
-                        <p class="lead fw-normal text-muted mb-0" href="#!">NULL</a>
+                            <a class="btn btn-lg btn-secondary" href="#!">상품 분류 </a>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="position-relative mb-5">
+                                <a class="h3 fw-bolder text-decoration-none link-dark " href="#!" >Main Category</a>
+                                <p class="lead fw-normal text-muted mt-3 mb-5" href="#!">NULL</p>
+                                <a class="h3 fw-bolder text-decoration-none link-dark  " href="#!">Color</a>
+                                <p class="lead fw-normal text-muted mt-3 mb-5" href="#!">NULL</p>
+                                <a class="h3 fw-bolder text-decoration-none link-dark strerched-link " href="#!">Style</a>
+                                <p class="lead fw-normal text-muted mt-3 mb-5" href="#!">NULL</p>
+                                
+                            </div>    
+                        </div>
+                        <div class="col-lg-3">
+                            <a class="h3 fw-bolder text-decoration-none link-dark strerched-link " href="#!">Sub Category</a>
+                                <p class="lead fw-normal text-muted mt-3 mb-5" href="#!">NULL</p>
+                            <a class="h3 fw-bolder text-decoration-none link-dark strerched-link " href="#!">Pattern</a>
+                                <p class="lead fw-normal text-muted mt-3 mb-5" href="#!">NULL</p>
+                        </div>
                     </div>
                 </div>
             </section>
