@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap');
+
+*{margin:0; padding: 0; box-sizing: border-box;}
+body{
+
+}
+body::before{
+
+}
+
+.login-form {position: relative; z-index:2;
+    background: rgba(17, 9, 20, 0.959);
+    margin-top: 20px;
+    margin-bottom: auto;
+    
+}
+.login-form h1{
+    font-size: 32px; color: rgb(247, 247, 248);
+    text-align: center;
+    margin-bottom: 60px;
+    margin-top : 30px;
+    
+}
+
+.int-area {width: 400px; margin-left: 10%;}
+.int-area input{
+    width: 120%;
+    padding: 20px 10px 10px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #999;
+    font-size: 18px; color: #fff;
+    outline: none;
+    
+}
+.int-area label {
+    position:relative; left:10px; bottom: 30px;
+    font-size: 18px; color: #999;
+    transition: top .5 ease;
+}
+.int-area input:focus + label,
+.int-area input:valid + label{
+    bottom: 70px;
+    font-size: 15px,; color: #166cea;
+}
+
+.btn-area {margin-top: 30px;}
+.btn-area button{
+    width: 60%; height: 50px;
+    background: #166cea;
+    color: #fff;
+    position: relative;
+    top: 50%;
+    left: 15%;
+    font-size: 20px;
+    border: none;
+    border-radius: 25px;
+    cursor:pointer;
+    margin-bottom: 20px;
+
+}
+
+.caption{
+    margin-top: 20px;
+    text-align: center;
+}
+.caption a{
+    font-size: 15px; color:#999;
+    text-decoration: none;
+}
+select {
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    -ms-appearance:none;
+    appearance:none;
+    outline:0;
+    box-shadow:none;
+    border:0!important;
+    background: #999;
+    background-image: none;
+    flex: 1;
+    padding: 0 .5em;
+    color:#fff;
+    cursor:pointer;
+    font-size: 1em;
+    font-family: 'Open Sans', sans-serif;
+ }
+ select::-ms-expand {
+    display: none;
+ }
+ .select label {
+    position:relative; left:10px; bottom: 5px;
+    font-size: 18px; color: rgb(153, 153, 153);
+    width: 5em;
+    transition: top .5 ease;
+ }
+ .select {
+    position: relative;
+    display: flex;
+    width: 14em;
+    height: 3em;
+    line-height: 3;
+    background: rgba(0,0,0,0);
+    overflow: hidden;
+    border-radius: 0em;
+    margin-left: 10%;
+    
+    
+ }
+ .select::after {
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 1em;
+    background: #bbc2c2;
+    cursor:pointer;
+    pointer-events:none;
+    transition:.25s all ease;
+ }
+ .select:hover::after {
+    color: #23b499;
+ }
