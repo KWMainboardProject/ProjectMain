@@ -149,13 +149,13 @@ function DropFile(dropAreaId, fileListId) {
     };
   }
   
-  const dropFile = new DropFile("drop-file", "files");
+  //const dropFile = new DropFile("drop-file", "files");
 
   // 로그인 구현 js
-  <script src="./js/login.js"></script>
+  //<script src="./js/login.js"></script>
 
-  function check_input()
-  {
+function check_input()
+{
     if(!document.loginSbmt.id.value)
     {
       alert("아이디를 입력하세요");
@@ -169,4 +169,4 @@ function DropFile(dropAreaId, fileListId) {
       return;
     }
     document.loginSbmt.submit();
-  }
+}
