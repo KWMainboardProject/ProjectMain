@@ -18,7 +18,7 @@ class WorkMessage:
         self.type = type
         self.resource = resource
 
-class SimpleMassageProduct(MessageProductAble):
+class SimpleMessageProduct(MessageProductAble):
     def __init__(self):
         self.orderQ = Queue();
 
