@@ -1,8 +1,19 @@
 import json
 import os
+from abc import *
 
+class DictUseAbleContainer(metaclass=ABCMeta):
+    @abstractmethod
+    def GetDict(self):
+        pass
+    @abstractmethod
+    def SetDict(self, container:dict):
+        pass
+    @abstractmethod
+    def GetKeyName(self):
+        pass
 
-class JsonPath:
+class JsonPath(DictUseAbleContainer):
     def __init__(self, p):
         self.__json_path = p
 
@@ -15,7 +26,7 @@ class JsonPath:
         return self.__json_path
 
 
-class ConfidenceContainer:
+class ConfidenceContainer(DictUseAbleContainer):
     def __init__(self, t, c=0):
         self.__confidence = c
         self.__threshold = t
@@ -24,7 +35,7 @@ class ConfidenceContainer:
         self.__confidence = c
 
 
-class Category:
+class Category(DictUseAbleContainer):
     def __init__(self, index=-1):
         self.__label_list = []
         self.__index = index
@@ -39,7 +50,7 @@ class Category:
         return self.__label_list
 
 
-class SaveImageContainer:
+class SaveImageContainer(DictUseAbleContainer):
     def __init__(self, file_path):
         self.__img_path = ''
         self.__save_path = JsonPath(file_path)
@@ -48,7 +59,7 @@ class SaveImageContainer:
         self.__img_path = img_path
 
 
-class ColorContainer:
+class ColorContainer(DictUseAbleContainer):
     def __init__(self, file_path):
         self.__color_dict = {}
         self.__save_path = JsonPath(file_path)
@@ -58,7 +69,7 @@ class ColorContainer:
         self.__color_dict = color_dict
 
 
-class StyleContainer:
+class StyleContainer(DictUseAbleContainer):
     def __init__(self, id, file_path=""):
         self.__ID = id
         self.__j_data = {}
@@ -90,7 +101,7 @@ class StyleContainer:
         return self.__save_path.getPath()
 
 
-class PatternContainer:
+class PatternContainer(DictUseAbleContainer):
     def __init__(self, id, file_path=""):
         self.__ID = id
         self.__j_data = {}
@@ -122,7 +133,7 @@ class PatternContainer:
         return self.__save_path.getPath()
 
 
-class SubCategoryContainer:
+class SubCategoryContainer(DictUseAbleContainer):
     def __init__(self, id, file_path=""):
         self.__ID = id
         self.__j_data = {}
@@ -154,7 +165,7 @@ class SubCategoryContainer:
         return self.__save_path.getPath()
 
 
-class MainCategoryContainer:
+class MainCategoryContainer(DictUseAbleContainer):
     def __init__(self, id, file_path=""):
         self.__ID = id
         self.__j_data = {}
@@ -193,7 +204,7 @@ class MainCategoryContainer:
         return self.__save_path.getPath()
 
 
-class FashionContainer:
+class FashionContainer(DictUseAbleContainer):
     def __init__(self, id, file_path):
         self.__ID = id
         self.__j_data = {"ID": id}
