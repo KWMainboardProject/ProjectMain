@@ -5,12 +5,16 @@ from abc import *
 class DictUseAbleContainer(metaclass=ABCMeta):
     @abstractmethod
     def GetDict(self):
+        #return dict_container
         pass
     @abstractmethod
     def SetDict(self, container:dict):
+        #return None
+        #set inner data
         pass
     @abstractmethod
     def GetKeyName(self):
+        #return root_key
         pass
 
 class JsonPath(DictUseAbleContainer):
