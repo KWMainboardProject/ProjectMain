@@ -3,6 +3,8 @@ from enum import Enum
 from class_file import DictUseAbleContainer
 from multiprocessing import Process, Queue, SimpleQueue, freeze_support
 import pickle
+from multiprocessing import Process, Queue, SimpleQueue, freeze_support, Value
+from ctypes import c_char_p
 
 class MessageType(Enum):
     Empty_Message = 0
@@ -64,6 +66,8 @@ class SimpleMessageProduct(MessageProductAble):
         if(self.orderQ == None):
             raise TypeError
         self.orderQ.put(pickle.dump(message))
+        manager = Array
+        self.orderQ.put()
 
     def setQ(self, Q:Queue):
         self.orderQ = Q

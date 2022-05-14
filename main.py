@@ -67,10 +67,17 @@ def testStyleContainer(ip ,resource_path):
     return path
 
 
+<<<<<<< Updated upstream
 def WriteJsonFile(dict, json_path):
     with open(json_path, 'w') as f:
         json.dump(dict, f)
 
+=======
+fashion.mc.setDict(json.dump(ReadJsonFile(mc_path))
+fashion.sc.setDict(json.dump(ReadJsonFile(sc_path))
+fashion.pc.setDict(json.dump(ReadJsonFile(p_path))
+fashion.st.setDict(json.dump(ReadJsonFile(s_path))
+>>>>>>> Stashed changes
 
 def ReadJsonFile(json_path):
     with open(json_path, 'r') as f:
@@ -88,10 +95,20 @@ if __name__ == "__main__":
     p_path = testPatternContainer(id, "crop img")
     s_path = testStyleContainer(id, "main img")
 
+<<<<<<< Updated upstream
     fashion.mc.setDict(ReadJsonFile(mc_path).getPath())
     fashion.sc.setDict(ReadJsonFile(sc_path).getPath())
     fashion.pc.setDict(ReadJsonFile(p_path).getPath())
     fashion.st.setDict(ReadJsonFile(s_path).getPath())
+=======
+    fashion.st.setPath("C:/fashion/style")
+    fashion.st.setLabel(["casual"])
+    fashion.st.setDict()
+    
+    for container in list:
+        value = dict[container.key]
+        setDict(value)
+>>>>>>> Stashed changes
 
     WriteJsonFile(fashion.getDict(), path.getPath())
     print(fashion.getDict())
