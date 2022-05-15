@@ -58,6 +58,8 @@
                                     <div class="int-area">
                                         <input type="text" name="userid" id="userid" autocomplete="off" required>
                                         <label for="id">USER ID</label>
+                                        <button type="button"  value="check" onclick="checkId()">CHECK</button>
+                                        <p id="result">&nbsp;</p>
                                     </div>
                                     <div class="int-area">
                                         <input type="password" name="uesrpw" id="userpw" autocomplete="off" required>
@@ -87,6 +89,7 @@
                                     </div>
                                     <div class="btn-area">
                                         <button type ="submit">회원 가입</button>
+                                        
                                     </div>
                                 </form>
                             </section>
