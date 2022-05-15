@@ -54,7 +54,7 @@
                             <!-- Post content-->
                             <section class="login-form">
                                 <h1>회원 가입 폼</h1>
-                                <form action="regist_ok.php" method="post" name="regiform" id="regist_form" class="form" onsubmit="return sendit()">
+                                <form action="register.php" method="post" name="regiform" id="regist_form" class="form" onsubmit="return sendit()">
                                     <div class="int-area">
                                         <input type="text" name="userid" id="userid" autocomplete="off" required>
                                         <label for="id">USER ID</label>
