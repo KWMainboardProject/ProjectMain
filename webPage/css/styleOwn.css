@@ -33,6 +33,23 @@ body::before{
     outline: none;
     
 }
+.int-area button{
+    position: relative;
+    top: -2px;
+    width: 50px;
+    margin-left: 0;
+    padding-left: 0;
+    border: 0;
+    box-sizing:content-box;
+    background: linear-gradient(to left, #f857a6, #ff5858);
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+}
+.int-area p{
+    display: none;
+}
 .int-area label {
     position:relative; left:10px; bottom: 30px;
     font-size: 18px; color: #999;
