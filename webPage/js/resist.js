@@ -3,8 +3,6 @@ const sendit = () => {
     const userid = document.regiform.userid;
 	const userpw = document.regiform.userpw;
     const userpw_ch = document.regiform.userpw_ch;
-    const userphone = document.regiform.userphone;
-    const useremail = document.regiform.useremail;
     const userhobby = document.regiform.hobby;
     
     // userid값이 비어있으면 실행.
@@ -55,34 +53,6 @@ const sendit = () => {
     if(!expNameText.test(username.value)){
         alert("이름 형식이 맞지않습니다. 형식에 맞게 입력해주세요.");
         username.focus();
-        return false;
-    }
-    // userphone값이 비어있으면 실행.
-    if(userphone.value == '') {
-        alert('핸드폰 번호를 입력해주세요.');
-        userphone.focus();
-        return false;
-    }
-    // 핸드폰 번호 형식 정규식
-    const expHpText = /^\d{3}-\d{3,4}-\d{4}$/;
-    // userphone값이 정규식에 부합한지 체크
-    if(!expHpText.test(userphone.value)) {
-        alert('핸드폰 번호 형식이 맞지않습니다. 형식에 맞게 입력해주세요.');
-        hp.focus()
-        return false;
-    }
-    // useremail값이 비어있으면 알림창을 띄우고 input에 포커스를 맞춘 뒤 False를 리턴한다.
-    if(useremail.value == '') {
-        alert('이메일을 입력해주세요.');
-        useremail.focus();
-        return false;
-    }
-	// 이메일 형식 정규식
-    const expEmailText = /^[A-Za-z0-9\.\-]+@[A-Za-z0-9\.\-]+\.[A-Za-z0-9\.\-]+$/;
-    // useremail값이 정규식에 부합한지 체크
-    if(!expEmailText.test(useremail.value)) {
-        alert('Please check the format your E-mail.');
-        useremail.focus();
         return false;
     }
     // userhobby를 하나 이상 선택 시 체크할 flag 변수 지정

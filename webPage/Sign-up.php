@@ -76,14 +76,14 @@
                                                 <option value="Woman">Woman</option>
                                             </select>
                                         </div>
-                                        <div class=" select">
-                                            <label >LikeStyle</label>    
-                                            <select name="format" id="format">
-                                                <option selected disabled>LikeStyle</option>
-                                                <option value="Man">뭐요</option>
-                                                <option value="Woman">왜요</option>
-                                            </select>
-                                        </div>
+                                        <p class="hobbystr">
+                                            <label for="drive">Drive <input type="checkbox" name="hobby[]" id="drive" value="Drive"></label>
+                                            <label for="movie">Movie <input type="checkbox" name="hobby[]" id="movie" value="Movie"></label>
+                                            <label for="study">Study <input type="checkbox" name="hobby[]" id="study" value="Study"></label>
+                                            <label for="game">Game <input type="checkbox" name="hobby[]" id="game" value="Game"></label> 
+                                            <label for="health">Health <input type="checkbox" name="hobby[]" id="health" value="Health"></label>
+                                            <label for="coding">Coding <input type="checkbox" name="hobby[]" id="coding" value="Coding"></label>
+                                        </p>
                                     </div>
                                     <div class="btn-area">
                                         <button type ="submit">회원 가입</button>
@@ -114,5 +114,6 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+        <script src="js/resist.js"></script>
     </body>
 </html>
