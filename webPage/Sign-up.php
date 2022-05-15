@@ -54,17 +54,17 @@
                             <!-- Post content-->
                             <section class="login-form">
                                 <h1>회원 가입 폼</h1>
-                                <form action ="">
+                                <form action="regist_ok.php" method="post" name="regiform" id="regist_form" class="form" onsubmit="return sendit()">
                                     <div class="int-area">
-                                        <input type="text" name="id" id="id" autocomplete="off" required>
+                                        <input type="text" name="userid" id="userid" autocomplete="off" required>
                                         <label for="id">USER ID</label>
                                     </div>
                                     <div class="int-area">
-                                        <input type="text" name="password" id="pw" autocomplete="off" required>
+                                        <input type="password" name="uesrpw" id="userpw" autocomplete="off" required>
                                         <label for="pw">PASSWORD</label>
                                     </div>
                                     <div class="int-area">
-                                        <input type="text" name="passwordrepeat" id="pwr" autocomplete="off" required>
+                                        <input type="password" name="userpw_ch" id="userpw_ch" autocomplete="off" required>
                                         <label for="pwr">PASSWORD Repeat</label>
                                     </div>
                                     <div class style="padding: 40px 0px;">
