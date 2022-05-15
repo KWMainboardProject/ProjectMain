@@ -18,12 +18,12 @@ class DB_Functions {
     }
 
     // 회원 정보 신규 입력
-    public function storeUser($Age, $LikeStyle, $Gender,$PID, $PPW ) {
-        $hash = $this->hashSSHA($PID);
+    public function storeUser($PID, $PPW, $LikeStyle, $Age, $Gender) {
+        $hash = $this->hashSSHA($PPW);
         $encrypted_password = $hash['encrypted']; // encrypted password
 
         $stmt = $this->conn->prepare("INSERT INTO members(Age, LikeStyle, Gender, PID, PPW ) VALUES(?, ?, ?, ?, ?, NOW())");
-        $stmt->bind_param(32,  $Agd, $LikeStyle, $Gender, $PID, $encrypted_password);
+        $stmt->bind_param(32,  $Age, $LikeStyle, $Gender, $PID, $encrypted_password);
         $result = $stmt->execute();
         $stmt->close();
 
