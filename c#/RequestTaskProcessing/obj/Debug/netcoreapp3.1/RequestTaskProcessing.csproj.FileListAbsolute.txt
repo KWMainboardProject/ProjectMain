@@ -1,0 +1,16 @@
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\RequestTaskProcessing.exe
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\RequestTaskProcessing.deps.json
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\RequestTaskProcessing.runtimeconfig.json
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\RequestTaskProcessing.runtimeconfig.dev.json
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\RequestTaskProcessing.dll
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\RequestTaskProcessing.pdb
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\obj\Debug\netcoreapp3.1\RequestTaskProcessing.csproj.AssemblyReference.cache
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\obj\Debug\netcoreapp3.1\RequestTaskProcessing.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\obj\Debug\netcoreapp3.1\RequestTaskProcessing.AssemblyInfoInputs.cache
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\obj\Debug\netcoreapp3.1\RequestTaskProcessing.AssemblyInfo.cs
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\obj\Debug\netcoreapp3.1\RequestTaskProcessing.csproj.CoreCompileInputs.cache
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\obj\Debug\netcoreapp3.1\RequestTaskProcessing.csproj.CopyComplete
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\obj\Debug\netcoreapp3.1\RequestTaskProcessing.dll
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\obj\Debug\netcoreapp3.1\RequestTaskProcessing.pdb
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\obj\Debug\netcoreapp3.1\RequestTaskProcessing.genruntimeconfig.cache
