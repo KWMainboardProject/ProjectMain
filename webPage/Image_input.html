@@ -14,20 +14,6 @@
         <link href="css/styles.css" rel="stylesheet" />
 
         <script src="example.js"></script>
-        <script>
-            function readURL(input) {
-                if(input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        document.getElementById('preview').src = e.target.result;
-                    };
-                    reader.readAsDataURL(input.files[0]);
-                }
-                else {
-                    document.getElementById('preview').src = "";
-                }
-            }
-        </script>
     </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
@@ -58,9 +44,10 @@
             <!-- Page Content-->
             <section class="py-5">
                 <div class="container">
-                    <div class="mb-3 row">
+                    <h2 class="mb-5" style="font-weight: bolder;">Similar Image Search</h2>
+                    <hr class="mb-5">
+                    <div class="mt-5 mb-3 row">
                         <div class="col-lg-6">
-                            <h2 class="mb-5">이미지 미리보기 연습</h2>
                             <input type="file" onchange="readURL(this);" accept="image/png, image/jpg, image/jpeg">
                             <div class="alert alert-secondary mb-3" role="alert">
                                 <ul>
@@ -69,15 +56,39 @@
                                 </ul>
                             </div>
                             <div class="mb-3 row">
-                                <a href="Image_result.html" class="col-6 d-grid p-1 justify-content-center">
-                                    <button type="button" class="btn btn-lg btn-outline-dark">Search</button>
+                                <a href="#!" class="col-6 d-grid p-1 justify-content-center">
+                                    <!--search 버튼 이미지 없을 시 비활성화 필요-->
+                                    <button type="button" disabled class="btn btn-lg btn-outline-dark" id="Search_btn" data-bs-toggle="modal" data-bs-target="#CF_Modal">
+                                        Search
+                                    </button>
                                 </a>
+                                <!-- Modal Section -->
+                                <div class="modal fade" id="CF_Modal" tabindex="-1" aria-labelledby="CF_ModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header" style="object-fit: contain;">
+                                                <h5 class="modal-title" id="CF_ModalLabel">Confirm!</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body" style="object-fit: contain;">
+                                                Is this the picture you are looking for?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="Image_result.html">
+                                                    <button type="button" class="btn btn-primary">Yes</button>
+                                                </a>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <a href="index.html" class="col-6 d-grid p-1 justify-content-center">
-                                    <button type="button" class="btn btn-lg btn-outline-danger">Cancel</button>
+                                    <button type="button" class="btn btn-lg btn-outline-danger" id="Cancel_btn">Cancel</button>
                                 </a>
                             </div>
                         </div>
                         <div class="col-lg-6">
+                            <p style="font-weight:bold">이미지 미리보기</p>
                             <img id="preview" style="max-width: 100%; height: auto; object-fit: contain;">
                         </div>
                     </div>
@@ -99,6 +110,24 @@
                 </div>
             </div>
         </footer>
+        <!--Additional JS Section-->
+        <script>
+            function readURL(input) {
+                if(input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('preview').src = e.target.result;
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+                else {
+                    document.getElementById('preview').src = "";
+                }
+
+                document.getElementById('Search_btn').disabled = false;
+            }
+
+        </script>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
