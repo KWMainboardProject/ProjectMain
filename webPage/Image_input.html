@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>MainBoard Product Regist Page</title>
+        <title>MainBoard Image Input Page</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
@@ -14,6 +14,20 @@
         <link href="css/styles.css" rel="stylesheet" />
 
         <script src="example.js"></script>
+        <script>
+            function readURL(input) {
+                if(input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('preview').src = e.target.result;
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+                else {
+                    document.getElementById('preview').src = "";
+                }
+            }
+        </script>
     </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
@@ -44,86 +58,30 @@
             <!-- Page Content-->
             <section class="py-5">
                 <div class="container">
-                    <h2 class="text-center fw-bolder mb-5">Product Register</h2>
-                    <hr>
                     <div class="mb-3 row">
-                      <label class="col-md-3 col-form-label">제품명</label>
-                      <div class="col-md-9">
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
-                    <div class="mb-3 row">
-                      <label class="col-md-3 col-form-label">제품가격</label>
-                      <div class="col-md-9">
-                        <div class="input-group mb-3">
-                          <input type="number" class="form-control">
-                          <span class="input-group-text">원</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label class="col-md-3 col-form-label">제품설명</label>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control">
-                        </div>
-                      </div>
-                    <div class="mb-3 row">
-                      <label class="col-md-3 col-form-label">썸네일 이미지(AI분석)</label>
-                      <div class="col-md-9">
-                        <input class="form-control" type="file" accept="image/png, image/jpg, image/jpeg">
-                        <div class="alert alert-secondary" role="alert">
-                          <ul>
-                            <li>이미지 사이즈: 300*400</li>
-                            <li>파일 사이즈: 1MB 이하</li>
-                            <li>파일 확장자: jpeg, png, jpg만 가능</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label class="col-md-3 col-form-label">제품 카테고리</label>
-                        <div class="col-md-9">
-                          <div class="row">
-                            <div class="col-auto">
-                              <select class="form-select">
-                                <option>Main Category</option>
-                                <option value="1">Outer</option>
-                                <option value="2">Top</option>
-                                <option value="3">Bottom</option>
-                                <option value="4">Overall</option>
-                              </select>
+                        <div class="col-lg-6">
+                            <h2 class="mb-5">이미지 미리보기 연습</h2>
+                            <input type="file" onchange="readURL(this);" accept="image/png, image/jpg, image/jpeg">
+                            <div class="alert alert-secondary mb-3" role="alert">
+                                <ul>
+                                  <li>파일 사이즈: 1MB 이하</li>
+                                  <li>파일 확장자: jpeg, png, jpg만 가능</li>
+                                </ul>
                             </div>
-                            <div class="col-auto">
-                              <select class="form-select">
-                                <option>Sub Category</option>
-                              </select>
+                            <div class="mb-3 row">
+                                <a href="Image_result.html" class="col-6 d-grid p-1 justify-content-center">
+                                    <button type="button" class="btn btn-lg btn-outline-dark">Search</button>
+                                </a>
+                                <a href="index.html" class="col-6 d-grid p-1 justify-content-center">
+                                    <button type="button" class="btn btn-lg btn-outline-danger">Cancel</button>
+                                </a>
                             </div>
-                          </div>
                         </div>
-                      </div>
-                    <div class="mb-3 row">
-                      <label class="col-md-3 col-form-label">제품 이미지</label>
-                      <div class="col-md-9">
-                        <input class="form-control" type="file" accept="image/png, image/jpg, image/jpeg" multiple>
-                        <div class="alert alert-secondary" role="alert">
-                          <ul>
-                            <li>최대 5개 가능</li>
-                            <li>이미지 사이즈: 600*800</li>
-                            <li>파일 사이즈: 1MB 이하</li>
-                            <li>파일 확장자: jpeg, png, jpg만 가능</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <div class="col-6 d-grid p-1">
-                            <button type="button" class="btn btn-lg btn-outline-dark">Register</button>
-                        </div>
-                        <div class="col-6 d-grid p-1">
-                            <button type="button" class="btn btn-lg btn-outline-danger">Cancel</button>
+                        <div class="col-lg-6">
+                            <img id="preview" style="max-width: 100%; height: auto; object-fit: contain;">
                         </div>
                     </div>
-                  </div>
+                </div>
             </section>
         </main>
         <!-- Footer-->
