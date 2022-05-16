@@ -6,8 +6,9 @@ class DB_Functions {
 
     // 생성자
     function __construct() {
-        require_once 'dbconnect.php';
+        require_once 'db_connect.php';
         // DB 연결
+
         $db = new Db_Connect();
         $this->conn = $db->connect();
     }
@@ -21,16 +22,18 @@ class DB_Functions {
     public function storeUser($PID, $PPW, $LikeStyle, $Age, $Gender) {
         $hash = $this->hashSSHA($PPW);
         $encrypted_password = $hash['encrypted']; // encrypted password
-
-        $stmt = $this->conn->prepare("INSERT INTO members(Age, LikeStyle, Gender, PID, PPW ) VALUES(?, ?, ?, ?, ?, NOW())");
-        $stmt->bind_param(32,  $Age, $LikeStyle, $Gender, $PID, $encrypted_password);
+        
+        $stmt = $this->conn->prepare("INSERT INTO users(Age, LikeStyle, Gender, PID, PPW ) VALUES(?, ?, ?, ?, ? )");
+        
+        $stmt->bind_param('issss',  $Age, $LikeStyle, $Gender, $PID, $encrypted_password);
+        
         $result = $stmt->execute();
         $stmt->close();
-
+        
         // check for successful store
         if ($result) {
             $stmt = $this->conn->prepare("SELECT * FROM users WHERE PID = ?");
-            $stmt->bind_param("s", $userID);
+            $stmt->bind_param("s", $PID);
             $stmt->execute();
             $user = $stmt->get_result()->fetch_assoc();
             $stmt->close();
@@ -44,7 +47,7 @@ class DB_Functions {
     // 로그인 체크
     public function getUser($userID, $password) {
         $stmt = $this->conn->prepare("SELECT * FROM members WHERE userID = ?");
-        $stmt->bind_param("홍길동", $userID);
+        $stmt->bind_param("s", $userID);
 
         if ($stmt->execute()) {
             $user = $stmt->get_result()->fetch_assoc();
@@ -66,9 +69,9 @@ class DB_Functions {
 
     // 회원 가입 여부 체크
     public function isUserExisted($userID) {
-        $stmt = $this->conn->prepare("SELECT PID from users WHERE userID = ?");
+        $stmt = $this->conn->prepare("SELECT PID from users WHERE PID = ?");
 
-        $stmt->bind_param("홍길동", $userID);
+        $stmt->bind_param("s", $userID);
         $stmt->execute();
         //$stmt->store_result();
 		$result = $stmt->get_result();
@@ -89,7 +92,7 @@ class DB_Functions {
 	// 회원 정보 삭제
 	public function deleteUser($userID){
         $stmt = $this->conn->prepare("delete FROM users WHERE PID = ?");
-        $stmt->bind_param("홍길동", $userID);
+        $stmt->bind_param("s", $userID);
 		$stmt->execute();
 		$stmt->close();
 	}
