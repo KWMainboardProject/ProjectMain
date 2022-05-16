@@ -1,29 +1,33 @@
 <?php
 // 안드로이드에서 넘어온 데이터라고 가정하고 직접 DB에 데이터 저장 테스트
 // 제대로 저장되는지 확인했으면 아래 4줄은 주석처리 또는 삭제해야 함
-$_POST['UserID'] = 'jsk005@gmail.com';
-$_POST['name'] = '홍길동';
-$_POST['email'] = 'jsk005@gmail.com';
-$_POST['password'] = 'sk1234!';
+/*$_POST['userID'] = 'unhappy';
+$_POST['Age'] = '24';
+$_POST['Gender'] = 'Woman';
+$_POST['userpw'] = 'sk1234!';
+$_POST['LikeStyle'] = 'sk1234!';
+*/
+
 
 extract($_POST);
 
 require_once 'config/db_functions.php';
+
 $db = new DB_Functions();
+
 
 // json response array
 $response = array("error" => FALSE);
 
-if (isset($_POST['userID']) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])) {
+if (isset($_POST['userID']) && isset($_POST['Age']) && isset($_POST['Gender']) && isset($_POST['userpw']) && isset($_POST['LikeStyle'])) {
 
     // POST 배열로 받은 데이터
     $userID = $_POST['userID'];
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-	$telNO = '02-1234-4567';
-	$mobileNO = '010-1234-2580';
-
+    $Age = $_POST['Age'];
+    $Gender = $_POST['Gender'];
+    $password = $_POST['userpw'];
+    $LikeStyle = $_POST['LikeStyle'];
+    
     // 동일한 userID 등록되어 있는지 체크
     if ($db->isUserExisted($userID)) { // E-Mail 이 key value
         // user already existed
@@ -32,14 +36,18 @@ if (isset($_POST['userID']) && isset($_POST['name']) && isset($_POST['email']) &
         echo json_encode($response);
     } else {
         // 사용자 등록
-        $user = $db->storeUser($userID, $name, $email, $password, $telNO, $mobileNO);
+        
+        $user = $db->storeUser($userID, $password, $LikeStyle, $Age, $Gender );
+        
         if ($user) { // 사용자 등록 성공
+            //storeUser($PID, $PPW, $LikeStyle, $Age, $Gender)
             $response['error'] = FALSE;
-            $response['user']['userID'] = $user['userID'];
-            $response['user']['name'] = $user['userNM'];
-            $response['user']['email'] = $user['email'];
-            $response['user']['created_at'] = $user['created_at'];
-            $response['user']['updated_at'] = $user['regdate'];
+            $response['users']['PID'] = $user['PID'];
+            $response['users']['PPW'] = $user['PPW'];
+            $response['users']['LikeStyle'] = $user['LikeStyle'];
+            $response['users']['Age'] = $user['Age'];
+            $response['users']['Gender'] = $user['Gender'];
+
             echo json_encode($response);
         } else {
             // 사용자 등록 실패
