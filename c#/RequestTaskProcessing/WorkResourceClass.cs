@@ -17,7 +17,35 @@ namespace Mainboard
 
 	}
 
-	public abstract class CompoundContainer :IJObjectUseAbleContainer
+    public class IpContainer : IJObjectUseAbleContainer
+    {
+        public JObject GetJObject()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetKey()
+        {
+            throw new NotImplementedException();
+        }
+
+        public JToken GetValue()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetJObject(JObject obj)
+        {
+            throw new NotImplementedException();
+        }
+		protected string ip = null;
+		public string IP
+        {
+            get { return ip; }
+            set { ip = value; }
+        }
+    }
+    public abstract class CompoundContainer :IJObjectUseAbleContainer
     {
 		abstract public void SetJObject(JObject obj);
 		abstract public string GetKey();
