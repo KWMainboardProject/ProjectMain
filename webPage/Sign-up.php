@@ -62,7 +62,7 @@
                                         <p id="result">&nbsp;</p>
                                     </div>
                                     <div class="int-area">
-                                        <input type="password" name="uesrpw" id="userpw" autocomplete="off" required>
+                                        <input type="password" name="userpw" id="userpw" autocomplete="off" required>
                                         <label for="pw">PASSWORD</label>
                                     </div>
                                     <div class="int-area">
@@ -72,7 +72,7 @@
                                     <div class style="padding: 40px 0px;">
                                         <div class="select" style="float:left;">
                                             <label >Gender</label>    
-                                            <select name="format" id="format">
+                                            <select name="gender" id="gender">
                                                 <option selected disabled>Gender</option>
                                                 <option value="Man">Man</option>
                                                 <option value="Woman">Woman</option>
