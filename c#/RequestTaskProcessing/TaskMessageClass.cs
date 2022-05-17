@@ -5,23 +5,42 @@ using System.Collections.Concurrent;
 
 namespace Mainboard
 {
-    interface IMessageProductAble
+    public interface IMessageProductAble
     {
         void Product(TaskMessage massage);
     }
-    interface IMessageConsumeAble
+    public interface IMessageConsumeAble
     {
         IMessageProductAble GetProductor();
         TaskMessage Consume();
+        bool IsEmpty();
     }
-    class TaskMessage
+    public class TaskMessage
     {
+        public TaskMessage(string ip=null, IMessageProductAble p=null, MessageType t=MessageType.EmptyMessage, IJObjectUseAbleContainer r = null)
+        {
+            if (ip != null) this.ip.IP = ip;
+            if (p != null) this.productor = p;
+            if (t != MessageType.EmptyMessage) this.type = t;
+            if (r != null) this.resource = r;
+        }
+
+        public void Print()
+        {
+            Console.WriteLine("===========Message===========");
+            Console.WriteLine("ip   : " + ip.IP);
+            Console.WriteLine("type : " + type.ToString());
+            Console.WriteLine("resource");
+            Console.WriteLine(resource.GetJObject().ToString());
+            Console.WriteLine("=============================");
+        }
+
         public IpContainer ip = new IpContainer();
         public IMessageProductAble productor = null;
         public MessageType type = MessageType.EmptyMessage;
         public IJObjectUseAbleContainer resource = null;
     }
-    enum MessageType
+    public enum MessageType
     {
         EmptyMessage=0,
 
@@ -29,7 +48,7 @@ namespace Mainboard
         ResponseFail,
         MessageTypeNum,
     }
-    class SimpleMessageProductor : IMessageProductAble
+    public class SimpleMessageProductor : IMessageProductAble
     {
         public void Product(TaskMessage massage)
         {

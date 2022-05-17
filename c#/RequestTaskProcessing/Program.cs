@@ -6,7 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Mainboard;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Converters;
+using System.Collections.Concurrent;
+using System.Threading;
 
 namespace RequestTaskProcessing
 {
@@ -14,7 +15,9 @@ namespace RequestTaskProcessing
     {
         static void Main(string[] args)
         {
-            TestWorkResourceMethod();
+            //TestWorkResourceMethod();
+            //TestTaskMessageMethod();
+            TestTaskMessageAndConsumer();
         }
 
         static void TestWorkResourceMethod()
@@ -32,9 +35,107 @@ namespace RequestTaskProcessing
             Console.WriteLine(container.GetJObject().ToString());
             File.WriteAllText(@"C:/sub_category/maincategory.json", container.GetJObject().ToString());
         }
+        static void TestTaskMessageAndConsumer()
+        {
+            TestTaskMessageClass.TestConsumer consumer = new TestTaskMessageClass.TestConsumer();
+            IMessageProductAble pdt = consumer.GetProductor();
+            int iterNum = 10;
+            for(int i=0; i<iterNum; i++)
+            {
+                TaskMessage m = new TaskMessage("ip_" + i.ToString(),null,MessageType.MessageTypeNum, new ConfidenceContainer(i * 0.15f));
+                pdt.Product(m);
+            }
+            while (!consumer.IsEmpty())
+            {
+                TaskMessage m = consumer.Consume();
+                m.Print();
+            }
+
+        }
+        static void TestTaskMessageMethod()
+        {
+            TestTaskMessageClass.TestConsumer consumer = new TestTaskMessageClass.TestConsumer();
+            TaskMessage message1 = new TaskMessage("maincategory",
+                consumer.GetProductor(),
+                MessageType.MessageTypeNum,
+                new ClassficationContainer("Maincategory"));
+            Thread work1 = new Thread(() => TestTaskMessageClass.Work(message1));
+
+            TaskMessage message2 = new TaskMessage("confidence",
+                consumer.GetProductor(),
+                MessageType.ResponseFail,
+                new ConfidenceContainer(0.9f));
+            Thread work2 = new Thread(() => TestTaskMessageClass.Work(message2));
+
+            TaskMessage message3 = new TaskMessage("classfication",
+                consumer.GetProductor(),
+                MessageType.MessageTypeNum,
+                new ClassficationContainer("Top"));
+            Thread work3 = new Thread(() => TestTaskMessageClass.Work(message3));
+
+            Console.WriteLine("Start Workers");
+            work1.Start();
+            work2.Start();
+            work3.Start();
+
+            Console.WriteLine("Sleep Main Process");
+            Thread.Sleep(10);
+            Console.WriteLine("Start Consume");
+            while (!consumer.IsEmpty())
+            {
+                TaskMessage m = consumer.Consume();
+                m.Print();
+            }
+        }
     }
 
+    class TestTaskMessageClass
+    {
+        public class TestConsumer : IMessageConsumeAble
+        {
+            public TestConsumer()
+            {
+                productor.SetQueue(q);
+            }
+            public TaskMessage Consume()
+            {
+                TaskMessage message = new TaskMessage();
+                if (q.IsEmpty) return message;
 
+                q.TryDequeue(out message);
+                return message;
+            }
+
+            public IMessageProductAble GetProductor()
+            {
+                return productor;
+            }
+
+            public bool IsEmpty()
+            {
+                return q.IsEmpty;
+            }
+
+            protected ConcurrentQueue<TaskMessage> q=new ConcurrentQueue<TaskMessage>();
+            protected SimpleMessageProductor productor = new SimpleMessageProductor();
+        }
+        static public void Work(TaskMessage message, int iterNum=10)
+        {
+            IMessageProductAble productor = message.productor;
+            TaskMessage respenceMessage = new TaskMessage();
+            for (int i=0; i<iterNum; i++)
+            {
+                IpContainer container = new IpContainer();
+                container.IP = message.ip + "_resource_" + i.ToString();
+                respenceMessage.resource = container;
+                respenceMessage.ip = container;
+                respenceMessage.type = MessageType.ResponseFail;
+                respenceMessage.productor = null;
+
+                productor.Product(respenceMessage);
+            }
+        }
+    }
     class TestWorkResouceClass
     {
         public string WriteClassfication(string id, string resource)
