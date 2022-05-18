@@ -16,16 +16,36 @@ namespace RequestTaskProcessing
     {
         public IStrategyOperateAble GetOperator(MessageType type)
         {
-            IStrategyOperateAble strategyOperator = null;
-            switch (type)
+            lock (Holder.instance)
             {
-                case MessageType.Request_ImageAnalysis_ImagePath:
-                    strategyOperator = ImageAnalysisOperator.GetInstance();
-                    //plz set helper productor
-                    throw new NotImplementedException();
-                    break;
+                IStrategyOperateAble strategyOperator = null;
+                switch (type)
+                {
+                    case MessageType.Request_ImageAnalysis_ImagePath:
+                        strategyOperator = new ImageAnalysisOperator();
+                        break;
+                    case MessageType.Request_TestTask_container:
+
+                        break;
+                }
+                return strategyOperator;
             }
-            return strategyOperator;
+        }
+        
+        /// <summary>
+        /// singleton pattern
+        /// </summary>
+        /// <returns></returns>
+        public static TaskOperatorFactory GetInstance()
+        {
+            return Holder.instance;
+        }
+        /// <summary>
+        /// Lazy Initialization + holder
+        /// </summary>
+        private static class Holder
+        {
+            public static TaskOperatorFactory instance = new TaskOperatorFactory();
         }
     }
 }

@@ -46,6 +46,8 @@ namespace RequestTaskProcessing
         Request_ImageAnalysis_ImagePath,
         Request_ImageAnalysis_JsonPath,
 
+
+        Request_TestTask_container,
         ResponseFail,
         MessageTypeNum,
     }

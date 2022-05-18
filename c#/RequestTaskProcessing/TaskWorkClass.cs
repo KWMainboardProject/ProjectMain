@@ -12,6 +12,7 @@ namespace RequestTaskProcessing
 
         public TaskMessage Consume()
         {
+            if (q == null) throw new NullReferenceException();
             if (q.IsEmpty) return null;
             TaskMessage message = new TaskMessage();
             qTF = q.TryDequeue(out message);
@@ -20,6 +21,7 @@ namespace RequestTaskProcessing
 
         public IMessageProductAble GetProductor()
         {
+            if (q == null) throw new NullReferenceException();
             return productor;
         }
 
@@ -52,13 +54,18 @@ namespace RequestTaskProcessing
         protected bool qTF = false;
 
         protected IOperatorFactory factory = null;
-        protected ConcurrentQueue<TaskMessage> q;// = new ConcurrentQueue<TaskMessage>();
+        protected ConcurrentQueue<TaskMessage> q=null;// = new ConcurrentQueue<TaskMessage>();
         protected SimpleMessageProductor productor = new SimpleMessageProductor();
     }
 
     public class Worker : QTheading
     {
         const int SLEEP_TIME = 100;
+        public Worker(IOperatorFactory factory=null)
+        {
+            SetOperatorFactory(factory);
+        }
+
         protected override void Run()
         {
             if (q == null)
@@ -95,17 +102,15 @@ namespace RequestTaskProcessing
                 //Get Operator
                 IStrategyOperateAble strategy = factory.GetOperator(m.type);
 
-                if(strategy != null)
-                {
-                    strategy.SetResource(m);
-                    strategy.Work();
-                    m.productor.Product(strategy.GetMessage());
-                    strategy.ClearResource();
-                }
-                else
-                {
+                if(strategy == null)
                     throw new NullReferenceException();
-                }
+
+                //Run operator
+                strategy.SetResource(m);
+                strategy.Work();
+                IMessageProductAble sender = m.productor;
+                sender.Product(strategy.GetMessage());
+                strategy.ClearResource();
             }
         }
         public override void Start()
@@ -149,7 +154,7 @@ namespace RequestTaskProcessing
         abstract public void SchedulingTaskProcess();
         public override void Start()
         {
-            if (workers.Count == 0) throw new ArgumentNullException();
+            if (workers.Count == 0) throw new NullReferenceException();
 
             Run();
             foreach(var worker in workers)
@@ -170,15 +175,21 @@ namespace RequestTaskProcessing
         
         protected List<Worker> workers = new List<Worker>(); 
     }
-
-
+    public class TaskWorker : Worker
+    {
+        public TaskWorker(ConcurrentQueue<TaskMessage> Q) : base(TaskOperatorFactory.GetInstance())
+        {
+            this.q = Q;
+            productor.SetQueue(q);
+        }
+    }
 
     /// <summary>
     /// singleton pattern
     /// </summary>
     public class TaskManager : WorkManager
     {
-        const int THREAD_COUNT = 2;
+        const int THREAD_COUNT = 1;
 
         /// <summary>
         /// child process에서 counsume 해줌
@@ -191,16 +202,18 @@ namespace RequestTaskProcessing
 
         protected override void Run()
         {
+            if (factory == null)
+                throw new NullReferenceException();
+
             for(int i=0; i<THREAD_COUNT; i++)
             {
-                workers.Add(new Worker());
+                workers.Add(new TaskWorker(q));
             }
         }
-
-
-        protected IMessageProductAble gpuRequestor = null;
-
-
+        /// <summary>
+        /// sington pattern
+        /// </summary>
+        /// <returns></returns>
         public static TaskManager GetInstance()
         {
             return Holder.instance;
@@ -211,6 +224,39 @@ namespace RequestTaskProcessing
         private static class Holder
         {
             public static TaskManager instance = new TaskManager();
+        }
+    }
+
+    /// <summary>
+    /// singleton pattern
+    /// </summary>
+    public class GPUWorkManager : WorkManager
+    {
+        public override void SchedulingTaskProcess()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void Run()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        /// <summary>
+        /// sington pattern
+        /// </summary>
+        /// <returns></returns>
+        public static GPUWorkManager GetInstance()
+        {
+            return Holder.instance;
+        }
+        /// <summary>
+        /// Lazy Initialization + holder
+        /// </summary>
+        private static class Holder
+        {
+            public static GPUWorkManager instance = new GPUWorkManager();
         }
     }
 }

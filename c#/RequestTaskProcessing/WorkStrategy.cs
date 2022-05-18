@@ -4,9 +4,7 @@ using System.Text;
 
 namespace RequestTaskProcessing
 {
-    /// <summary>
-    /// plz singleton pattern
-    /// </summary>
+    
     public interface IStrategyOperateAble
     {
         public void SetResource(TaskMessage message);
@@ -33,7 +31,7 @@ namespace RequestTaskProcessing
     {
         public override void ClearResource()
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public override TaskMessage GetMessage()
@@ -48,20 +46,68 @@ namespace RequestTaskProcessing
 
         public override void Work()
         {
+            IMessageProductAble requester = GPUWorkManager.GetInstance().GetProductor();
+
+            //request remove bg
+
+            //wait returned remove bg
+
+            //request yolo v5
+
+            //wait returnd Detected objects
+
+            //crop img each object
+
+            //save croped img
+
+            //request subcategory * (0,4)
+
+            //request pattern * (0,4)
+
+            //request style
+
+            //calc color
+
+            //wait returned resources
+
+            //merge resource
+
+            //save resource
+
+            //prepare resoure for GetMessage
+        }
+    }
+
+    public class TestTask_ResourceContainer_NoHelper : IStrategyOperateAble
+    {
+        public void ClearResource()
+        {
+            return;
+        }
+
+        public TaskMessage GetMessage()
+        {
             throw new NotImplementedException();
         }
 
-        public static ImageAnalysisOperator GetInstance()
+        public void SetResource(TaskMessage m)
         {
-            return Holder.instance;
+            //Worng
+            if (m.type != MessageType.Request_TestTask_container)
+                throw new NullReferenceException();
+
+            ip = m.ip.IP;
+            r = m.resource;
+            p = m.productor;
         }
-        /// <summary>
-        /// Lazy Initialization + holder
-        /// </summary>
-        private static class Holder
+
+        public void Work()
         {
-            public static ImageAnalysisOperator instance = new ImageAnalysisOperator();
+            
         }
+        protected string ip = null;
+        protected IMessageProductAble p = null;
+        protected IJObjectUseAbleContainer r = null;
     }
 
     public class NullOperator : IStrategyOperateAble
