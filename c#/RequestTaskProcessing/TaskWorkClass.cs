@@ -4,18 +4,70 @@ using System.Text;
 using System.Threading;
 using System.Collections.Concurrent;
 
+
 namespace RequestTaskProcessing
 {
+    public class TimeOut
+    {
+        //for time out
+        public const int DEFAULT_TIME = 5000;
+        int thresholdTime = 0;
+        int waitTime = 0;
+        public void SetThesholdTime(int time = DEFAULT_TIME)
+        {
+            thresholdTime = time;
+        }
+        public bool CheckTimeOut(int time)
+        {
+            if (thresholdTime == 0) return false;
+            //Console.WriteLine("ADD time : " + time.ToString() + 's');
+            waitTime += time;
+            if (waitTime >= thresholdTime) return true;
+            else return false;
+        }
+        public void ResetTimeOut()
+        {
+            waitTime = 0;
+        }
+
+        //count time
+        DateTime startTime;
+        public void StartTime()
+        {
+            startTime = DateTime.Now;
+        }
+        public int EndTime()
+        {
+            if (thresholdTime == 0) return 0;
+            DateTime currnetTime = DateTime.Now;
+            TimeSpan timeSpan =currnetTime - startTime;
+
+            return (int)(timeSpan.Milliseconds);
+        }
+
+
+        
+    }
+
     public abstract class QTheading : IMessageConsumeAble
     {
         // 참고했음 Queue&Thread 구조 -> https://programerstory.tistory.com/8
 
+        abstract public void SetTimeOutThreshold(int time = TimeOut.DEFAULT_TIME);
+
         public TaskMessage Consume()
         {
             if (q == null) throw new NullReferenceException();
+
+            int elpse = timeout.EndTime();
+            bool timeoutTF = timeout.CheckTimeOut(elpse);
+            if (timeoutTF) StopAndClear();//time out 시 멈춤
+            timeout.StartTime();
+
             if (q.IsEmpty) return null;
             TaskMessage message = new TaskMessage();
             qTF = q.TryDequeue(out message);
+            if (qTF) timeout.ResetTimeOut();//성공 시 timeout reset
             return message;
         }
 
@@ -49,6 +101,7 @@ namespace RequestTaskProcessing
         abstract public void Start();
         abstract public void Join();
 
+        protected TimeOut timeout = new TimeOut();
 
         protected bool stopAndClearTF = false;
         protected bool qTF = false;
@@ -75,12 +128,6 @@ namespace RequestTaskProcessing
             while (thread.IsAlive)
             {
                 Thread.Sleep(SLEEP_TIME);
-                //Get message
-                TaskMessage m = Consume();
-                if (!qTF) continue;//fali consume
-                if (m == null) continue;
-                //Success consume
-
                 //stop thread and claear Q
                 if (stopAndClearTF)
                 {
@@ -99,6 +146,17 @@ namespace RequestTaskProcessing
                         break;
                     }
                 }
+
+                //Get message
+                TaskMessage m = Consume();
+                if (!qTF || m == null)//fali consume
+                {
+                    Console.WriteLine("Wait Messamge - Worker");
+                    continue;
+                }
+                //Success consume
+
+                
                 
                 //Get Operator
                 IStrategyOperateAble strategy = factory.GetOperator(m.type);
@@ -127,6 +185,11 @@ namespace RequestTaskProcessing
             if (thread == null)
                 throw new NullReferenceException();
             thread.Join();
+        }
+
+        public override void SetTimeOutThreshold(int time = 5000)
+        {
+            timeout.SetThesholdTime(time);
         }
 
         protected Thread thread = null;
@@ -174,8 +237,16 @@ namespace RequestTaskProcessing
             {
                 worker.Join();
             }
+            
         }
-        
+        public override void SetTimeOutThreshold(int time = 5000)
+        {
+            foreach(Worker worker in workers)
+            {
+                worker.SetTimeOutThreshold(time);
+            }
+            
+        }
         protected List<Worker> workers = new List<Worker>(); 
     }
     public class TaskWorker : Worker
@@ -192,7 +263,7 @@ namespace RequestTaskProcessing
     /// </summary>
     public class TaskManager : WorkManager
     {
-        const int THREAD_COUNT = 10;
+        const int THREAD_COUNT = 3;
 
         /// <summary>
         /// child process에서 counsume 해줌

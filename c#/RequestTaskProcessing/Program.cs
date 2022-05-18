@@ -93,11 +93,13 @@ namespace RequestTaskProcessing
             const int TASK_NUM = 50;
             TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
             TaskManager taskManager = TaskManager.GetInstance();
+
             sender.Start();
             taskManager.Start();
 
+
             IMessageProductAble p = taskManager.GetProductor();
-            for(int i=0; i<TASK_NUM; i++)
+            for (int i = 0; i < TASK_NUM; i++)
             {
                 TaskMessage m = new TaskMessage(
                     "Task" + i.ToString(),
@@ -105,9 +107,11 @@ namespace RequestTaskProcessing
                     MessageType.Request_TestTask_container);
                 p.Product(m);
             }
+            taskManager.SetTimeOutThreshold();
             taskManager.Join();
+            sender.SetTimeOutThreshold();
             sender.Join();
-            Console.WriteLine("complete");
+            Console.WriteLine("complete##################################################");
         }
     }
 
@@ -140,12 +144,6 @@ namespace RequestTaskProcessing
                 while (thread.IsAlive)
                 {
                     Thread.Sleep(SLEEP_TIME);
-                    //Get message
-                    TaskMessage m = Consume();
-                    if (!qTF) continue;//fali consume
-                    if (m == null) continue;
-                    //Success consume
-
                     //stop thread and claear Q
                     if (stopAndClearTF)
                     {
@@ -164,10 +162,25 @@ namespace RequestTaskProcessing
                             break;
                         }
                     }
+
+                    //Get message
+                    TaskMessage m = Consume();
+                    if (!qTF || m == null)//fali consume
+                    {
+                        //Console.WriteLine("Wait Messamge - TestSender");
+                        continue;
+                    }
+                    
+                    //Success consume
                     Console.WriteLine(thread.ToString());
                     m.Print();
                 }
             }
+            public override void SetTimeOutThreshold(int time = 5000)
+            {
+                timeout.SetThesholdTime(time);
+            }
+
             Thread thread = null;
         }
 
