@@ -16,8 +16,8 @@ namespace RequestTaskProcessing
         static void Main(string[] args)
         {
             //TestWorkResourceMethod();
-            TestTaskMessageMethod();
-            //TestTaskMessageAndConsumer();
+            //TestTaskMessageMethod();
+            TestTaskMessageAndConsumer();
         }
 
         static void TestWorkResourceMethod()
