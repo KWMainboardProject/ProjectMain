@@ -43,7 +43,8 @@ namespace RequestTaskProcessing
     public enum MessageType
     {
         EmptyMessage=0,
-
+        Request_ImageAnalysis_ImagePath,
+        Request_ImageAnalysis_JsonPath,
 
         ResponseFail,
         MessageTypeNum,
