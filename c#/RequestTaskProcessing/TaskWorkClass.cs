@@ -81,6 +81,7 @@ namespace RequestTaskProcessing
                         do
                         {
                             Consume();
+                            //clear Q
                         } while (!qTF);
 
                         stopAndClearTF = false;
@@ -91,17 +92,34 @@ namespace RequestTaskProcessing
                     }
                 }
 
-                //Create Operator
+                //Get Operator
                 IStrategyOperateAble strategy = factory.GetOperator(m.type);
+
+                if(strategy != null)
+                {
+                    strategy.SetResource(m);
+                    strategy.Work();
+                    m.productor.Product(strategy.GetMessage());
+                    strategy.ClearResource();
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
             }
         }
         public override void Start()
         {
-            thread = new Thread(() => Run());
+            if(thread == null)
+            {
+                thread = new Thread(() => Run());
+            }
             thread.Start();
         }
         public override void Join()
         {
+            if (thread == null)
+                throw new NullReferenceException();
             thread.Join();
         }
 
@@ -131,12 +149,12 @@ namespace RequestTaskProcessing
         abstract public void SchedulingTaskProcess();
         public override void Start()
         {
-            if (threads.Count == 0) throw new ArgumentNullException();
+            if (workers.Count == 0) throw new ArgumentNullException();
 
             Run();
-            foreach(Thread thread in threads)
+            foreach(var worker in workers)
             {
-                thread.Start();
+                worker.Start();
             }
             Thread.Sleep(SLEEP_TIME);
             Thread scheduleThread = new Thread(() => SchedulingTaskProcess());
@@ -144,14 +162,16 @@ namespace RequestTaskProcessing
         }
         public override void Join()
         {
-            foreach (Thread thread in threads)
+            foreach (var worker in workers)
             {
-                thread.Join();
+                worker.Join();
             }
         }
         
-        protected List<Thread> threads = new List<Thread>(); 
+        protected List<Worker> workers = new List<Worker>(); 
     }
+
+
 
     /// <summary>
     /// singleton pattern
@@ -171,7 +191,10 @@ namespace RequestTaskProcessing
 
         protected override void Run()
         {
-            throw new NotImplementedException();
+            for(int i=0; i<THREAD_COUNT; i++)
+            {
+                workers.Add(new Worker());
+            }
         }
 
 

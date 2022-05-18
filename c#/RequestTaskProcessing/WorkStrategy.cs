@@ -11,14 +11,14 @@ namespace RequestTaskProcessing
     {
         public void SetResource(TaskMessage message);
         public void Work();
-        public IJObjectUseAbleContainer GetResouce();
+        public TaskMessage GetMessage();
         public void ClearResource();
     }
 
     abstract public class HaveHelperOperator : IStrategyOperateAble
     {
         public abstract void ClearResource();
-        public abstract IJObjectUseAbleContainer GetResouce();
+        public abstract TaskMessage GetMessage();
         public abstract void SetResource(TaskMessage message);
         public abstract void Work();
 
@@ -36,7 +36,7 @@ namespace RequestTaskProcessing
             throw new NotImplementedException();
         }
 
-        public override IJObjectUseAbleContainer GetResouce()
+        public override TaskMessage GetMessage()
         {
             throw new NotImplementedException();
         }
@@ -71,7 +71,7 @@ namespace RequestTaskProcessing
             throw new NotImplementedException();
         }
 
-        public IJObjectUseAbleContainer GetResouce()
+        public TaskMessage GetMessage()
         {
             throw new NotImplementedException();
         }
