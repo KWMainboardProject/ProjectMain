@@ -19,7 +19,7 @@ namespace RequestTaskProcessing
     {
         public TaskMessage(string ip=null, IMessageProductAble p=null, MessageType t=MessageType.EmptyMessage, IJObjectUseAbleContainer r = null)
         {
-            if (ip != null) this.ip.IP = ip;
+            if (ip != null) this.ip.Value = ip;
             if (p != null) this.productor = p;
             if (t != MessageType.EmptyMessage) this.type = t;
             if (r != null) this.resource = r;
@@ -28,14 +28,14 @@ namespace RequestTaskProcessing
         public void Print()
         {
             Console.WriteLine("===========Message===========");
-            Console.WriteLine("ip   : " + ip.IP);
+            Console.WriteLine("ip   : " + ip.Value);
             Console.WriteLine("type : " + type.ToString());
             Console.WriteLine("resource");
             Console.WriteLine(resource.GetJObject().ToString());
             Console.WriteLine("=============================");
         }
 
-        public IpContainer ip = new IpContainer();
+        public StringContainer ip = new StringContainer();
         public IMessageProductAble productor = null;
         public MessageType type = MessageType.EmptyMessage;
         public IJObjectUseAbleContainer resource = null;
@@ -48,7 +48,9 @@ namespace RequestTaskProcessing
 
 
         Request_TestTask_container,
-        ResponseFail,
+        Response_TestTask_container,
+
+        Response_Fail,
         MessageTypeNum,
     }
     public class SimpleMessageProductor : IMessageProductAble

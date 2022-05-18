@@ -25,7 +25,10 @@ namespace RequestTaskProcessing
                         strategyOperator = new ImageAnalysisOperator();
                         break;
                     case MessageType.Request_TestTask_container:
+                        TestTaskManager.TestTask_ResourceContainer_NoHelper worker = new TestTaskManager.TestTask_ResourceContainer_NoHelper();
+                        worker.
 
+                        strategyOperator = worker;
                         break;
                 }
                 return strategyOperator;

@@ -50,7 +50,7 @@ namespace RequestTaskProcessing
         abstract public void Join();
 
 
-        protected bool stopAndClearTF = true;
+        protected bool stopAndClearTF = false;
         protected bool qTF = false;
 
         protected IOperatorFactory factory = null;
@@ -78,6 +78,7 @@ namespace RequestTaskProcessing
                 //Get message
                 TaskMessage m = Consume();
                 if (!qTF) continue;//fali consume
+                if (m == null) continue;
                 //Success consume
 
                 //stop thread and claear Q
@@ -98,7 +99,7 @@ namespace RequestTaskProcessing
                         break;
                     }
                 }
-
+                
                 //Get Operator
                 IStrategyOperateAble strategy = factory.GetOperator(m.type);
 
@@ -154,9 +155,11 @@ namespace RequestTaskProcessing
         abstract public void SchedulingTaskProcess();
         public override void Start()
         {
-            if (workers.Count == 0) throw new NullReferenceException();
-
             Run();
+
+            if (workers.Count == 0)
+                throw new NullReferenceException();
+
             foreach(var worker in workers)
             {
                 worker.Start();
@@ -202,10 +205,7 @@ namespace RequestTaskProcessing
 
         protected override void Run()
         {
-            if (factory == null)
-                throw new NullReferenceException();
-
-            for(int i=0; i<THREAD_COUNT; i++)
+            for (int i=0; i<THREAD_COUNT; i++)
             {
                 workers.Add(new TaskWorker(q));
             }
@@ -239,6 +239,7 @@ namespace RequestTaskProcessing
 
         protected override void Run()
         {
+            Console.WriteLine("GpuWorkManaer - Run");
             throw new NotImplementedException();
         }
 

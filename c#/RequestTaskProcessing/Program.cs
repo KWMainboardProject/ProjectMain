@@ -17,7 +17,8 @@ namespace RequestTaskProcessing
         {
             //TestWorkResourceMethod();
             //TestTaskMessageMethod();
-            TestTaskMessageAndConsumer();
+            //TestTaskMessageAndConsumer();
+            TestTaskManager();
         }
 
         static void TestWorkResourceMethod()
@@ -63,7 +64,7 @@ namespace RequestTaskProcessing
 
             TaskMessage message2 = new TaskMessage("Worker2",
                 consumer.GetProductor(),
-                MessageType.ResponseFail,
+                MessageType.Response_Fail,
                 new ConfidenceContainer(0.9f));
             Thread work2 = new Thread(() => TestTaskMessageClass.Work(message2));
 
@@ -87,7 +88,128 @@ namespace RequestTaskProcessing
                 m.Print();
             }
         }
+        static void TestTaskManager()
+        {
+            const int TASK_NUM = 10;
+            TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
+            TaskManager taskManager = TaskManager.GetInstance();
+            sender.Start();
+            taskManager.Start();
+
+            IMessageProductAble p = taskManager.GetProductor();
+            for(int i=0; i<TASK_NUM; i++)
+            {
+                TaskMessage m = new TaskMessage(
+                    "Task" + i.ToString(),
+                    sender.GetProductor(),
+                    MessageType.Request_TestTask_container);
+                p.Product(m);
+            }
+
+        }
     }
+
+    public class TestTaskManager
+    {
+        public class TestSenderManager : QTheading
+        {
+            const int SLEEP_TIME = 10;
+            public TestSenderManager()
+            {
+                q = new ConcurrentQueue<TaskMessage>();
+                productor.SetQueue(q);
+            }
+
+            public override void Join()
+            {
+                thread.Join();
+            }
+
+            public override void Start()
+            {
+                thread = new Thread(() => Run());
+                thread.Start();
+            }
+
+            protected override void Run()
+            {
+                if (q == null)
+                    throw new NullReferenceException();
+                while (thread.IsAlive)
+                {
+                    Thread.Sleep(SLEEP_TIME);
+                    //Get message
+                    TaskMessage m = Consume();
+                    if (!qTF) continue;//fali consume
+                    if (m == null) continue;
+                    //Success consume
+
+                    //stop thread and claear Q
+                    if (stopAndClearTF)
+                    {
+                        lock (q)
+                        {
+                            do
+                            {
+                                Consume();
+                                //clear Q
+                            } while (!qTF);
+
+                            stopAndClearTF = false;
+
+                            //need thread stop
+                            Console.WriteLine("plz thread stop at QThread.Run");
+                            break;
+                        }
+                    }
+                    Console.WriteLine(thread.ToString());
+                    m.Print();
+                }
+            }
+            Thread thread = null;
+        }
+
+        public class TestTask_ResourceContainer_NoHelper : IStrategyOperateAble
+        {
+            public TestTask_ResourceContainer_NoHelper()
+            {
+                WORKER_NUM++;
+                workerNumber = WORKER_NUM;
+            }
+            public void ClearResource()
+            {
+                return;
+            }
+
+            public TaskMessage GetMessage()
+            {
+                TaskMessage m = new TaskMessage(ip, p, MessageType.Response_TestTask_container, r);
+                return m;
+            }
+
+            public void SetResource(TaskMessage m)
+            {
+                //Worng
+                if (m.type != MessageType.Request_TestTask_container)
+                    throw new NullReferenceException();
+
+                ip = m.ip.Value;
+                //r = (StringContainer)m.resource;
+                p = m.productor;
+            }
+
+            public void Work()
+            {
+                r = new StringContainer("resource", "Worker" + workerNumber.ToString());
+            }
+            static int WORKER_NUM = 0;
+            private int workerNumber;
+            protected string ip = null;
+            protected IMessageProductAble p = null;
+            protected StringContainer r = null;
+        }
+    }
+
 
     class TestTaskMessageClass
     {
@@ -125,8 +247,8 @@ namespace RequestTaskProcessing
             for (int i=0; i<iterNum; i++)
             {
                 TaskMessage respenceMessage = new TaskMessage();
-                IpContainer container = new IpContainer();
-                container.IP = message.ip.IP + "_resource_" + i.ToString();
+                StringContainer container = new StringContainer();
+                container.Value = message.ip.Value + "_resource_" + i.ToString();
                 respenceMessage.resource = message.resource;
                 respenceMessage.ip = container;
                 respenceMessage.type = message.type;

@@ -17,32 +17,40 @@ namespace RequestTaskProcessing
 
 	}
 
-    public class IpContainer : IJObjectUseAbleContainer
+    public class StringContainer : IJObjectUseAbleContainer
     {
+		public StringContainer(string key="ip",string str=null)
+        {
+			if (str != null) Value = str;
+			this.key = key;
+        }
         public JObject GetJObject()
         {
-            throw new NotImplementedException();
-        }
+			JObject json = new JObject();
+			json.Add(GetKey(), Value);
+			return json;
+		}
 
         public string GetKey()
         {
-            throw new NotImplementedException();
+			return key;
         }
 
         public JToken GetValue()
         {
-            throw new NotImplementedException();
+            return GetJObject()[GetKey()];
         }
 
         public void SetJObject(JObject obj)
         {
             throw new NotImplementedException();
         }
-		protected string ip = null;
-		public string IP
+		protected string key = null;
+		protected string str = null;
+		public string Value
         {
-            get { return ip; }
-            set { ip = value; }
+            get { return str; }
+            set { str = value; }
         }
     }
     public abstract class CompoundContainer :IJObjectUseAbleContainer

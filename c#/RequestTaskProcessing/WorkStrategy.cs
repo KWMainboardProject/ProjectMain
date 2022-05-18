@@ -78,37 +78,7 @@ namespace RequestTaskProcessing
         }
     }
 
-    public class TestTask_ResourceContainer_NoHelper : IStrategyOperateAble
-    {
-        public void ClearResource()
-        {
-            return;
-        }
-
-        public TaskMessage GetMessage()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetResource(TaskMessage m)
-        {
-            //Worng
-            if (m.type != MessageType.Request_TestTask_container)
-                throw new NullReferenceException();
-
-            ip = m.ip.IP;
-            r = m.resource;
-            p = m.productor;
-        }
-
-        public void Work()
-        {
-            
-        }
-        protected string ip = null;
-        protected IMessageProductAble p = null;
-        protected IJObjectUseAbleContainer r = null;
-    }
+    
 
     public class NullOperator : IStrategyOperateAble
     {
