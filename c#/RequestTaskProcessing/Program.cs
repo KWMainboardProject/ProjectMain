@@ -16,8 +16,8 @@ namespace RequestTaskProcessing
         static void Main(string[] args)
         {
             //TestWorkResourceMethod();
-            //TestTaskMessageMethod();
-            TestTaskMessageAndConsumer();
+            TestTaskMessageMethod();
+            //TestTaskMessageAndConsumer();
         }
 
         static void TestWorkResourceMethod()
@@ -55,19 +55,19 @@ namespace RequestTaskProcessing
         static void TestTaskMessageMethod()
         {
             TestTaskMessageClass.TestConsumer consumer = new TestTaskMessageClass.TestConsumer();
-            TaskMessage message1 = new TaskMessage("maincategory",
+            TaskMessage message1 = new TaskMessage("Worker1",
                 consumer.GetProductor(),
                 MessageType.MessageTypeNum,
                 new ClassficationContainer("Maincategory"));
             Thread work1 = new Thread(() => TestTaskMessageClass.Work(message1));
 
-            TaskMessage message2 = new TaskMessage("confidence",
+            TaskMessage message2 = new TaskMessage("Worker2",
                 consumer.GetProductor(),
                 MessageType.ResponseFail,
                 new ConfidenceContainer(0.9f));
             Thread work2 = new Thread(() => TestTaskMessageClass.Work(message2));
 
-            TaskMessage message3 = new TaskMessage("classfication",
+            TaskMessage message3 = new TaskMessage("Worker3",
                 consumer.GetProductor(),
                 MessageType.MessageTypeNum,
                 new ClassficationContainer("Top"));
@@ -79,7 +79,7 @@ namespace RequestTaskProcessing
             work3.Start();
 
             Console.WriteLine("Sleep Main Process");
-            Thread.Sleep(10);
+            Thread.Sleep(1);
             Console.WriteLine("Start Consume");
             while (!consumer.IsEmpty())
             {
@@ -119,17 +119,17 @@ namespace RequestTaskProcessing
             protected ConcurrentQueue<TaskMessage> q=new ConcurrentQueue<TaskMessage>();
             protected SimpleMessageProductor productor = new SimpleMessageProductor();
         }
-        static public void Work(TaskMessage message, int iterNum=10)
+        static public void Work(TaskMessage message, int iterNum=1000)
         {
             IMessageProductAble productor = message.productor;
-            TaskMessage respenceMessage = new TaskMessage();
             for (int i=0; i<iterNum; i++)
             {
+                TaskMessage respenceMessage = new TaskMessage();
                 IpContainer container = new IpContainer();
-                container.IP = message.ip + "_resource_" + i.ToString();
-                respenceMessage.resource = container;
+                container.IP = message.ip.IP + "_resource_" + i.ToString();
+                respenceMessage.resource = message.resource;
                 respenceMessage.ip = container;
-                respenceMessage.type = MessageType.ResponseFail;
+                respenceMessage.type = message.type;
                 respenceMessage.productor = null;
 
                 productor.Product(respenceMessage);
