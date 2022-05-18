@@ -3,7 +3,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
-namespace Mainboard
+namespace RequestTaskProcessing
 {
 	/// <summary>
 	/// work resouce의 내용을 담을 수 있는 container

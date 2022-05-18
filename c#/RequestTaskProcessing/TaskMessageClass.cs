@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections.Concurrent;
 
-namespace Mainboard
+namespace RequestTaskProcessing
 {
     public interface IMessageProductAble
     {
