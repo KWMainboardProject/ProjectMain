@@ -90,7 +90,7 @@ namespace RequestTaskProcessing
         }
         static void TestTaskManager()
         {
-            const int TASK_NUM = 10;
+            const int TASK_NUM = 50;
             TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
             TaskManager taskManager = TaskManager.GetInstance();
             sender.Start();
@@ -105,7 +105,9 @@ namespace RequestTaskProcessing
                     MessageType.Request_TestTask_container);
                 p.Product(m);
             }
-
+            taskManager.Join();
+            sender.Join();
+            Console.WriteLine("complete");
         }
     }
 
@@ -171,6 +173,7 @@ namespace RequestTaskProcessing
 
         public class TestTask_ResourceContainer_NoHelper : IStrategyOperateAble
         {
+            const int SLEEP_TIME = 500;
             public TestTask_ResourceContainer_NoHelper()
             {
                 WORKER_NUM++;
@@ -200,6 +203,7 @@ namespace RequestTaskProcessing
 
             public void Work()
             {
+                Thread.Sleep(SLEEP_TIME);
                 r = new StringContainer("resource", "Worker" + workerNumber.ToString());
             }
             static int WORKER_NUM = 0;

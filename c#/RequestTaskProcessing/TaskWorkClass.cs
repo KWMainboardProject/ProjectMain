@@ -192,7 +192,7 @@ namespace RequestTaskProcessing
     /// </summary>
     public class TaskManager : WorkManager
     {
-        const int THREAD_COUNT = 1;
+        const int THREAD_COUNT = 10;
 
         /// <summary>
         /// child process에서 counsume 해줌
