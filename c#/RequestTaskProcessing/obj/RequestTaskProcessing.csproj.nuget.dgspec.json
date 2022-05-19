@@ -43,6 +43,14 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.1, )"
+            },
+            "OpenCvSharp4": {
+              "target": "Package",
+              "version": "[4.5.5.20211231, )"
+            },
+            "OpenCvSharp4.Windows": {
+              "target": "Package",
+              "version": "[4.5.5.20211231, )"
             }
           },
           "imports": [

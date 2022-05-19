@@ -3,16 +3,30 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Collections.Concurrent;
+using RequestTaskProcessing.StrategyOperator;
 
 
 namespace RequestTaskProcessing
 {
+    
     public abstract class QTheading : IMessageConsumeAble
     {
         // 참고했음 Queue&Thread 구조 -> https://programerstory.tistory.com/8
 
+        /// <summary>
+        /// Time out 설정하는 함수
+        /// 기본적으로 0이 설정되어 있고 0은 Time out 이 없다는 뜻이다.
+        /// 해당 ms가 지나면 time out 된다.
+        /// </summary>
+        /// <param name="time">범위[0,큰값)</param>
         abstract public void SetTimeOutThreshold(int time = TimeOut.DEFAULT_TIME);
 
+
+        /// <summary>
+        /// message Q에 쌓여있는 것중에 가장 앞에 있는 message를 꺼내서 반환함
+        /// message Q를 반환에 성공하면 qTF는 true로 세팅된다.
+        /// </summary>
+        /// <returns>반환이 성공하면 message를 실패하는 null을 반환한다.</returns>
         public TaskMessage Consume()
         {
             if (q == null) throw new NullReferenceException();
@@ -49,11 +63,18 @@ namespace RequestTaskProcessing
             return q.IsEmpty;
         }
 
+        /// <summary>
+        /// 연산에 필요한 operator Factory를 설정하는 함수이다.
+        /// </summary>
+        /// <param name="factory"></param>
         public void SetOperatorFactory(IOperatorFactory factory)
         {
             this.factory = factory;
         }
 
+        /// <summary>
+        /// 해당 스레드를 멈추고 싶을 때 작동한다.
+        /// </summary>
         public void StopAndClear()
         {
             stopAndClearTF = true;
