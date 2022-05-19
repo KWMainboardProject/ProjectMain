@@ -11,6 +11,81 @@ namespace RequestTaskProcessing
     {
         public IStrategyOperateAble GetOperator(MessageType type);
     }
+    public class GPUWorkerOperatorFactory : IOperatorFactory
+    {
+        protected GPUWorkerOperatorFactory()
+        {
+            //init path
+        }
+        public IStrategyOperateAble GetOperator(MessageType type)
+        {
+            lock (Holder.instance)
+            {
+                IStrategyOperateAble strategyOperator = null;
+                switch (type)
+                {
+                    case MessageType.Request_Removebg_ImagePath:
+                        throw new NotImplementedException();
+                        break;
+                    case MessageType.Request_FindMainCategory_ImagePath:
+                        throw new NotImplementedException();
+                        break;
+                    case MessageType.Request_FindSubCategory_Top_ImagePath:
+                        throw new NotImplementedException();
+                        break;
+                    case MessageType.Request_FindSubCategory_Bottom_ImagePath:
+                        throw new NotImplementedException();
+                        break;
+                    case MessageType.Request_FindSubCategory_Outer_ImagePath:
+                        throw new NotImplementedException();
+                        break;
+                    case MessageType.Request_FindSubCategory_Overall_ImagePath:
+                        throw new NotImplementedException();
+                        break;
+                    case MessageType.Request_FindPattern_Top_ImagePath:
+                        throw new NotImplementedException();
+                        break;
+                    case MessageType.Request_FindPattern_Bottom_ImagePath:
+                        throw new NotImplementedException();
+                        break;
+                    case MessageType.Request_FindPattern_Outer_ImagePath:
+                        throw new NotImplementedException();
+                        break;
+                    case MessageType.Request_FindPattern_Overall_ImagePath:
+                        throw new NotImplementedException();
+                        break;
+                    case MessageType.Request_FindStyle_ImagePath:
+                        throw new NotImplementedException();
+                        break;
+                }
+                return strategyOperator;
+            }
+        }
+        public string workerName = null;
+        protected string rootpath = null;
+        public string RootPath
+        {
+            get { return rootpath; }
+        }
+
+
+        /// <summary>
+        /// singleton pattern
+        /// </summary>
+        /// <returns></returns>
+        public static GPUWorkerOperatorFactory GetInstance()
+        {
+            return Holder.instance;
+        }
+        /// <summary>
+        /// Lazy Initialization + holder
+        /// </summary>
+        private static class Holder
+        {
+            public static GPUWorkerOperatorFactory instance = new GPUWorkerOperatorFactory();
+        }
+    }
+
 
     public class TaskOperatorFactory : IOperatorFactory
     {

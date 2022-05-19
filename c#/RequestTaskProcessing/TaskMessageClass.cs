@@ -5,6 +5,46 @@ using System.Collections.Concurrent;
 
 namespace RequestTaskProcessing
 {
+    public enum MessageType
+    {
+        //Empty
+        EmptyMessage = 0,
+        //Request
+        Request_ImageAnalysis_ImagePath,
+        Request_ImageAnalysis_JsonPath,
+        Request_Removebg_ImagePath,
+        Request_FindMainCategory_ImagePath,
+        Request_FindSubCategory_Top_ImagePath,
+        Request_FindSubCategory_Bottom_ImagePath,
+        Request_FindSubCategory_Outer_ImagePath,
+        Request_FindSubCategory_Overall_ImagePath,
+        Request_FindPattern_Top_ImagePath,
+        Request_FindPattern_Bottom_ImagePath,
+        Request_FindPattern_Outer_ImagePath,
+        Request_FindPattern_Overall_ImagePath,
+        Request_FindStyle_ImagePath,
+        //Receive
+        Receive_ImagePath_RemoveBG,
+        Receive_ImagePath_Original,
+        Receive_JsonPath_ImageList,
+        Receive_JsonPath_MainCategory,
+        Receive_JsonPath_SubCategory_Top,
+        Receive_JsonPath_SubCategory_Bottom,
+        Receive_JsonPath_SubCategory_Outer,
+        Receive_JsonPath_SubCategory_Overall,
+        Receive_JsonPath_Pattern_Top,
+        Receive_JsonPath_Pattern_Bottom,
+        Response_JsonPath_Pattern_Outer,
+        Receive_JsonPath_Pattern_Overall,
+        Receive_JsonPath_Style,
+        //special
+        Response_Fail,
+        MessageTypeNum,
+        //Test
+        Request_TestTask_container,
+        Response_TestTask_container,
+    }
+
     public interface IMessageProductAble
     {
         void Product(TaskMessage massage);
@@ -40,19 +80,7 @@ namespace RequestTaskProcessing
         public MessageType type = MessageType.EmptyMessage;
         public IJObjectUseAbleContainer resource = null;
     }
-    public enum MessageType
-    {
-        EmptyMessage=0,
-        Request_ImageAnalysis_ImagePath,
-        Request_ImageAnalysis_JsonPath,
-
-
-        Request_TestTask_container,
-        Response_TestTask_container,
-
-        Response_Fail,
-        MessageTypeNum,
-    }
+    
     public class SimpleMessageProductor : IMessageProductAble
     {
         public void Product(TaskMessage massage)

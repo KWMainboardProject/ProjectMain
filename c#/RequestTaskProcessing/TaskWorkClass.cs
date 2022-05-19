@@ -7,44 +7,6 @@ using System.Collections.Concurrent;
 
 namespace RequestTaskProcessing
 {
-    public class TimeOut
-    {
-        //for time out
-        public const int DEFAULT_TIME = 5000;
-        int thresholdTime = 0;
-        int waitTime = 0;
-        public void SetThesholdTime(int time = DEFAULT_TIME)
-        {
-            thresholdTime = time;
-        }
-        public bool CheckTimeOut(int time)
-        {
-            if (thresholdTime == 0) return false;
-            waitTime += time;
-            if (waitTime >= thresholdTime) return true;
-            else return false;
-        }
-        public void ResetTimeOut()
-        {
-            waitTime = 0;
-        }
-
-        //count time
-        DateTime startTime;
-        public void StartTime()
-        {
-            startTime = DateTime.Now;
-        }
-        public int EndTime()
-        {
-            if (thresholdTime == 0) return 0;
-            DateTime currnetTime = DateTime.Now;
-            TimeSpan timeSpan =currnetTime - startTime;
-
-            return (int)(timeSpan.Milliseconds);
-        }
-    }
-
     public abstract class QTheading : IMessageConsumeAble
     {
         // 참고했음 Queue&Thread 구조 -> https://programerstory.tistory.com/8
@@ -258,11 +220,20 @@ namespace RequestTaskProcessing
     {
         public TaskWorker(ConcurrentQueue<TaskMessage> Q) : base(TaskOperatorFactory.GetInstance())
         {
+            //Task Manager의 Q를 consume함
             this.q = Q;
             productor.SetQueue(q);
         }
     }
-
+    public class GPUWorker : Worker
+    {
+        public GPUWorker() : base(GPUWorkerOperatorFactory.GetInstance())
+        {
+            //개별적인 Q를 consume함
+            this.q = new ConcurrentQueue<TaskMessage>();
+            productor.SetQueue(q);
+        }
+    }
     /// <summary>
     /// singleton pattern
     /// </summary>
@@ -308,6 +279,7 @@ namespace RequestTaskProcessing
     /// </summary>
     public class GPUWorkManager : WorkManager
     {
+        const int THREAD_COUNT = 3;
         public override void SchedulingTaskProcess()
         {
             throw new NotImplementedException();
@@ -334,6 +306,43 @@ namespace RequestTaskProcessing
         private static class Holder
         {
             public static GPUWorkManager instance = new GPUWorkManager();
+        }
+    }
+    public class TimeOut
+    {
+        //for time out
+        public const int DEFAULT_TIME = 5000;
+        int thresholdTime = 0;
+        int waitTime = 0;
+        public void SetThesholdTime(int time = DEFAULT_TIME)
+        {
+            thresholdTime = time;
+        }
+        public bool CheckTimeOut(int time)
+        {
+            if (thresholdTime == 0) return false;
+            waitTime += time;
+            if (waitTime >= thresholdTime) return true;
+            else return false;
+        }
+        public void ResetTimeOut()
+        {
+            waitTime = 0;
+        }
+
+        //count time
+        DateTime startTime;
+        public void StartTime()
+        {
+            startTime = DateTime.Now;
+        }
+        public int EndTime()
+        {
+            if (thresholdTime == 0) return 0;
+            DateTime currnetTime = DateTime.Now;
+            TimeSpan timeSpan = currnetTime - startTime;
+
+            return (int)(timeSpan.Milliseconds);
         }
     }
 }
