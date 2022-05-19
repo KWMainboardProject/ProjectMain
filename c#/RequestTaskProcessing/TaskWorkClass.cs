@@ -20,7 +20,6 @@ namespace RequestTaskProcessing
         public bool CheckTimeOut(int time)
         {
             if (thresholdTime == 0) return false;
-            //Console.WriteLine("ADD time : " + time.ToString() + 's');
             waitTime += time;
             if (waitTime >= thresholdTime) return true;
             else return false;
@@ -44,9 +43,6 @@ namespace RequestTaskProcessing
 
             return (int)(timeSpan.Milliseconds);
         }
-
-
-        
     }
 
     public abstract class QTheading : IMessageConsumeAble
@@ -61,13 +57,21 @@ namespace RequestTaskProcessing
 
             int elpse = timeout.EndTime();
             bool timeoutTF = timeout.CheckTimeOut(elpse);
-            if (timeoutTF) StopAndClear();//time out 시 멈춤
-            timeout.StartTime();
+            
+            //Consume Message
+            TaskMessage message = null;
+            if (!q.IsEmpty)
+            {
+                message = new TaskMessage();
+                qTF = q.TryDequeue(out message);
+            }     
 
-            if (q.IsEmpty) return null;
-            TaskMessage message = new TaskMessage();
-            qTF = q.TryDequeue(out message);
-            if (qTF) timeout.ResetTimeOut();//성공 시 timeout reset
+            //time out check and Run
+            if (message != null && qTF) timeout.ResetTimeOut();//성공 시 timeout reset
+            else if(timeoutTF) StopAndClear();//message가 계속 없을 때, time out으로 멈춤
+
+            //time start
+            timeout.StartTime();
             return message;
         }
 
@@ -151,7 +155,6 @@ namespace RequestTaskProcessing
                 TaskMessage m = Consume();
                 if (!qTF || m == null)//fali consume
                 {
-                    Console.WriteLine("Wait Messamge - Worker");
                     continue;
                 }
                 //Success consume
@@ -228,7 +231,7 @@ namespace RequestTaskProcessing
                 worker.Start();
             }
             Thread.Sleep(SLEEP_TIME);
-            Thread scheduleThread = new Thread(() => SchedulingTaskProcess());
+            scheduleThread = new Thread(() => SchedulingTaskProcess());
             scheduleThread.Start();
         }
         public override void Join()
@@ -237,6 +240,7 @@ namespace RequestTaskProcessing
             {
                 worker.Join();
             }
+            scheduleThread.Join();
             
         }
         public override void SetTimeOutThreshold(int time = 5000)
@@ -247,6 +251,7 @@ namespace RequestTaskProcessing
             }
             
         }
+        protected Thread scheduleThread = null;
         protected List<Worker> workers = new List<Worker>(); 
     }
     public class TaskWorker : Worker
