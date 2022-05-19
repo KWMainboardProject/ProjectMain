@@ -22,10 +22,11 @@ class DB_Functions {
     public function storeUser($PID, $PPW, $LikeStyle, $Age, $Gender) {
         $hash = $this->hashSSHA($PPW);
         $encrypted_password = $hash['encrypted']; // encrypted password
+        $salt = $hash['salt']; 
+
+        $stmt = $this->conn->prepare("INSERT INTO users(Age, LikeStyle, Gender, PID, PPW, salt ) VALUES(?, ?, ?, ?, ?, ?)");
         
-        $stmt = $this->conn->prepare("INSERT INTO users(Age, LikeStyle, Gender, PID, PPW ) VALUES(?, ?, ?, ?, ? )");
-        
-        $stmt->bind_param('issss',  $Age, $LikeStyle, $Gender, $PID, $encrypted_password);
+        $stmt->bind_param('isssss',  $Age, $LikeStyle, $Gender, $PID, $encrypted_password, $salt);
         
         $result = $stmt->execute();
         $stmt->close();
@@ -46,18 +47,20 @@ class DB_Functions {
 
     // 로그인 체크
     public function getUser($userID, $password) {
-        $stmt = $this->conn->prepare("SELECT * FROM members WHERE userID = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE PID = ?");
         $stmt->bind_param("s", $userID);
 
         if ($stmt->execute()) {
             $user = $stmt->get_result()->fetch_assoc();
             $stmt->close();
-
+            
+            
             // verifying user password
             $salt = $user['salt'];
-            $encrypted_password = $user['passwd'];
+            $encrypted_password = $user['PPW'];
             $hash = $this->checkhashSSHA($salt, $password);
             // check for password equality
+
             if ($encrypted_password == $hash) {
                 // user authentication details are correct
                 return $user;

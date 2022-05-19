@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -20,11 +21,17 @@
                 <div class="container px-5">
                     <a class="navbar-brand" href="index.html">MainBoard</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <?php if(!is_null($_SESSION['id'])){
+                        $idtext = $_SESSION['id']."님으로 로그인 중입니다.";
+                    }else{
+                        $idtext = "로그인을 해주세요.";
+                    } ?>
+                    <a class="text"> <?php echo $idtext;?></a>}
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-                            <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Collections</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
@@ -58,25 +65,24 @@
                                 <!-- To make this form functional, sign up at-->
                                 <!-- https://startbootstrap.com/solution/contact-forms-->
                                 <!-- to get an API token!-->
-                                <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                                <form id="contactForm"  method="post" action="logincheck.php" >
                                     <!-- Name input-->
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
-                                        <label for="name">Press your ID</label>
-                                        <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                                        <input class="form-control" name="userid" id="userid" type="text" placeholder="Enter your ID..." data-sb-validations="required" />
+                                        <label for="userid">Press your ID</label>
+                                        <div class="invalid-feedback" data-sb-feedback="name:required">ID is required.</div>
                                     </div>
                                     <!-- Email address input-->
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
-                                        <label for="email">Press your password</label>
-                                        <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
-                                        <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
+                                        <input class="form-control" id="userpw" name= "userpw" type="password" placeholder="password here"  />
+                                        <label for="userpw">Press your password</label>
+                                        <div class="invalid-feedback" data-sb-feedback="name:required">PW is required.</div>
                                     </div>
                                     <!-- Submit success message-->
                                     <!---->
                                     <!-- This is what your users will see when the form-->
                                     <!-- has successfully submitted-->
-                                    <div class="d-none" id="submitSuccessMessage">
+                                    <!--<div class="d-none" id="submitSuccessMessage">
                                         <div class="text-center mb-3">
                                             <div class="fw-bolder">Form submission successful!</div>
                                             To activate this form, sign up at
@@ -84,13 +90,13 @@
                                             <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
                                         </div>
                                     </div>
-                                    <!-- Submit error message-->
+                                     Submit error message-->
                                     <!---->
                                     <!-- This is what your users will see when there is-->
                                     <!-- an error submitting the form-->
-                                    <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
-                                    <!-- Submit Button-->
-                                    <div class="d-grid"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">Login</button></div>
+                                    <!--<div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                                     Submit Button-->
+                                    <div class="d-grid"><button class="btn btn-primary btn-lg " id="submitButton" type="submit">Login</button></div>
                                 </form>
                             </div>
                         </div>
@@ -98,7 +104,10 @@
                     <!-- Contact cards-->
                     <div class="row gx-5 row-cols-2 row-cols-lg-4 py-5">
                         <div class="col" style="margin: auto;">
-                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-people"></i></div>
+                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3">
+                                <i class="bi bi-people"></i>                                
+                            </div>
+                            <a href="Sign-up.php" >Sign_up</a>
                             <div class="h5">Register new account</div>
                             <p class="text-muted mb-0">Explore our community forums and communicate with other users.</p>
                         </div>

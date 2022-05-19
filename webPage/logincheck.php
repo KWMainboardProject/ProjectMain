@@ -1,14 +1,8 @@
 <?php
 // 안드로이드에서 넘어온 데이터라고 가정하고 직접 DB에 데이터 저장 테스트
 // 제대로 저장되는지 확인했으면 아래 4줄은 주석처리 또는 삭제해야 함
-
-$_POST['userid'];
-$_POST['Gender'];
-$_POST['userpw'];
-$_POST['Age'] = '24';
-$_POST['LikeStyle'] = 'Dandy';
-
-
+session_start();
+ $_SESSION['id'] = $_POST['userid'] ; 
 
 extract($_POST);
 
@@ -20,47 +14,35 @@ $db = new DB_Functions();
 // json response array
 $response = array("error" => FALSE);
 
-if (isset($_POST['userid']) && isset($_POST['Age']) && isset($_POST['gender']) && isset($_POST['userpw']) && isset($_POST['LikeStyle'])) {
+if (isset($_POST['userid']) && isset($_POST['userpw'])) {
 
     // POST 배열로 받은 데이터
     $userID = $_POST['userid'];
-    $Age = $_POST['Age'];
-    $Gender = $_POST['gender'];
     $password = $_POST['userpw'];
-    $LikeStyle = $_POST['LikeStyle'];
-    
-    // 동일한 userID 등록되어 있는지 체크
-    if ($db->isUserExisted($userID)) { // E-Mail 이 key value
-        // user already existed
-        $response["error"] = TRUE;
-        $response["error_msg"] = "User already existed with " . $userID;
-        echo json_encode($response);
-    } else {
-        // 사용자 등록
+      
+    $user = $db->getUser($userID, $password);
         
-        $user = $db->storeUser($userID, $password, $LikeStyle, $Age, $Gender );
-        
-        if ($user) { // 사용자 등록 성공
-            //storeUser($PID, $PPW, $LikeStyle, $Age, $Gender)
-            $response['error'] = FALSE;
-            $response['users']['PID'] = $user['PID'];
-            $response['users']['PPW'] = $user['PPW'];
-            $response['users']['LikeStyle'] = $user['LikeStyle'];
-            $response['users']['Age'] = $user['Age'];
-            $response['users']['Gender'] = $user['Gender'];
+    if ($user) { // 사용자 등록 성공
+        //storeUser($PID, $PPW, $LikeStyle, $Age, $Gender)
+        $response['error'] = FALSE;
+        $response['users']['PID'] = $user['PID'];
+        $response['users']['PPW'] = $user['PPW'];
 
-            echo $_POST["userid"] ."님 환영합니다.";
-        } else {
-            // 사용자 등록 실패
-            $response['error'] = TRUE;
-            $response['error_msg'] = "Unknown error occurred in registration!";
-            echo json_encode($response);
-        }
+        echo $_POST["userid"] ."님으로 로그인하였습니다.";
+
+    } else {
+        // 로그인 실패
+        $response['error'] = TRUE;
+        $response['error_msg'] = "비밀번호가 틀렸습니다.";
+        echo "비밀번호가 틀렸습니다.";
+        session_destroy();
     }
+
 } else { // 입력받은 데이터에 문제가 있을 경우
     $response['error'] = TRUE;
     $response['error_msg'] = "fail to registration because input data be incorrected";
     echo json_encode($response);
+    session_destroy();
 }
 ?>
 <!DOCTYPE html>
@@ -94,6 +76,14 @@ if (isset($_POST['userid']) && isset($_POST['Age']) && isset($_POST['gender']) &
                 <div class="container px-5">
                     <a class="navbar-brand" href="index.html">MainBoard</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <?php if(!is_null($_SESSION['id'])){
+                        $idtext = $_SESSION['id']."님으로 로그인 중입니다.";
+                    }else{
+                        $idtext = "로그인을 해주세요.";
+                    } ?>
+                    <a class="text"> <?php echo $idtext;?></a>}
+
+                    
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
@@ -210,5 +200,3 @@ if (isset($_POST['userid']) && isset($_POST['Age']) && isset($_POST['gender']) &
         <script src="js/scripts.js"></script>
     </body>
 </html>
-
-                    
