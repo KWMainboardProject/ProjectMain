@@ -13,20 +13,6 @@ namespace RequestTaskProcessing.StrategyOperator
         public void ClearResource();
     }
 
-    abstract public class HaveHelperOperator : IStrategyOperateAble
-    {
-        public abstract void ClearResource();
-        public abstract TaskMessage GetMessage();
-        public abstract void SetResource(TaskMessage message);
-        public abstract void Work();
-
-        public void SetHelpProductor(IMessageProductAble productor)
-        {
-            this.requestProductor = productor;
-        }
-        protected IMessageProductAble requestProductor= null;
-    }
-
        
 
     public class NullOperator : IStrategyOperateAble

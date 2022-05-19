@@ -25,6 +25,9 @@ namespace RequestTaskProcessing
         /// <summary>
         /// message Q에 쌓여있는 것중에 가장 앞에 있는 message를 꺼내서 반환함
         /// message Q를 반환에 성공하면 qTF는 true로 세팅된다.
+        /// 
+        /// Time out 이 설정 되었을 경우 time out 될 경우
+        /// TimeoutException을 반환한다.
         /// </summary>
         /// <returns>반환이 성공하면 message를 실패하는 null을 반환한다.</returns>
         public TaskMessage Consume()
@@ -40,11 +43,11 @@ namespace RequestTaskProcessing
             {
                 message = new TaskMessage();
                 qTF = q.TryDequeue(out message);
-            }     
+            }
 
             //time out check and Run
             if (message != null && qTF) timeout.ResetTimeOut();//성공 시 timeout reset
-            else if(timeoutTF) StopAndClear();//message가 계속 없을 때, time out으로 멈춤
+            else if (timeoutTF) throw new TimeoutException();//message가 계속 없을 때, time out으로 멈춤
 
             //time start
             timeout.StartTime();
@@ -135,15 +138,16 @@ namespace RequestTaskProcessing
                 }
 
                 //Get message
-                TaskMessage m = Consume();
+                TaskMessage m = null;
+                try{m = Consume();}
+                catch(TimeoutException e){StopAndClear();}
+
                 if (!qTF || m == null)//fali consume
                 {
                     continue;
                 }
                 //Success consume
 
-                
-                
                 //Get Operator
                 IStrategyOperateAble strategy = factory.GetOperator(m.type);
 
@@ -173,7 +177,7 @@ namespace RequestTaskProcessing
             thread.Join();
         }
 
-        public override void SetTimeOutThreshold(int time = 5000)
+        public override void SetTimeOutThreshold(int time = TimeOut.DEFAULT_TIME)
         {
             timeout.SetThesholdTime(time);
         }
@@ -226,7 +230,7 @@ namespace RequestTaskProcessing
             scheduleThread.Join();
             
         }
-        public override void SetTimeOutThreshold(int time = 5000)
+        public override void SetTimeOutThreshold(int time = TimeOut.DEFAULT_TIME)
         {
             foreach(Worker worker in workers)
             {
@@ -335,10 +339,28 @@ namespace RequestTaskProcessing
         public const int DEFAULT_TIME = 5000;
         int thresholdTime = 0;
         int waitTime = 0;
+        /// <summary>
+        /// Time out을 판별할 수 있는 Threashold 값 설정 함수
+        /// </summary>
+        /// <param name="time">
+        /// 음수 : 없음 / 
+        /// 0 : time out 설정 안함 / 
+        /// 1 이상 : 해당 시간 이 지나며 time out을 띄움
+        /// </param>
         public void SetThesholdTime(int time = DEFAULT_TIME)
         {
             thresholdTime = time;
         }
+        /// <summary>
+        /// time 만큼 시간이 흐를때 time out 인지를 판별해주는 함수
+        /// </summary>
+        /// <param name="time">
+        /// time 만큼 시간이 흘렀을 때
+        /// </param>
+        /// <returns>
+        /// time out 인지(TF)를 반환한다
+        /// ThresholdTime 이 0으로 설정되면 항상 F반환
+        /// </returns>
         public bool CheckTimeOut(int time)
         {
             if (thresholdTime == 0) return false;
@@ -346,6 +368,9 @@ namespace RequestTaskProcessing
             if (waitTime >= thresholdTime) return true;
             else return false;
         }
+        /// <summary>
+        /// Time out을 위해 측정하던 시간 초기화
+        /// </summary>
         public void ResetTimeOut()
         {
             waitTime = 0;
@@ -353,10 +378,20 @@ namespace RequestTaskProcessing
 
         //count time
         DateTime startTime;
+        /// <summary>
+        /// 측정하기 원하는 시작시간
+        /// </summary>
         public void StartTime()
         {
             startTime = DateTime.Now;
         }
+        /// <summary>
+        /// 측정이 완료되는 시점
+        /// </summary>
+        /// <returns>
+        /// StartTime 이후부터 흐른시간 반환
+        /// 단위(=ms)
+        /// </returns>
         public int EndTime()
         {
             if (thresholdTime == 0) return 0;
