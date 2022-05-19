@@ -26,23 +26,24 @@
             <!-- Navigation-->
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container px-5">
-                    <a class="navbar-brand" href="index.html">MainBoard</a>
+                    <a class="navbar-brand" href="index.php">MainBoard</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-                            <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Collections</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                                    <li><a class="dropdown-item" href="product-list.html">Outer</a></li>
-                                    <li><a class="dropdown-item" href="product-list.html">Top</a></li>
-                                    <li><a class="dropdown-item" href="product-list.html">Bottom</a></li>
-                                    <li><a class="dropdown-item" href="product-list.html">Overall</a></li>
+                                    <li><a class="dropdown-item" href="Outer-list.php">Outer</a></li>
+                                    <li><a class="dropdown-item" href="Top-list.php">Top</a></li>
+                                    <li><a class="dropdown-item" href="Bottom-list.php">Bottom</a></li>
+                                    <li><a class="dropdown-item" href="Overall-list.php">Overall</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="product_create.html">Product Register</a></li>
+                            <li class="nav-item"><a class="nav-link" href="product_create.php">Product Register</a></li>
+                            <li name="nav_myproducts" class="nav-item"><a class="nav-link" href="myProduct-list.php" style="display: none;">My Products</a></li>
                         </ul>
                     </div>
                 </div>
@@ -66,7 +67,7 @@
                 <div class="container px-5 my-5" data-aos="zoom-in">
                     <div class="row gx-5 align-items-center">
                         <div class="col-lg-6">
-                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="/Bootstrap/ProjectMain/clothes_cnn.png" alt="..."/>
+                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="/GraduationProject/ProjectMain/clothes_cnn.png" alt="..."/>
                         </div>
                         <div class="col-lg-6">
                             <h2 class="fw-bolder">CNN</h2>
@@ -86,7 +87,7 @@
                 <div class="container px-5 my-5" data-aos="zoom-in">
                     <div class="row gx-5 align-items-center">
                         <div class="col-lg-6 order-first order-lg-last">    
-                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="/Bootstrap/ProjectMain/yolo.png" alt="..."/>
+                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="/GraduationProject/ProjectMain/yolo.png" alt="..."/>
                         </div>
                         <div class="col-lg-6">
                             <h2 class="fw-bolder">Yolo v5 (You Only Look Once)</h2>
@@ -107,7 +108,7 @@
                 <div class="container px-5 my-5" data-aos="zoom-in">
                     <div class="row gx-5 align-items-center">
                         <div class="col-lg-6">
-                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="/Bootstrap/ProjectMain/resnet.png" alt="..."/>
+                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="/GraduationProject/ProjectMain/resnet.png" alt="..."/>
                         </div>
                         <div class="col-lg-6">
                             <h2 class="fw-bolder">ResNet</h2>
@@ -128,7 +129,7 @@
                 <div class="container px-5 my-5" data-aos="zoom-in">
                     <div class="row gx-5 align-items-center">
                         <div class="col-lg-6 order-first order-lg-last">
-                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="/Bootstrap/ProjectMain/process.png" alt="..."/>
+                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="/GraduationProject/ProjectMain/process.png" alt="..."/>
                         </div>
                         <div class="col-lg-6">
                             <h2 class="fw-bolder">Whole Process</h2>
@@ -149,7 +150,7 @@
                             <div class="text-center">
                                 <img class="img-fluid rounded-circle mb-4 px-4" src="https://dummyimage.com/150x150/ced4da/6c757d" alt="..." />
                                 <h5 class="fw-bolder">손우진</h5>
-                                <div class="fst-italic text-muted">Team Manager <br> Frond-end / Database</div>
+                                <div class="fst-italic text-muted">Team Manager <br> Frond-end / Database, Front-Back-DB communication</div>
                             </div>
                         </div>
                         <div class="col mb-5 mb-5 mb-xl-0">

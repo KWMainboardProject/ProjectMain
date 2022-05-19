@@ -20,23 +20,24 @@
             <!-- Navigation-->
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container px-5">
-                    <a class="navbar-brand" href="index.html">MainBoard</a>
+                    <a class="navbar-brand" href="index.php">MainBoard</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-                            <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Collections</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                                    <li><a class="dropdown-item" href="product-list.html">Outer</a></li>
-                                    <li><a class="dropdown-item" href="product-list.html">Top</a></li>
-                                    <li><a class="dropdown-item" href="product-list.html">Bottom</a></li>
-                                    <li><a class="dropdown-item" href="product-list.html">Overall</a></li>
+                                    <li><a class="dropdown-item" href="Outer-list.php">Outer</a></li>
+                                    <li><a class="dropdown-item" href="Top-list.php">Top</a></li>
+                                    <li><a class="dropdown-item" href="Bottom-list.php">Bottom</a></li>
+                                    <li><a class="dropdown-item" href="Overall-list.php">Overall</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="product_create.html">Product Register</a></li>
+                            <li class="nav-item"><a class="nav-link" href="product_create.php">Product Register</a></li>
+                            <li name="nav_myproducts" class="nav-item"><a class="nav-link" href="myProduct-list.php" style="display: none;">My Products</a></li>
                         </ul>
                     </div>
                 </div>
@@ -56,13 +57,13 @@
                                 </ul>
                             </div>
                             <div class="mb-3 row">
-                                <a href="#!" class="col-6 d-grid p-1 justify-content-center">
-                                    <!--search 버튼 이미지 없을 시 비활성화 필요-->
+                                <div class="col-6 d-grid p-1 justify-content-center">
+                                    <!--search 버튼 이미지 유무에 따른 비활성화-->
                                     <button type="button" disabled class="btn btn-lg btn-outline-dark" id="Search_btn" data-bs-toggle="modal" data-bs-target="#CF_Modal">
                                         Search
                                     </button>
-                                </a>
-                                <!-- Modal Section -->
+                                </div>
+                                <!-- Confirm(확인) Modal Section -->
                                 <div class="modal fade" id="CF_Modal" tabindex="-1" aria-labelledby="CF_ModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -74,7 +75,7 @@
                                                 Is this the picture you are looking for?
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="Image_result.html">
+                                                <a href="Image_result.php">
                                                     <button type="button" class="btn btn-primary">Yes</button>
                                                 </a>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
@@ -82,14 +83,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="index.html" class="col-6 d-grid p-1 justify-content-center">
+                                <a href="index.php" class="col-6 d-grid p-1 justify-content-center">
                                     <button type="button" class="btn btn-lg btn-outline-danger" id="Cancel_btn">Cancel</button>
                                 </a>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <p style="font-weight:bold">이미지 미리보기</p>
-                            <img id="preview" style="max-width: 100%; height: auto; object-fit: contain;">
+                            <img class="ImgPreview" id="preview" style="max-width: 100%; height: auto; object-fit: contain;">
                         </div>
                     </div>
                 </div>
@@ -126,7 +127,6 @@
 
                 document.getElementById('Search_btn').disabled = false;
             }
-
         </script>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
