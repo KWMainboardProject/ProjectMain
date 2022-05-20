@@ -117,7 +117,56 @@ namespace RequestTaskProcessing
         protected string classfication;
 	}
 
-	public class ConfidenceContainer : IJObjectUseAbleContainer
+    public class ReturnedResourceContainer : IJObjectUseAbleContainer
+    {
+		public ReturnedResourceContainer(MessageType type=MessageType.EmptyMessage, IJObjectUseAbleContainer container=null)
+        {
+			SetKey(type);
+			if(container != null) SetContainer(container);
+        }
+        public JObject GetJObject()
+        {
+			JObject json = new JObject();
+			json.Add(GetKey(), container);
+			return json;
+        }
+
+        public string GetKey()
+        {
+			return type.ToString();
+        }
+
+		protected MessageType type = MessageType.EmptyMessage;
+		protected JObject container = null;
+		public void SetKey(MessageType type)
+        {
+			this.type = type;
+        }
+		public void SetContainer(IJObjectUseAbleContainer container)
+        {
+			if (container == null) throw new NullReferenceException();
+			this.container = container.GetJObject();
+        }
+		public void SetContainer(JObject container)
+        {
+			this.container = container;
+        }
+
+        public JToken GetValue()
+        {
+			return container;
+        }
+
+        public void SetJObject(JObject obj)
+        {
+			string key = obj.Properties().ToString();
+			SetKey( (MessageType)Enum.Parse(typeof(MessageType), key) );
+
+			SetContainer(obj.Value<JObject>());
+		}
+	}
+
+    public class ConfidenceContainer : IJObjectUseAbleContainer
     {
 		private float threashold = 0.55f;
 		public ConfidenceContainer(float confidence=0)

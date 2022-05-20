@@ -10,8 +10,7 @@ namespace RequestTaskProcessing
         //Empty
         EmptyMessage = 0,
         //Request
-        Request_ImageAnalysis_ImagePath,
-        Request_ImageAnalysis_JsonPath,
+        Request_ImageAnalysis_ImagePath, //Request_ImageSave_JsonPath,
         Request_Removebg_ImagePath,
         Request_FindMainCategory_ImagePath,
         Request_FindSubCategory_Top_ImagePath,
@@ -64,7 +63,18 @@ namespace RequestTaskProcessing
             if (t != MessageType.EmptyMessage) this.type = t;
             if (r != null) this.resource = r;
         }
+        public TaskMessage(TaskMessage message)
+        {
+            SetMessage(message);
+        }
 
+        public void SetMessage(TaskMessage message)
+        {
+            this.ip.Value = message.ip.Value;
+            this.productor = message.productor;
+            this.type = message.type;
+            this.resource.SetJObject(message.resource.GetJObject());
+        }
         public void Print()
         {
             Console.WriteLine("===========Message===========");

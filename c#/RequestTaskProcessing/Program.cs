@@ -19,9 +19,28 @@ namespace RequestTaskProcessing
             //TestWorkResourceMethod();
             //TestTaskMessageMethod();
             //TestTaskMessageAndConsumer();
-            TestTaskManager();
+            //TestTaskManager();
+            TestReturnedResourceContiner();
         }
+        static void TestReturnedResourceContiner()
+        {
+            TestWorkResouceClass test = new TestWorkResouceClass();
+            string id = "test_Resource_";
+            string classPath = test.WriteClassfication(id, "subcategory");
+            string boundPath = test.WriteBoundbox(id, "boundbox");
 
+
+            MainCategoryContainer container = new MainCategoryContainer();
+            container.classficationContainer.SetJObject(test.ReadJsonFile(classPath));
+            container.boundboxContainer.SetJObject(test.ReadJsonFile(boundPath));
+
+            ReturnedResourceContainer container1 = new ReturnedResourceContainer(MessageType.Receive_Container_MainCategory,container);
+            Console.WriteLine(container1.GetJObject().ToString());
+
+
+            Console.WriteLine(container1.GetValue().ToString());
+            Console.WriteLine(container1.GetKey());
+        }
         static void TestWorkResourceMethod()
         {
             TestWorkResouceClass test = new TestWorkResouceClass();
