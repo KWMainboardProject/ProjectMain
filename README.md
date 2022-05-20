@@ -1,10 +1,7 @@
-# ProjectMain
+# Mainboard
+Clothing search system using AI
 21-22 KW,Univ SW Partnership Project
 
-Visit to https://kwmainboardproject.github.io/ProjectMain/webPage for experience our project!
+Visit to http://uijin97.cafe24.com/webPage for experience our project!
 
-Now, Team Developing our own App ! 
-Using App 
-step 1 . downloading ====
-step 2 . xxxxx
-step 3 . @-@
+Now, Team Developing our own App!
