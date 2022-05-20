@@ -83,6 +83,10 @@ namespace RequestTaskProcessing
 			return value;
 		}
 
+		public List<IJObjectUseAbleContainer> GetList()
+        {
+			return containers;
+        }
         protected List<IJObjectUseAbleContainer> containers = new List<IJObjectUseAbleContainer>();
     }
 
@@ -206,7 +210,7 @@ namespace RequestTaskProcessing
     {
 		public BoundBoxContainer(int x_min=0, int x_max=0, int y_min=0, int y_max=0)
         {
-			SetBoundBox(x_min, x_max, y_min, y_max);
+			if(x_min+x_max+y_max+y_min != 0) SetBoundBox(x_min, x_max, y_min, y_max);
 		}
 		public JObject GetJObject()
 		{
@@ -227,6 +231,7 @@ namespace RequestTaskProcessing
 			this.boundbox.Add(x_max);
 			this.boundbox.Add(y_min);
 			this.boundbox.Add(y_max);
+			IsdetectObject = true;
 		}
 
 		public string GetKey() { return "boundbox"; }
@@ -236,17 +241,47 @@ namespace RequestTaskProcessing
 			return GetJObject()[GetKey()];
 		}
 
-        /// <summary>
-        /// 0:x_min / 1:x_max / 2:y_min / 3:y_max
-        /// </summary>
-        protected JArray boundbox;
+		protected bool IsdetectObject = false;
+
+		/// <summary>
+		/// 0:x_min / 1:x_max / 2:y_min / 3:y_max
+		/// </summary>
+		protected JArray boundbox;
     }
+    public class FashionObjectsContainer : CompoundContainer
+    {
+		public FashionObjectsContainer()
+        {
+			SetAtribute(top);
+			SetAtribute(bottom);
+			SetAtribute(overall);
+			SetAtribute(outer);
+        }
+        public override string GetKey()
+        {
+			return "Fashion";
+        }
+
+        public override void SetJObject(JObject obj)
+        {
+			JObject value = (JObject)obj[GetKey()];
+			foreach (IJObjectUseAbleContainer container in containers)
+			{
+				container.SetJObject(value);
+			}
+		}
+		public MainCategoryContainer top = new MainCategoryContainer("Top");
+		public MainCategoryContainer bottom = new MainCategoryContainer("Bottom");
+		public MainCategoryContainer overall = new MainCategoryContainer("Overall");
+		public MainCategoryContainer outer = new MainCategoryContainer("Outer");
+	}
+
     public class MainCategoryContainer : CompoundContainer
     {
-		public MainCategoryContainer()
+		public MainCategoryContainer(string classfication= "maincategory")
         {
 			classficationContainer = new ClassficationContainer();
-			classficationContainer.SetClassfication("maincategory");
+			classficationContainer.SetClassfication(classfication);
 			boundboxContainer = new BoundBoxContainer();
             //SetAtribute(classficationContainer);
             SetAtribute(boundboxContainer);
@@ -270,6 +305,7 @@ namespace RequestTaskProcessing
 		public void SetBoundbox(int x_min, int x_max, int y_min, int y_max)
         {
 			boundboxContainer.SetBoundBox(x_min, x_max, y_min, y_max);
+
         }
 
 		ClassficationContainer GetClassficationContainer()

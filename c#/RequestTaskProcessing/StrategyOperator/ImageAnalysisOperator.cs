@@ -35,17 +35,33 @@ namespace RequestTaskProcessing.StrategyOperator
             IMessageProductAble requester = GPUWorkManager.GetInstance().GetProductor();
 
             //request remove bg
-            TaskMessage rmbgM = new TaskMessage(requestMessage);
-            rmbgM.type = MessageType.Request_Removebg_ImagePath;
-            rmbgM.productor = GetProductor();
-            // 받아야할 메세지 추가하기
-            requester.Product(rmbgM);
+            TaskMessage rmbgM = new TaskMessage(requestMessage);        //init
+            rmbgM.type = MessageType.Request_Removebg_ImagePath;        //set
+            rmbgM.productor = GetProductor();                           //set
+            waitMessage.Add(MessageType.Receive_ImagePath_RemoveBG);    //받을 메세지 추가
+            requester.Product(rmbgM);                                   //request
 
             //wait returned remove bg
+            Start(); // Set rbimgPath
+            Join();
+            InitThread();
+            Console.WriteLine("Set Remove Backgruound Message");
+            Console.WriteLine(rbimgPath.GetJObject().ToString());
 
             //request yolo v5
+            TaskMessage yoloM = new TaskMessage(requestMessage);
+            yoloM.type = MessageType.Request_FindMainCategory_ImagePath;        //set
+            yoloM.productor = GetProductor();                                   //set
+            yoloM.resource = rbimgPath;                                         //set
+            waitMessage.Add(MessageType.Receive_Container_DetectedObjects);     //받을 메세지 추가
+            requester.Product(yoloM);                                          //request
 
             //wait returnd Detected objects
+            Start(); // Set container
+            Join();
+            InitThread();
+            Console.WriteLine("Set Detected Objects Message");
+            Console.WriteLine(container.GetJObject().ToString());
 
             // Yolo postprocessing
 
@@ -71,22 +87,31 @@ namespace RequestTaskProcessing.StrategyOperator
 
             //origin img delete
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>
+        /// type : Receive_Container_Fashion
+        /// </returns>
         public TaskMessage GetMessage()
         {
-            throw new NotImplementedException();
+            TaskMessage taskMessage = new TaskMessage(requestMessage);
+            taskMessage.type = MessageType.Receive_Container_Fashion;        //set
+            taskMessage.productor = null;                                   //set
+            taskMessage.resource = container;                               //set
+            return taskMessage;
         }
 
         public void ClearResource()
         {
-            throw new NotImplementedException();
+            return;
         }
         /// <summary>
         /// Thread는 한번씩 밖에 start를 못하니
         /// 여러번 해주기 위해서 이전 thread를 버리는 
         /// 함수
         /// </summary>
-        public void init()
+        public void InitThread()
         {
             if (thread.IsAlive)
             {
@@ -101,6 +126,51 @@ namespace RequestTaskProcessing.StrategyOperator
         {
             timeout.SetThesholdTime(time);
         }
+
+        protected FashionObjectsContainer container = new FashionObjectsContainer();
+        protected StringContainer rbimgPath = null;
+        protected List<MessageType> waitMessage = new List<MessageType>();
+
+        public void OpenMessage(TaskMessage message)
+        {
+            //delete wait message
+            int idx = waitMessage.FindIndex(x => x == message.type);
+            waitMessage.RemoveAt(idx);
+
+            //open & input to container
+            switch (message.type)
+            {
+                case MessageType.Receive_ImagePath_RemoveBG:
+                    rbimgPath.SetJObject(message.resource.GetJObject()); //clone
+                    break;
+                case MessageType.Receive_Container_DetectedObjects:
+                    container.SetJObject(message.resource.GetJObject()); //clone
+                    break;
+                case MessageType.Receive_Container_SubCategory_Top:
+                case MessageType.Receive_Container_Pattern_Top:
+                    container.top.SetAtribute(message.resource);        //attach
+                    break;
+                case MessageType.Receive_Container_SubCategory_Bottom:
+                case MessageType.Receive_Container_Pattern_Bottom:
+                    container.bottom.SetAtribute(message.resource);        //attach
+                    break;
+                case MessageType.Receive_Container_SubCategory_Outer:
+                case MessageType.Receive_Container_Pattern_Outer:
+                    container.outer.SetAtribute(message.resource);        //attach
+                    break;
+                case MessageType.Receive_Container_SubCategory_Overall:
+                case MessageType.Receive_Container_Pattern_Overall:
+                    container.overall.SetAtribute(message.resource);        //attach
+                    break;
+                case MessageType.Receive_Container_Style:
+                    foreach(CompoundContainer obj in container.GetList())
+                    {
+                        obj.SetAtribute(message.resource);                  //모든 요소에 attach
+                    }
+                    break;
+            }
+        }
+
         /// <summary>
         /// Q에서 내용을 기다리다가
         /// return Message를 보고 container를 채우는 methods 
@@ -109,9 +179,8 @@ namespace RequestTaskProcessing.StrategyOperator
         {
             if (q == null)
                 throw new NullReferenceException();
-            if (factory == null)
-                throw new NullReferenceException();
-            while (thread.IsAlive)
+            //thread가 살아있고, 받을 메세지가 남았다면
+            while (thread.IsAlive && waitMessage.Count>0)
             {
                 Thread.Sleep(SLEEP_TIME);
                 //stop thread and claear Q
@@ -134,27 +203,17 @@ namespace RequestTaskProcessing.StrategyOperator
                 }
 
                 //Get message
-                TaskMessage m = Consume();
+                //Get message
+                TaskMessage m = null;
+                m = Consume();
+                //try { m = Consume(); }
+                //catch (TimeoutException e) { StopAndClear(); }
                 if (!qTF || m == null)//fali consume
                 {
                     continue;
                 }
                 //Success consume
-
-
-
-                //Get Operator
-                IStrategyOperateAble strategy = factory.GetOperator(m.type);
-
-                if (strategy == null)
-                    throw new NullReferenceException();
-
-                //Run operator
-                strategy.SetResource(m);
-                strategy.Work();
-                IMessageProductAble sender = m.productor;
-                sender.Product(strategy.GetMessage());
-                strategy.ClearResource();
+                OpenMessage(m);
             }
         }
         /// <summary>
@@ -162,12 +221,18 @@ namespace RequestTaskProcessing.StrategyOperator
         /// </summary>
         public override void Start()
         {
-            throw new NotImplementedException();
+            if (thread == null)
+            {
+                thread = new Thread(() => Run());
+            }
+            thread.Start();
         }
 
         public override void Join()
         {
-            throw new NotImplementedException();
+            if (thread == null)
+                throw new NullReferenceException();
+            thread.Join();
         }
 
         protected Thread thread = null;

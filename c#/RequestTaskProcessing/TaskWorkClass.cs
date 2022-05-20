@@ -155,11 +155,14 @@ namespace RequestTaskProcessing
                     throw new NullReferenceException();
 
                 //Run operator
-                strategy.SetResource(m);
-                strategy.Work();
-                IMessageProductAble sender = m.productor;
-                sender.Product(strategy.GetMessage());
-                strategy.ClearResource();
+                //lock (strategy)
+                {
+                    strategy.SetResource(m);
+                    strategy.Work();
+                    IMessageProductAble sender = m.productor;
+                    sender.Product(strategy.GetMessage());
+                    strategy.ClearResource();
+                }
             }
         }
         public override void Start()
@@ -305,15 +308,57 @@ namespace RequestTaskProcessing
     public class GPUWorkManager : WorkManager
     {
         const int THREAD_COUNT = 3;
+
+        int messageCount = 0;
         public override void SchedulingTaskProcess()
         {
-            throw new NotImplementedException();
+            if (q == null)
+                throw new NullReferenceException();
+            while (scheduleThread.IsAlive)
+            {
+                Thread.Sleep(SLEEP_TIME);
+                //stop thread and claear Q
+                if (stopAndClearTF)
+                {
+                    lock (q)
+                    {
+                        do
+                        {
+                            Consume();
+                            //clear Q
+                        } while (!qTF);
+
+                        stopAndClearTF = false;
+
+                        //need thread stop
+                        Console.WriteLine("plz thread stop at QThread.Run");
+                        break;
+                    }
+                }
+
+                //Get message
+                TaskMessage m = null;
+                try { m = Consume(); }
+                catch (TimeoutException e) { StopAndClear(); }
+
+                if (!qTF || m == null)//fali consume
+                {
+                    continue;
+                }
+                //Success consume
+                IMessageProductAble p = workers[messageCount % THREAD_COUNT].GetProductor();
+                //plz change scheduling methods
+                p.Product(m);
+            }
         }
 
         protected override void Run()
         {
             Console.WriteLine("GpuWorkManaer - Run");
-            throw new NotImplementedException();
+            for (int i = 0; i < THREAD_COUNT; i++)
+            {
+                workers.Add(new GPUWorker());
+            }
         }
 
 
