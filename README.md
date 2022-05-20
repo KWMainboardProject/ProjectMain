@@ -1,6 +1,7 @@
 # Mainboard
 **Clothing search system using AI**
-#####<21-22 KW,Univ SW Partnership Project>
+KwangWoon University SW Partnership Project
+(21.08 ~ 22.05)
 
 Visit to http://uijin97.cafe24.com for experience our project!
 
