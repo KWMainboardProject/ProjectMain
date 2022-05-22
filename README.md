@@ -1,10 +1,6 @@
-# ProjectMain
-21-22 KW,Univ SW Partnership Project
+# Mainboard
+**🧥Clothing search system using AI**
+KwangWoon University SW Partnership Project
+(21.08 ~ 22.05)
 
-Visit to https://kwmainboardproject.github.io/ProjectMain/webPage for experience our project!
-
-Now, Team Developing our own App ! 
-Using App 
-step 1 . downloading ====
-step 2 . xxxxx
-step 3 . @-@
+Visit to http://uijin97.cafe24.com for experience our project!
