@@ -74,7 +74,7 @@ namespace RequestTaskProcessing
             this.ip.Value = message.ip.Value;
             this.productor = message.productor;
             this.type = message.type;
-            this.resource.SetJObject(message.resource.GetJObject());
+            this.resource = message.resource;
         }
         public void Print()
         {

@@ -32,21 +32,25 @@ namespace RequestTaskProcessing.StrategyOperator
         public void Work()
         {
             if (requestMessage == null) throw new NullReferenceException();
-            IMessageProductAble requester = GPUWorkManager.GetInstance().GetProductor();
+            GPUWorkManager requester = GPUWorkManager.GetInstance();
+            requester.Start();
+
 
             //request remove bg
             TaskMessage rmbgM = new TaskMessage(requestMessage);        //init
             rmbgM.type = MessageType.Request_Removebg_ImagePath;        //set
             rmbgM.productor = GetProductor();                           //set
             waitMessage.Add(MessageType.Receive_ImagePath_RemoveBG);    //받을 메세지 추가
-            requester.Product(rmbgM);                                   //request
+            requester.GetProductor().Product(rmbgM);                                   //request
 
             //wait returned remove bg
             Start(); // Set rbimgPath
             Join();
+            //Console.WriteLine("Pass Join");
             InitThread();
-            Console.WriteLine("Set Remove Backgruound Message");
-            Console.WriteLine(rbimgPath.GetJObject().ToString());
+            //Console.WriteLine("Set Remove Backgruound Message");
+            //Console.WriteLine(rbimgPath.GetJObject().ToString());
+            return;
 
             //request yolo v5
             TaskMessage yoloM = new TaskMessage(requestMessage);
@@ -54,7 +58,7 @@ namespace RequestTaskProcessing.StrategyOperator
             yoloM.productor = GetProductor();                                   //set
             yoloM.resource = rbimgPath;                                         //set
             waitMessage.Add(MessageType.Receive_Container_DetectedObjects);     //받을 메세지 추가
-            requester.Product(yoloM);                                          //request
+            requester.GetProductor().Product(yoloM);                                          //request
 
             //wait returnd Detected objects
             Start(); // Set container
@@ -134,14 +138,13 @@ namespace RequestTaskProcessing.StrategyOperator
         public void OpenMessage(TaskMessage message)
         {
             //delete wait message
-            int idx = waitMessage.FindIndex(x => x == message.type);
-            waitMessage.RemoveAt(idx);
+            waitMessage.Remove(message.type);
 
             //open & input to container
             switch (message.type)
             {
                 case MessageType.Receive_ImagePath_RemoveBG:
-                    rbimgPath.SetJObject(message.resource.GetJObject()); //clone
+                    rbimgPath = message.resource as StringContainer; //clone
                     break;
                 case MessageType.Receive_Container_DetectedObjects:
                     container.SetJObject(message.resource.GetJObject()); //clone

@@ -21,25 +21,59 @@ namespace RequestTaskProcessing
             //TestTaskMessageAndConsumer();
             //TestTaskManager();
             TestReturnedResourceContiner();
+            //TestTaskMessage();
         }
+
+        static void TestTaskMessage()
+        {
+            TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
+            TaskMessage m = new TaskMessage(
+                    "Task" + 123123.ToString(),
+                    sender.GetProductor(),
+                    MessageType.Request_ImageAnalysis_ImagePath,
+                    new StringContainer("img_path", "./task/img_" + 123123.ToString()));
+
+            m.Print();
+
+            TaskMessage mCopy = new TaskMessage(m);
+            mCopy.Print();
+        }
+
+        //static void Test
         static void TestReturnedResourceContiner()
         {
-            TestWorkResouceClass test = new TestWorkResouceClass();
-            string id = "test_Resource_";
-            string classPath = test.WriteClassfication(id, "subcategory");
-            string boundPath = test.WriteBoundbox(id, "boundbox");
+            const int TASK_NUM = 10;
+            TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
+            TaskManager taskManager = TaskManager.GetInstance();
+
+            sender.Start();
+            taskManager.Start();
 
 
-            MainCategoryContainer container = new MainCategoryContainer();
-            container.classficationContainer.SetJObject(test.ReadJsonFile(classPath));
-            container.boundboxContainer.SetJObject(test.ReadJsonFile(boundPath));
+            IMessageProductAble p = taskManager.GetProductor();
+            Console.WriteLine("Create Strat Message");
+            for (int i = 0; i < TASK_NUM; i++)
+            {
+                TaskMessage m = new TaskMessage(
+                    "Task" + i.ToString(),
+                    sender.GetProductor(),
+                    MessageType.Request_ImageAnalysis_ImagePath,
+                    new StringContainer("img_path", "./task/img_"+i.ToString()));
+                p.Product(m);
+            }
 
-            ReturnedResourceContainer container1 = new ReturnedResourceContainer(MessageType.Receive_Container_MainCategory,container);
-            Console.WriteLine(container1.GetJObject().ToString());
+            Console.WriteLine("Consume Message");
+            while (!sender.IsEmpty())
+            {
+                TaskMessage m = sender.Consume();
+                m.Print();
+            }
 
-
-            Console.WriteLine(container1.GetValue().ToString());
-            Console.WriteLine(container1.GetKey());
+            taskManager.SetTimeOutThreshold();
+            taskManager.Join();
+            sender.SetTimeOutThreshold();
+            sender.Join();
+            Console.WriteLine("complete##################################################");
         }
         static void TestWorkResourceMethod()
         {
@@ -110,7 +144,7 @@ namespace RequestTaskProcessing
         }
         static void TestTaskManager()
         {
-            const int TASK_NUM = 50;
+            const int TASK_NUM = 10;
             TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
             TaskManager taskManager = TaskManager.GetInstance();
 

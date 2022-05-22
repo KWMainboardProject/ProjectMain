@@ -43,7 +43,7 @@ namespace RequestTaskProcessing
 
         public void SetJObject(JObject obj)
         {
-            throw new NotImplementedException();
+			Value = (string)obj[GetKey()];
         }
 		protected string key = null;
 		protected string str = null;
@@ -208,6 +208,7 @@ namespace RequestTaskProcessing
 
 	public class BoundBoxContainer : IJObjectUseAbleContainer
     {
+		private int threashold = 5;
 		public BoundBoxContainer(int x_min=0, int x_max=0, int y_min=0, int y_max=0)
         {
 			if(x_min+x_max+y_max+y_min != 0) SetBoundBox(x_min, x_max, y_min, y_max);
@@ -231,8 +232,23 @@ namespace RequestTaskProcessing
 			this.boundbox.Add(x_max);
 			this.boundbox.Add(y_min);
 			this.boundbox.Add(y_max);
-			IsdetectObject = true;
 		}
+
+		/// <summary>
+		/// 객체가 비었는지 아닌지 판별해줌
+		/// 비어있으면 false return
+		/// </summary>
+		public bool IsEmpty
+        {
+            get 
+			{
+				int sum = (int)boundbox[0]
+					+ (int)boundbox[1]
+					+ (int)boundbox[2]
+					+ (int)boundbox[3];
+				return (sum > threashold);
+			}
+        }
 
 		public string GetKey() { return "boundbox"; }
 
@@ -240,9 +256,6 @@ namespace RequestTaskProcessing
         {
 			return GetJObject()[GetKey()];
 		}
-
-		protected bool IsdetectObject = false;
-
 		/// <summary>
 		/// 0:x_min / 1:x_max / 2:y_min / 3:y_max
 		/// </summary>

@@ -46,7 +46,10 @@ namespace RequestTaskProcessing
             }
 
             //time out check and Run
-            if (message != null && qTF) timeout.ResetTimeOut();//성공 시 timeout reset
+            if (message != null && qTF)
+            {
+                timeout.ResetTimeOut();//성공 시 timeout reset
+            }
             else if (timeoutTF) throw new TimeoutException();//message가 계속 없을 때, time out으로 멈춤
 
             //time start
@@ -209,20 +212,32 @@ namespace RequestTaskProcessing
         /// 
         /// </summary>
         abstract public void SchedulingTaskProcess();
+
+        protected bool isStart = false;
         public override void Start()
         {
-            Run();
-
-            if (workers.Count == 0)
-                throw new NullReferenceException();
-
-            foreach(var worker in workers)
+            if (!isStart)
             {
-                worker.Start();
+                lock (this)
+                {
+                    if (!isStart)
+                    {
+                        Run();
+
+                        if (workers.Count == 0)
+                            throw new NullReferenceException();
+
+                        foreach (var worker in workers)
+                        {
+                            worker.Start();
+                        }
+                        Thread.Sleep(SLEEP_TIME);
+                        scheduleThread = new Thread(() => SchedulingTaskProcess());
+                        scheduleThread.Start();
+                        isStart = true;
+                    }
+                }
             }
-            Thread.Sleep(SLEEP_TIME);
-            scheduleThread = new Thread(() => SchedulingTaskProcess());
-            scheduleThread.Start();
         }
         public override void Join()
         {
@@ -307,7 +322,7 @@ namespace RequestTaskProcessing
     /// </summary>
     public class GPUWorkManager : WorkManager
     {
-        const int THREAD_COUNT = 3;
+        const int THREAD_COUNT = 1;
 
         int messageCount = 0;
         public override void SchedulingTaskProcess()
@@ -338,13 +353,16 @@ namespace RequestTaskProcessing
 
                 //Get message
                 TaskMessage m = null;
-                try { m = Consume(); }
+                try { m = Consume(); Console.WriteLine("Try Counsume in gpu worker"); }
                 catch (TimeoutException e) { StopAndClear(); }
 
                 if (!qTF || m == null)//fali consume
                 {
                     continue;
                 }
+                Console.WriteLine("GPU Worker Catch Message");
+                m.Print();
+
                 //Success consume
                 IMessageProductAble p = workers[messageCount % THREAD_COUNT].GetProductor();
                 //plz change scheduling methods

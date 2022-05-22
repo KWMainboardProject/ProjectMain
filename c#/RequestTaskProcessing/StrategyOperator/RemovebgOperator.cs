@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading; ;
+using System.Threading;
 
 namespace RequestTaskProcessing.StrategyOperator
 {
@@ -13,6 +13,7 @@ namespace RequestTaskProcessing.StrategyOperator
         protected RemovebgOperator()
         {
             Console.WriteLine("plz weight upload");
+            //plz set gpu device
         }
         public void ClearResource()
         {
@@ -25,7 +26,8 @@ namespace RequestTaskProcessing.StrategyOperator
             taskMessage.type = MessageType.Receive_Container_Fashion;        //set
             taskMessage.productor = null;                                   //set
             taskMessage.resource = 
-                new StringContainer("img_path", "./gpu_worker/removed_img.jpg");         //set
+                new StringContainer("img_path", 
+                requestMessage.resource.GetValue().ToString()+"/gpu_worker/removed_img.jpg");         //set
             return taskMessage;
         }
 
@@ -38,7 +40,7 @@ namespace RequestTaskProcessing.StrategyOperator
 
         public void Work()
         {
-            Console.WriteLine("remove bg는 자요");
+            Console.WriteLine(requestMessage.ip.Value+ "를 실행 중이예요.\n remove bg는 자요");
             Thread.Sleep(1000);
             return;
             throw new NotImplementedException();

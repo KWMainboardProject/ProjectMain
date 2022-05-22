@@ -26,7 +26,7 @@ namespace RequestTaskProcessing.StrategyOperator
                 switch (type)
                 {
                     case MessageType.Request_Removebg_ImagePath:
-                        throw new NotImplementedException();
+                        strategyOperator = RemovebgOperator.GetInstance();
                         break;
                     case MessageType.Request_FindMainCategory_ImagePath:
                         throw new NotImplementedException();
@@ -101,6 +101,7 @@ namespace RequestTaskProcessing.StrategyOperator
                         strategyOperator = new ImageAnalysisOperator();
                         break;
                     case MessageType.Request_TestTask_container:
+                        throw new NotImplementedException();
                         strategyOperator = new TestTaskManager.TestTask_ResourceContainer_NoHelper();
                         break;
                 }
