@@ -44,10 +44,10 @@ namespace RequestTaskProcessing.StrategyOperator
         {
             lock (Holder.instance)
             {
-                Console.WriteLine(requestMessage.ip.Value + "_yolo를 실행 중이예요.\n remove bg는 자요");
+                //Console.WriteLine(requestMessage.ip.Value + "_yolo를 실행 중이예요.\n remove bg는 자요");
                 SetContainer();
                 Thread.Sleep(1000);
-                Console.WriteLine(requestMessage.ip.Value + "_yolo는 작업을 완료했어요");
+                //Console.WriteLine(requestMessage.ip.Value + "_yolo는 작업을 완료했어요");
                 return;
                 throw new NotImplementedException();
             }

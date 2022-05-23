@@ -112,7 +112,7 @@ namespace RequestTaskProcessing
 
     public class Worker : QTheading
     {
-        const int SLEEP_TIME = 1000;
+        const int SLEEP_TIME = 100;
         public Worker(IOperatorFactory factory=null)
         {
             SetOperatorFactory(factory);
@@ -168,19 +168,19 @@ namespace RequestTaskProcessing
                     throw new NullReferenceException();
 
                 //Run operator
-                //lock (strategy)
+                lock (strategy)
                 {
                     IMessageProductAble sender = m.productor;
 
 
-                    Console.WriteLine(this.ToString() + "-> SetResource");
+                    //Console.WriteLine(this.ToString() + "-> SetResource");
                     strategy.SetResource(m);
-                    Console.WriteLine(this.ToString() + "-> Work");
+                    //Console.WriteLine(this.ToString() + "-> Work");
                     strategy.Work();
-                    Console.WriteLine(this.ToString() + "-> GetMessage");
-                    strategy.GetMessage().Print();
+                    //Console.WriteLine(this.ToString() + "-> GetMessage");
+                    //strategy.GetMessage().Print();
                     sender.Product(strategy.GetMessage());
-                    Console.WriteLine(this.ToString() + "-> ClearResource");
+                    //Console.WriteLine(this.ToString() + "-> ClearResource");
                     strategy.ClearResource();
                 }
             }

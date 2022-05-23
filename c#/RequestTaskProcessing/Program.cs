@@ -42,7 +42,7 @@ namespace RequestTaskProcessing
         //static void Test
         static void TestReturnedResourceContiner()
         {
-            const int TASK_NUM = 3;
+            const int TASK_NUM = 5;
             TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
             TaskManager taskManager = TaskManager.GetInstance();
             GPUWorkManager gpuManager = GPUWorkManager.GetInstance();

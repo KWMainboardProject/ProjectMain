@@ -9,7 +9,7 @@ namespace RequestTaskProcessing.StrategyOperator
 {
     public class ImageAnalysisOperator : QTheading, IStrategyOperateAble
     {
-        const int SLEEP_TIME = 3000;
+        const int SLEEP_TIME = 100;
         public ImageAnalysisOperator()
         {
             this.q = new ConcurrentQueue<TaskMessage>();
@@ -49,7 +49,7 @@ namespace RequestTaskProcessing.StrategyOperator
             //Console.WriteLine("Pass Join");
             InitThread();
 
-            Console.WriteLine("Set Removed img And Start Yolo Operator");
+            //Console.WriteLine("Set Removed img And Start Yolo Operator");
 
             //request yolo v5
             TaskMessage yoloM = new TaskMessage(requestMessage);
@@ -63,7 +63,7 @@ namespace RequestTaskProcessing.StrategyOperator
             Start(); // Set container
             Join();
             InitThread();
-            Console.WriteLine("Set Detected Objects Message");
+           // Console.WriteLine("Set Detected Objects Message");
 
             //Console.WriteLine(container.GetJObject().ToString());
 
@@ -145,13 +145,13 @@ namespace RequestTaskProcessing.StrategyOperator
             switch (message.type)
             {
                 case MessageType.Receive_ImagePath_RemoveBG:
-                    Console.WriteLine(this.ToString() + "-> Open Message RemoveBG");
-                    message.Print();
+                    // Console.WriteLine(this.ToString() + "-> Open Message RemoveBG");
+                    // message.Print();
                     rbimgPath = message.resource as StringContainer; //clone
                     break;
                 case MessageType.Receive_Container_DetectedObjects:
-                    Console.WriteLine(this.ToString() + "-> Open Message Detected Objects");
-                    message.Print();
+                    //Console.WriteLine(this.ToString() + "-> Open Message Detected Objects");
+                    //message.Print();
                     container.SetJObject(message.resource.GetJObject()); //clone
                     break;
                 case MessageType.Receive_Container_SubCategory_Top:
@@ -192,8 +192,6 @@ namespace RequestTaskProcessing.StrategyOperator
             if (q == null)
                 throw new NullReferenceException();
             //thread가 살아있고, 받을 메세지가 남았다면
-
-            Console.WriteLine("image analysis thread while TF: "+(thread.IsAlive && waitMessage.Count > 0));
             while (thread.IsAlive && waitMessage.Count>0)
             {
                 Thread.Sleep(SLEEP_TIME);
