@@ -219,7 +219,156 @@ namespace RequestTaskProcessing
 		bool confidence;
 	}
 
-	public class BoundBoxContainer : IJObjectUseAbleContainer
+    public class IntigerContainer : IJObjectUseAbleContainer
+    {
+		public IntigerContainer(string key = "proportion", int num = -1)
+		{
+			Value = num;
+			this.key = key;
+		}
+		public JObject GetJObject()
+		{
+			JObject json = new JObject() ;
+			json.Add(GetKey(), Value);
+			return json;
+		}
+
+		public string GetKey()
+		{
+			return key;
+		}
+
+		public JToken GetValue()
+		{
+			return GetJObject()[GetKey()];
+		}
+
+		public void SetJObject(JObject obj)
+		{
+			try
+			{
+				Value = (int)obj[GetKey()];
+			}
+			catch (NullReferenceException ex)
+			{
+				Value = -1;
+			}
+		}
+		protected string key = null;
+		protected int num = -1;
+		public int Value
+		{
+			get { return num; }
+			set { if (value  >= 0) num = value; }
+		}
+	}
+    public class MainSubColorContainer : CompoundContainer
+    {
+		public MainSubColorContainer()
+        {
+			SetAtribute(main);
+			SetAtribute(sub);
+        }
+        public override string GetKey()
+        {
+			return "color";
+        }
+
+        public override void SetJObject(JObject obj)
+        {
+			if (obj == null) return;
+			JObject value = (JObject)obj[GetKey()];
+			foreach (IJObjectUseAbleContainer container in containers)
+			{
+				container.SetJObject(value);
+			}
+		}
+		public ProportionRgbContainer main = new ProportionRgbContainer("maincolor");
+		public ProportionRgbContainer sub = new ProportionRgbContainer("subcolor");
+	}
+
+    public class ProportionRgbContainer : CompoundContainer
+    {
+		public ProportionRgbContainer(string key="maincolor")
+        {
+			this.key = key;
+			SetAtribute(rgbContainer);
+			SetAtribute(proportionContainer);
+		}
+		public override string GetKey()
+        {
+			return key;
+        }
+
+        public override void SetJObject(JObject obj)
+        {
+			if (obj == null) return;
+			JObject value = (JObject)obj[GetKey()];
+			foreach (IJObjectUseAbleContainer container in containers)
+			{
+				container.SetJObject(value);
+			}
+		}
+
+		public void SetRGB(char r, char g, char b)
+		{
+			rgbContainer.SetRGB(r, g, b);
+		}
+		public void SetProportion(int proportion)
+        {
+			proportionContainer.Value = proportion;
+        }
+
+		protected string key = null;
+		public IntigerContainer proportionContainer = new IntigerContainer();
+		public RgbContainer rgbContainer = new RgbContainer();
+
+    }
+    public class RgbContainer : IJObjectUseAbleContainer
+    {
+		public RgbContainer(int r = -1, int g = -1, int b = -1)
+		{ 
+			if(r+g+b >= 0)
+				SetRGB((char)r, (char)g, (char)b);
+        }
+		public JObject GetJObject()
+		{
+			//if (boundbox[0]+ boundbox[1]+ boundbox[2]+ boundbox[3] =< 0) throw NullReferenceException;
+			JObject json = new JObject();
+			json.Add(GetKey(), rgb);
+			return json;
+		}
+		public void SetJObject(JObject obj)
+		{
+			JArray value = (JArray)obj[GetKey()];
+			this.rgb = value;
+		}
+		public void SetRGB(char r, char g, char b)
+		{
+			rgb = new JArray();
+			this.rgb.Add(r);
+			this.rgb.Add(g);
+			this.rgb.Add(b);
+		}
+		public void SetDumi()
+        {
+			Random r = new Random();
+			SetRGB((char)r.Next(0,255),
+				(char)r.Next(0, 255),
+				(char)r.Next(0, 255));
+        }
+		public string GetKey() { return "rgb"; }
+
+		public JToken GetValue()
+		{
+			return GetJObject()[GetKey()];
+		}
+		/// <summary>
+		/// 0:x_min / 1:x_max / 2:y_min / 3:y_max
+		/// </summary>
+		protected JArray rgb=null;
+	}
+    public class BoundBoxContainer : IJObjectUseAbleContainer
 	{
 		private int threashold = 5;
 		public BoundBoxContainer(int x_min = 0, int x_max = 0, int y_min = 0, int y_max = 0)
@@ -246,7 +395,14 @@ namespace RequestTaskProcessing
 			this.boundbox.Add(y_min);
 			this.boundbox.Add(y_max);
 		}
-
+		public void SetDumi()
+		{
+			Random r = new Random();
+			SetBoundBox(r.Next(10, 200),
+				r.Next(10, 200),
+				r.Next(10, 200),
+				r.Next(10, 200));
+		}
 		/// <summary>
 		/// 객체가 비었는지 아닌지 판별해줌
 		/// 비어있으면 false return
@@ -396,7 +552,58 @@ namespace RequestTaskProcessing
 		public ClassficationContainer classficationContainer = new ClassficationContainer();
 		public ConfidenceContainer confidenceContainer;// = new ConfidenceContainer();
 	}
-    public class WorkResourceClass
+	public class PatternContainer : CompoundContainer
+	{
+		public PatternContainer(float confidence_threshold = 0.55f)
+		{
+			confidenceContainer = new ConfidenceContainer(confidence_threshold);
+			SetAtribute(classficationContainer);
+			SetAtribute(confidenceContainer);
+		}
+		public override string GetKey()
+		{
+			return "pattern";
+		}
+
+		public override void SetJObject(JObject obj)
+		{
+			JObject value = (JObject)obj[GetKey()];
+			foreach (IJObjectUseAbleContainer container in containers)
+			{
+				container.SetJObject(value);
+			}
+		}
+		//string key;
+		public ClassficationContainer classficationContainer = new ClassficationContainer();
+		public ConfidenceContainer confidenceContainer;// = new ConfidenceContainer();
+	}
+	public class StayleContainer : CompoundContainer
+	{
+		public StayleContainer(float confidence_threshold = 0.55f)
+		{
+			confidenceContainer = new ConfidenceContainer(confidence_threshold);
+			SetAtribute(classficationContainer);
+			SetAtribute(confidenceContainer);
+		}
+		public override string GetKey()
+		{
+			return "style";
+		}
+
+		public override void SetJObject(JObject obj)
+		{
+			JObject value = (JObject)obj[GetKey()];
+			foreach (IJObjectUseAbleContainer container in containers)
+			{
+				container.SetJObject(value);
+			}
+		}
+		//string key;
+		public ClassficationContainer classficationContainer = new ClassficationContainer();
+		public ConfidenceContainer confidenceContainer;// = new ConfidenceContainer();
+	}
+	
+	public class WorkResourceClass
 	{
 		public WorkResourceClass()
 		{

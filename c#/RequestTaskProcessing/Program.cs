@@ -20,8 +20,154 @@ namespace RequestTaskProcessing
             //TestTaskMessageMethod();
             //TestTaskMessageAndConsumer();
             //TestTaskManager();
-            TestReturnedResourceContiner();
+            //TestReturnedResourceContiner();
             //TestTaskMessage();
+            TestJsonFile();
+        }
+
+        static void TestJsonFile()
+        {
+            FashionObjectsContainer fashion = new FashionObjectsContainer();
+            Random random = new Random();
+            if (random.Next(2) == 0)
+            {
+                MainCategoryContainer container = fashion.top;
+                container.boundboxContainer.SetDumi();
+
+                {
+                    SubCategoryContainer c = new SubCategoryContainer();
+                    c.classficationContainer.SetClassfication("T-shirt");
+                    c.confidenceContainer.SetConfidence(0.7f);
+                    container.SetAtribute(c);
+                }
+                {
+                    MainSubColorContainer c = new MainSubColorContainer();
+                    c.main.rgbContainer.SetDumi();
+                    c.main.SetProportion(random.Next(30, 100));
+                    c.sub.rgbContainer.SetDumi();
+                    c.sub.SetProportion(random.Next(0, 100 - c.main.proportionContainer.Value));
+                    container.SetAtribute(c);
+                }
+
+                {
+                    PatternContainer c = new PatternContainer();
+                    c.classficationContainer.SetClassfication("solid");
+                    c.confidenceContainer.SetConfidence(0.7f);
+                    container.SetAtribute(c);
+                }
+
+                {
+                    StayleContainer c = new StayleContainer();
+                    c.classficationContainer.SetClassfication("casual");
+                    c.confidenceContainer.SetConfidence(0.7f);
+                    container.SetAtribute(c);
+                }
+
+            }
+            if (random.Next(2) == 0)
+            {
+                MainCategoryContainer container = fashion.bottom;
+                container.boundboxContainer.SetDumi();
+
+                {
+                    SubCategoryContainer c = new SubCategoryContainer();
+                    c.classficationContainer.SetClassfication("Jean");
+                    c.confidenceContainer.SetConfidence(0.7f);
+                    container.SetAtribute(c);
+                }
+                {
+                    MainSubColorContainer c = new MainSubColorContainer();
+                    c.main.rgbContainer.SetDumi();
+                    c.main.SetProportion(random.Next(30, 100));
+                    c.sub.rgbContainer.SetDumi();
+                    c.sub.SetProportion(random.Next(0, 100 - c.main.proportionContainer.Value));
+                    container.SetAtribute(c);
+                }
+
+                {
+                    PatternContainer c = new PatternContainer();
+                    c.classficationContainer.SetClassfication("solid");
+                    c.confidenceContainer.SetConfidence(0.7f);
+                    container.SetAtribute(c);
+                }
+
+                {
+                    StayleContainer c = new StayleContainer();
+                    c.classficationContainer.SetClassfication("casual");
+                    c.confidenceContainer.SetConfidence(0.7f);
+                    container.SetAtribute(c);
+                }
+            }
+            if (random.Next(2) == 0)
+            {
+                MainCategoryContainer container = fashion.overall;
+                container.boundboxContainer.SetDumi();
+
+                {
+                    SubCategoryContainer c = new SubCategoryContainer();
+                    c.classficationContainer.SetClassfication("Jump_suit");
+                    c.confidenceContainer.SetConfidence(0.7f);
+                    container.SetAtribute(c);
+                }
+                {
+                    MainSubColorContainer c = new MainSubColorContainer();
+                    c.main.rgbContainer.SetDumi();
+                    c.main.SetProportion(random.Next(30, 100));
+                    c.sub.rgbContainer.SetDumi();
+                    c.sub.SetProportion(random.Next(0, 100 - c.main.proportionContainer.Value));
+                    container.SetAtribute(c);
+                }
+
+                {
+                    PatternContainer c = new PatternContainer();
+                    c.classficationContainer.SetClassfication("solid");
+                    c.confidenceContainer.SetConfidence(0.7f);
+                    container.SetAtribute(c);
+                }
+
+                {
+                    StayleContainer c = new StayleContainer();
+                    c.classficationContainer.SetClassfication("casual");
+                    c.confidenceContainer.SetConfidence(0.7f);
+                    container.SetAtribute(c);
+                }
+            }
+            if (random.Next(2) == 0)
+            {
+                MainCategoryContainer container = fashion.outer;
+                container.boundboxContainer.SetDumi();
+
+                {
+                    SubCategoryContainer c = new SubCategoryContainer();
+                    c.classficationContainer.SetClassfication("Jaket");
+                    c.confidenceContainer.SetConfidence(0.7f);
+                    container.SetAtribute(c);
+                }
+                {
+                    MainSubColorContainer c = new MainSubColorContainer();
+                    c.main.rgbContainer.SetDumi();
+                    c.main.SetProportion(random.Next(30, 100));
+                    c.sub.rgbContainer.SetDumi();
+                    c.sub.SetProportion(random.Next(0, 100 - c.main.proportionContainer.Value));
+                    container.SetAtribute(c);
+                }
+
+                {
+                    PatternContainer c = new PatternContainer();
+                    c.classficationContainer.SetClassfication("solid");
+                    c.confidenceContainer.SetConfidence(0.7f);
+                    container.SetAtribute(c);
+                }
+
+                {
+                    StayleContainer c = new StayleContainer();
+                    c.classficationContainer.SetClassfication("casual");
+                    c.confidenceContainer.SetConfidence(0.7f);
+                    container.SetAtribute(c);
+                }
+            }
+            string filename = @"C:/sub_category/gpuworker1/fashion.json";
+            File.WriteAllText(filename, fashion.GetJObject().ToString());
         }
 
         static void TestTaskMessage()
