@@ -41,8 +41,14 @@ namespace RequestTaskProcessing
             TaskMessage message = null;
             if (!q.IsEmpty)
             {
-                message = new TaskMessage();
-                qTF = q.TryDequeue(out message);
+                lock (q)
+                {
+                    if (!q.IsEmpty)
+                    {
+                        message = new TaskMessage();
+                        qTF = q.TryDequeue(out message);
+                    }
+                }
             }
 
             //time out check and Run
@@ -85,7 +91,7 @@ namespace RequestTaskProcessing
         {
             stopAndClearTF = true;
             //plz add code
-            Console.WriteLine("plz Add code at StopAndClear");
+            Console.WriteLine("\tplz Add code at StopAndClear");
         }
         /// <summary>
         /// 실제로 manager에서 동작하게 될 동작
@@ -106,7 +112,7 @@ namespace RequestTaskProcessing
 
     public class Worker : QTheading
     {
-        const int SLEEP_TIME = 100;
+        const int SLEEP_TIME = 1000;
         public Worker(IOperatorFactory factory=null)
         {
             SetOperatorFactory(factory);
@@ -135,7 +141,7 @@ namespace RequestTaskProcessing
                         stopAndClearTF = false;
 
                         //need thread stop
-                        Console.WriteLine("plz thread stop at QThread.Run");
+                        Console.WriteLine("\tplz thread stop at QThread.Run");
                         break;
                     }
                 }
@@ -143,7 +149,11 @@ namespace RequestTaskProcessing
                 //Get message
                 TaskMessage m = null;
                 try{m = Consume();}
-                catch(TimeoutException e){StopAndClear();}
+                catch(TimeoutException e)
+                {
+                    Console.WriteLine("Stop and Clear (Worker)");
+                    StopAndClear();
+                }
 
                 if (!qTF || m == null)//fali consume
                 {
@@ -246,7 +256,6 @@ namespace RequestTaskProcessing
                 worker.Join();
             }
             scheduleThread.Join();
-            
         }
         public override void SetTimeOutThreshold(int time = TimeOut.DEFAULT_TIME)
         {
@@ -309,7 +318,7 @@ namespace RequestTaskProcessing
             return Holder.instance;
         }
         /// <summary>
-        /// Lazy Initialization + holder
+        /// Lazy Initialization + holder\t
         /// </summary>
         private static class Holder
         {
@@ -346,15 +355,15 @@ namespace RequestTaskProcessing
                         stopAndClearTF = false;
 
                         //need thread stop
-                        Console.WriteLine("plz thread stop at QThread.Run");
+                        Console.WriteLine("\tplz thread stop at QThread.Run");
                         break;
                     }
                 }
 
                 //Get message
                 TaskMessage m = null;
-                try { m = Consume(); Console.WriteLine("Try Counsume in gpu worker"); }
-                catch (TimeoutException e) { StopAndClear(); }
+                try { m = Consume(); /*Console.WriteLine("Try Counsume in gpu worker");*/ }
+                catch (TimeoutException e) { Console.WriteLine("Stop and Clear");  StopAndClear(); }
 
                 if (!qTF || m == null)//fali consume
                 {
@@ -364,6 +373,7 @@ namespace RequestTaskProcessing
                 m.Print();
 
                 //Success consume
+                messageCount++;
                 IMessageProductAble p = workers[messageCount % THREAD_COUNT].GetProductor();
                 //plz change scheduling methods
                 p.Product(m);

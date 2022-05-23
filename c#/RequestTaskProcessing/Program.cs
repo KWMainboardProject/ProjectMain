@@ -42,16 +42,18 @@ namespace RequestTaskProcessing
         //static void Test
         static void TestReturnedResourceContiner()
         {
-            const int TASK_NUM = 10;
+            const int TASK_NUM = 3;
             TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
             TaskManager taskManager = TaskManager.GetInstance();
+            GPUWorkManager gpuManager = GPUWorkManager.GetInstance();
 
+            Console.WriteLine("Consume Message");
             sender.Start();
             taskManager.Start();
 
 
             IMessageProductAble p = taskManager.GetProductor();
-            Console.WriteLine("Create Strat Message");
+            Console.WriteLine("Strat Create Message");
             for (int i = 0; i < TASK_NUM; i++)
             {
                 TaskMessage m = new TaskMessage(
@@ -61,18 +63,21 @@ namespace RequestTaskProcessing
                     new StringContainer("img_path", "./task/img_"+i.ToString()));
                 p.Product(m);
             }
+            Console.WriteLine("Complete Create Message");
 
-            Console.WriteLine("Consume Message");
-            while (!sender.IsEmpty())
-            {
-                TaskMessage m = sender.Consume();
-                m.Print();
-            }
-
+            
             taskManager.SetTimeOutThreshold();
+            Console.WriteLine("Set Time out task manager");
             taskManager.Join();
+
+            Console.WriteLine("Join taskManager");
+
             sender.SetTimeOutThreshold();
+            Console.WriteLine("Set Time out task manager");
             sender.Join();
+
+            gpuManager.SetTimeOutThreshold();
+            gpuManager.Join();
             Console.WriteLine("complete##################################################");
         }
         static void TestWorkResourceMethod()
@@ -161,6 +166,7 @@ namespace RequestTaskProcessing
                     MessageType.Request_TestTask_container);
                 p.Product(m);
             }
+
             taskManager.SetTimeOutThreshold();
             taskManager.Join();
             sender.SetTimeOutThreshold();
@@ -212,7 +218,7 @@ namespace RequestTaskProcessing
                             stopAndClearTF = false;
 
                             //need thread stop
-                            Console.WriteLine("plz thread stop at QThread.Run");
+                            Console.WriteLine("\tplz thread stop at QThread.Run");
                             break;
                         }
                     }

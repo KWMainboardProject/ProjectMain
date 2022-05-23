@@ -101,7 +101,7 @@ namespace RequestTaskProcessing.StrategyOperator
                         strategyOperator = new ImageAnalysisOperator();
                         break;
                     case MessageType.Request_TestTask_container:
-                        throw new NotImplementedException();
+                        //throw new NotImplementedException();
                         strategyOperator = new TestTaskManager.TestTask_ResourceContainer_NoHelper();
                         break;
                 }

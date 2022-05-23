@@ -48,6 +48,7 @@ namespace RequestTaskProcessing.StrategyOperator
             Join();
             //Console.WriteLine("Pass Join");
             InitThread();
+            Console.WriteLine("Clear working");
             //Console.WriteLine("Set Remove Backgruound Message");
             //Console.WriteLine(rbimgPath.GetJObject().ToString());
             return;
@@ -139,7 +140,8 @@ namespace RequestTaskProcessing.StrategyOperator
         {
             //delete wait message
             waitMessage.Remove(message.type);
-
+            Console.WriteLine("Open Message");
+            message.Print();
             //open & input to container
             switch (message.type)
             {
@@ -172,6 +174,10 @@ namespace RequestTaskProcessing.StrategyOperator
                     }
                     break;
             }
+            if(waitMessage.Count == 0)
+            {
+                StopAndClear();
+            }
         }
 
         /// <summary>
@@ -200,7 +206,7 @@ namespace RequestTaskProcessing.StrategyOperator
                         stopAndClearTF = false;
 
                         //need thread stop
-                        Console.WriteLine("plz thread stop at QThread.Run");
+                        Console.WriteLine("\tplz thread stop at QThread.Run");
                         break;
                     }
                 }

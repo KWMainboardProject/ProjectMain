@@ -12,18 +12,18 @@ namespace RequestTaskProcessing.StrategyOperator
     {
         protected RemovebgOperator()
         {
-            Console.WriteLine("plz weight upload");
+            Console.WriteLine("\tplz weight upload");
             //plz set gpu device
         }
         public void ClearResource()
         {
-            Console.WriteLine("plz clear resource img");
+            Console.WriteLine("\tplz clear resource img");
         }
 
         public TaskMessage GetMessage()
         {
             TaskMessage taskMessage = new TaskMessage(requestMessage);
-            taskMessage.type = MessageType.Receive_Container_Fashion;        //set
+            taskMessage.type = MessageType.Receive_ImagePath_RemoveBG;        //set
             taskMessage.productor = null;                                   //set
             taskMessage.resource = 
                 new StringContainer("img_path", 
@@ -33,7 +33,7 @@ namespace RequestTaskProcessing.StrategyOperator
 
         public void SetResource(TaskMessage message)
         {
-            Console.WriteLine("plz Set resource");
+            Console.WriteLine("\tplz Set resource");
             requestMessage = new TaskMessage(message);
         }
         protected TaskMessage requestMessage = null;
@@ -42,6 +42,7 @@ namespace RequestTaskProcessing.StrategyOperator
         {
             Console.WriteLine(requestMessage.ip.Value+ "를 실행 중이예요.\n remove bg는 자요");
             Thread.Sleep(1000);
+            Console.WriteLine(requestMessage.ip.Value + "는 작업을 완료했어요");
             return;
             throw new NotImplementedException();
         }
