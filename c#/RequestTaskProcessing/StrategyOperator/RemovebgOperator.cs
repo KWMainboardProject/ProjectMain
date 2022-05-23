@@ -12,7 +12,7 @@ namespace RequestTaskProcessing.StrategyOperator
     {
         protected RemovebgOperator()
         {
-            Console.WriteLine("\tplz weight upload");
+            Console.WriteLine("\tplz removebg weight upload");
             //plz set gpu device
         }
         public void ClearResource()
@@ -22,13 +22,16 @@ namespace RequestTaskProcessing.StrategyOperator
 
         public TaskMessage GetMessage()
         {
-            TaskMessage taskMessage = new TaskMessage(requestMessage);
-            taskMessage.type = MessageType.Receive_ImagePath_RemoveBG;        //set
-            taskMessage.productor = null;                                   //set
-            taskMessage.resource = 
-                new StringContainer("img_path", 
-                requestMessage.resource.GetValue().ToString()+"/gpu_worker/removed_img.jpg");         //set
-            return taskMessage;
+            lock (Holder.instance)
+            {
+                TaskMessage taskMessage = new TaskMessage(requestMessage);
+                taskMessage.type = MessageType.Receive_ImagePath_RemoveBG;        //set
+                taskMessage.productor = null;                                   //set
+                taskMessage.resource =
+                    new StringContainer("img_path",
+                    requestMessage.resource.GetValue().ToString() + "/gpu_worker/removed_img.jpg");         //set
+                return taskMessage;
+            }
         }
 
         public void SetResource(TaskMessage message)
@@ -40,11 +43,14 @@ namespace RequestTaskProcessing.StrategyOperator
 
         public void Work()
         {
-            Console.WriteLine(requestMessage.ip.Value+ "를 실행 중이예요.\n remove bg는 자요");
-            Thread.Sleep(1000);
-            Console.WriteLine(requestMessage.ip.Value + "는 작업을 완료했어요");
-            return;
-            throw new NotImplementedException();
+            lock (Holder.instance)
+            {
+                Console.WriteLine(requestMessage.ip.Value + "_removebg를 실행 중이예요.\n remove bg는 자요");
+                Thread.Sleep(1000);
+                Console.WriteLine(requestMessage.ip.Value + "_removebg는 작업을 완료했어요");
+                return;
+                throw new NotImplementedException();
+            }
         }
 
         /// <summary>

@@ -29,7 +29,7 @@ namespace RequestTaskProcessing.StrategyOperator
                         strategyOperator = RemovebgOperator.GetInstance();
                         break;
                     case MessageType.Request_FindMainCategory_ImagePath:
-                        throw new NotImplementedException();
+                        strategyOperator = ClothesObjectDetectOperatorYolov5.GetInstance();
                         break;
                     case MessageType.Request_FindSubCategory_Top_ImagePath:
                         throw new NotImplementedException();

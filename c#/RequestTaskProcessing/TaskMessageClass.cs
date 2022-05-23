@@ -96,8 +96,14 @@ namespace RequestTaskProcessing
     {
         public void Product(TaskMessage massage)
         {
-            if (q == null) throw new NullReferenceException();
-            q.Enqueue(massage);
+            try
+            {
+                q.Enqueue(massage);
+            }
+            catch(NullReferenceException ex)
+            {
+                Console.WriteLine("Deleted Q");
+            }
         }
         public void SetQueue(ConcurrentQueue<TaskMessage> Q)
         {

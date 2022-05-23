@@ -9,7 +9,7 @@ namespace RequestTaskProcessing.StrategyOperator
 {
     public class ImageAnalysisOperator : QTheading, IStrategyOperateAble
     {
-        const int SLEEP_TIME = 100;
+        const int SLEEP_TIME = 3000;
         public ImageAnalysisOperator()
         {
             this.q = new ConcurrentQueue<TaskMessage>();
@@ -48,10 +48,8 @@ namespace RequestTaskProcessing.StrategyOperator
             Join();
             //Console.WriteLine("Pass Join");
             InitThread();
-            Console.WriteLine("Clear working");
-            //Console.WriteLine("Set Remove Backgruound Message");
-            //Console.WriteLine(rbimgPath.GetJObject().ToString());
-            return;
+
+            Console.WriteLine("Set Removed img And Start Yolo Operator");
 
             //request yolo v5
             TaskMessage yoloM = new TaskMessage(requestMessage);
@@ -66,7 +64,8 @@ namespace RequestTaskProcessing.StrategyOperator
             Join();
             InitThread();
             Console.WriteLine("Set Detected Objects Message");
-            Console.WriteLine(container.GetJObject().ToString());
+
+            //Console.WriteLine(container.GetJObject().ToString());
 
             // Yolo postprocessing
 
@@ -105,6 +104,7 @@ namespace RequestTaskProcessing.StrategyOperator
             taskMessage.productor = null;                                   //set
             taskMessage.resource = container;                               //set
             return taskMessage;
+            
         }
 
         public void ClearResource()
@@ -125,6 +125,7 @@ namespace RequestTaskProcessing.StrategyOperator
             }
             thread = null;
             SetTimeOutThreshold(0);
+            stopAndClearTF = false;
         }
 
         public override void SetTimeOutThreshold(int time = TimeOut.DEFAULT_TIME)
@@ -140,15 +141,17 @@ namespace RequestTaskProcessing.StrategyOperator
         {
             //delete wait message
             waitMessage.Remove(message.type);
-            Console.WriteLine("Open Message");
-            message.Print();
             //open & input to container
             switch (message.type)
             {
                 case MessageType.Receive_ImagePath_RemoveBG:
+                    Console.WriteLine(this.ToString() + "-> Open Message RemoveBG");
+                    message.Print();
                     rbimgPath = message.resource as StringContainer; //clone
                     break;
                 case MessageType.Receive_Container_DetectedObjects:
+                    Console.WriteLine(this.ToString() + "-> Open Message Detected Objects");
+                    message.Print();
                     container.SetJObject(message.resource.GetJObject()); //clone
                     break;
                 case MessageType.Receive_Container_SubCategory_Top:
@@ -189,6 +192,8 @@ namespace RequestTaskProcessing.StrategyOperator
             if (q == null)
                 throw new NullReferenceException();
             //thread가 살아있고, 받을 메세지가 남았다면
+
+            Console.WriteLine("image analysis thread while TF: "+(thread.IsAlive && waitMessage.Count > 0));
             while (thread.IsAlive && waitMessage.Count>0)
             {
                 Thread.Sleep(SLEEP_TIME);
@@ -233,8 +238,8 @@ namespace RequestTaskProcessing.StrategyOperator
             if (thread == null)
             {
                 thread = new Thread(() => Run());
+                thread.Start();
             }
-            thread.Start();
         }
 
         public override void Join()

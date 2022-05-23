@@ -170,10 +170,17 @@ namespace RequestTaskProcessing
                 //Run operator
                 //lock (strategy)
                 {
-                    strategy.SetResource(m);
-                    strategy.Work();
                     IMessageProductAble sender = m.productor;
+
+
+                    Console.WriteLine(this.ToString() + "-> SetResource");
+                    strategy.SetResource(m);
+                    Console.WriteLine(this.ToString() + "-> Work");
+                    strategy.Work();
+                    Console.WriteLine(this.ToString() + "-> GetMessage");
+                    strategy.GetMessage().Print();
                     sender.Product(strategy.GetMessage());
+                    Console.WriteLine(this.ToString() + "-> ClearResource");
                     strategy.ClearResource();
                 }
             }
@@ -291,7 +298,7 @@ namespace RequestTaskProcessing
     /// </summary>
     public class TaskManager : WorkManager
     {
-        const int THREAD_COUNT = 3;
+        const int THREAD_COUNT = 1;
 
         /// <summary>
         /// child process에서 counsume 해줌
@@ -369,8 +376,8 @@ namespace RequestTaskProcessing
                 {
                     continue;
                 }
-                Console.WriteLine("GPU Worker Catch Message");
-                m.Print();
+                //Console.WriteLine("GPU Worker Catch Message");
+                //m.Print();
 
                 //Success consume
                 messageCount++;

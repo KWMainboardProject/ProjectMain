@@ -9,7 +9,7 @@ namespace RequestTaskProcessing
 	/// work resouce의 내용을 담을 수 있는 container
 	/// </summary>
 	public interface IJObjectUseAbleContainer
-    {
+	{
 		JObject GetJObject();
 		void SetJObject(JObject obj);
 		string GetKey();
@@ -17,201 +17,214 @@ namespace RequestTaskProcessing
 
 	}
 
-    public class StringContainer : IJObjectUseAbleContainer
-    {
-		public StringContainer(string key="ip",string str=null)
-        {
+	public class StringContainer : IJObjectUseAbleContainer
+	{
+		public StringContainer(string key = "ip", string str = null)
+		{
 			if (str != null) Value = str;
 			this.key = key;
-        }
-        public JObject GetJObject()
-        {
+		}
+		public JObject GetJObject()
+		{
 			JObject json = new JObject();
 			json.Add(GetKey(), Value);
 			return json;
 		}
 
-        public string GetKey()
-        {
+		public string GetKey()
+		{
 			return key;
-        }
+		}
 
-        public JToken GetValue()
-        {
-            return GetJObject()[GetKey()];
-        }
+		public JToken GetValue()
+		{
+			return GetJObject()[GetKey()];
+		}
 
-        public void SetJObject(JObject obj)
-        {
-			Value = (string)obj[GetKey()];
-        }
+		public void SetJObject(JObject obj)
+		{
+            try
+            {
+				Value = (string)obj[GetKey()];
+			}
+			catch(NullReferenceException ex)
+            {
+				Value = null;
+            }
+		}
 		protected string key = null;
 		protected string str = null;
 		public string Value
-        {
-            get { return str; }
-            set { str = value; }
-        }
-    }
-    public abstract class CompoundContainer :IJObjectUseAbleContainer
-    {
+		{
+			get { return str; }
+			set { str = value; }
+		}
+	}
+	public abstract class CompoundContainer : IJObjectUseAbleContainer
+	{
 		abstract public void SetJObject(JObject obj);
 		abstract public string GetKey();
 		public JObject GetJObject()
-        {
-			JObject value = new JObject();
-			foreach(IJObjectUseAbleContainer container in containers)
-			{
-				value.Add(container.GetKey(), container.GetJObject()[container.GetKey()]);
-            }
+		{
 			JObject json = new JObject();
-			json.Add(GetKey(), value);
+			json.Add(GetKey(), GetValue());
 			return json;
-        }
+		}
 		public void SetAtribute(IJObjectUseAbleContainer container)
 		{
 			containers.Add(container);
 		}
 
-        public JToken GetValue()
-        {
+		public JToken GetValue()
+		{
 			JObject value = new JObject();
-			foreach (IJObjectUseAbleContainer container in containers)
-			{
-				value.Add(container.GetKey(), container.GetJObject()[container.GetKey()]);
+			if(containers.Count == 0)
+            {
+				value = null;
+            }
+            else
+            {
+				foreach (IJObjectUseAbleContainer container in containers)
+				{
+					value.Add(container.GetKey(), container.GetJObject()[container.GetKey()]);
+				}
 			}
+			
 			return value;
 		}
 
 		public List<IJObjectUseAbleContainer> GetList()
-        {
+		{
 			return containers;
-        }
-        protected List<IJObjectUseAbleContainer> containers = new List<IJObjectUseAbleContainer>();
-    }
+		}
+		protected List<IJObjectUseAbleContainer> containers = new List<IJObjectUseAbleContainer>();
+	}
 
 	public class ClassficationContainer : IJObjectUseAbleContainer
-    {
-		public ClassficationContainer(string classfication="None")
-        {
+	{
+		public ClassficationContainer(string classfication = "None")
+		{
 			this.classfication = classfication;
-        }
+		}
 		public string GetKey() { return "classfication"; }
 		public JObject GetJObject()
-        {
+		{
 			//if (classfication == null)
 			JObject json = new JObject();
 			json.Add(GetKey(), classfication);
 			return json;
-        }
+		}
 		public void SetJObject(JObject obj)
-        {
+		{
+			if (obj == null) return;
 			classfication = (string)obj[GetKey()];
 		}
 		public void SetClassfication(string classfication)
-        {
+		{
 			this.classfication = classfication;
-        }
+		}
 
-        public JToken GetValue()
-        {
+		public JToken GetValue()
+		{
 			return GetJObject()[GetKey()];
-        }
+		}
 
-        protected string classfication;
+		protected string classfication;
 	}
 
-    public class ReturnedResourceContainer : IJObjectUseAbleContainer
-    {
-		public ReturnedResourceContainer(MessageType type=MessageType.EmptyMessage, IJObjectUseAbleContainer container=null)
-        {
+	public class ReturnedResourceContainer : IJObjectUseAbleContainer
+	{
+		public ReturnedResourceContainer(MessageType type = MessageType.EmptyMessage, IJObjectUseAbleContainer container = null)
+		{
 			SetKey(type);
-			if(container != null) SetContainer(container);
-        }
-        public JObject GetJObject()
-        {
+			if (container != null) SetContainer(container);
+		}
+		public JObject GetJObject()
+		{
 			JObject json = new JObject();
 			json.Add(GetKey(), container);
 			return json;
-        }
+		}
 
-        public string GetKey()
-        {
+		public string GetKey()
+		{
 			return type.ToString();
-        }
+		}
 
 		protected MessageType type = MessageType.EmptyMessage;
 		protected JObject container = null;
 		public void SetKey(MessageType type)
-        {
+		{
 			this.type = type;
-        }
+		}
 		public void SetContainer(IJObjectUseAbleContainer container)
-        {
+		{
 			if (container == null) throw new NullReferenceException();
 			this.container = container.GetJObject();
-        }
+		}
 		public void SetContainer(JObject container)
-        {
+		{
 			this.container = container;
-        }
+		}
 
-        public JToken GetValue()
-        {
+		public JToken GetValue()
+		{
 			return container;
-        }
+		}
 
-        public void SetJObject(JObject obj)
-        {
+		public void SetJObject(JObject obj)
+		{
+			if (obj == null) return;
 			string key = obj.Properties().ToString();
-			SetKey( (MessageType)Enum.Parse(typeof(MessageType), key) );
+			SetKey((MessageType)Enum.Parse(typeof(MessageType), key));
 
 			SetContainer(obj.Value<JObject>());
 		}
 	}
 
-    public class ConfidenceContainer : IJObjectUseAbleContainer
-    {
+	public class ConfidenceContainer : IJObjectUseAbleContainer
+	{
 		private float threashold = 0.55f;
-		public ConfidenceContainer(float confidence=0)
-        {
+		public ConfidenceContainer(float confidence = 0)
+		{
 			this.confidence = (threashold <= confidence);
-        }
+		}
 
-        public JObject GetJObject()
-        {
+		public JObject GetJObject()
+		{
 			JObject json = new JObject();
 			json.Add(GetKey(), confidence);
 			return json;
 		}
 
-        public string GetKey()
-        {
+		public string GetKey()
+		{
 			return "confidence";
-        }
+		}
 
-        public JToken GetValue()
-        {
+		public JToken GetValue()
+		{
 			return GetJObject()[GetKey()];
 		}
 
-        public void SetJObject(JObject obj)
-        {
+		public void SetJObject(JObject obj)
+		{
+			if (obj == null) return;
 			confidence = (bool)obj[GetKey()];
 		}
 		public void SetConfidence(float confidence)
-        {
+		{
 			this.confidence = (threashold <= confidence);
-        }
+		}
 		bool confidence;
-    }
+	}
 
 	public class BoundBoxContainer : IJObjectUseAbleContainer
-    {
+	{
 		private int threashold = 5;
-		public BoundBoxContainer(int x_min=0, int x_max=0, int y_min=0, int y_max=0)
-        {
-			if(x_min+x_max+y_max+y_min != 0) SetBoundBox(x_min, x_max, y_min, y_max);
+		public BoundBoxContainer(int x_min = 0, int x_max = 0, int y_min = 0, int y_max = 0)
+		{
+			if (x_min + x_max + y_max + y_min != 0) SetBoundBox(x_min, x_max, y_min, y_max);
 		}
 		public JObject GetJObject()
 		{
@@ -222,11 +235,11 @@ namespace RequestTaskProcessing
 		}
 		public void SetJObject(JObject obj)
 		{
-			 JArray value = (JArray)obj[GetKey()];
+			JArray value = (JArray)obj[GetKey()];
 			this.boundbox = value;
 		}
 		public void SetBoundBox(int x_min, int x_max, int y_min, int y_max)
-        {
+		{
 			boundbox = new JArray();
 			this.boundbox.Add(x_min);
 			this.boundbox.Add(x_max);
@@ -239,8 +252,8 @@ namespace RequestTaskProcessing
 		/// 비어있으면 false return
 		/// </summary>
 		public bool IsEmpty
-        {
-            get 
+		{
+			get
 			{
 				int sum = (int)boundbox[0]
 					+ (int)boundbox[1]
@@ -248,35 +261,36 @@ namespace RequestTaskProcessing
 					+ (int)boundbox[3];
 				return (sum > threashold);
 			}
-        }
+		}
 
 		public string GetKey() { return "boundbox"; }
 
-        public JToken GetValue()
-        {
+		public JToken GetValue()
+		{
 			return GetJObject()[GetKey()];
 		}
 		/// <summary>
 		/// 0:x_min / 1:x_max / 2:y_min / 3:y_max
 		/// </summary>
 		protected JArray boundbox;
-    }
-    public class FashionObjectsContainer : CompoundContainer
-    {
+	}
+	public class FashionObjectsContainer : CompoundContainer
+	{
 		public FashionObjectsContainer()
-        {
+		{
 			SetAtribute(top);
 			SetAtribute(bottom);
 			SetAtribute(overall);
 			SetAtribute(outer);
-        }
-        public override string GetKey()
-        {
+		}
+		public override string GetKey()
+		{
 			return "Fashion";
-        }
+		}
 
-        public override void SetJObject(JObject obj)
-        {
+		public override void SetJObject(JObject obj)
+		{
+			if (obj == null) return;
 			JObject value = (JObject)obj[GetKey()];
 			foreach (IJObjectUseAbleContainer container in containers)
 			{
@@ -288,6 +302,19 @@ namespace RequestTaskProcessing
 		public MainCategoryContainer overall = new MainCategoryContainer("Overall");
 		public MainCategoryContainer outer = new MainCategoryContainer("Outer");
 	}
+    public class DetectedObjectsContainer : CompoundContainer
+    {
+        public override string GetKey()
+        {
+			return "Fashion";
+		}
+
+        public override void SetJObject(JObject obj)
+        {
+			Console.WriteLine("Can't use SetJObject in DetectedObjectsContainer");
+            throw new NotImplementedException();
+        }
+    }
 
     public class MainCategoryContainer : CompoundContainer
     {
@@ -305,11 +332,21 @@ namespace RequestTaskProcessing
         }
 		public override void SetJObject(JObject obj)
         {
-			JObject value = (JObject)obj[GetKey()];
-			foreach(IJObjectUseAbleContainer container in containers)
+			JObject value = null;
+
+            try
             {
-				container.SetJObject(value);
-            }
+				value = (JObject)obj[GetKey()];
+			}
+			catch (NullReferenceException ex){}
+
+			if (value != null)
+			{
+				foreach (IJObjectUseAbleContainer container in containers)
+				{
+					container.SetJObject(value);
+				}
+			}
         }
 		public void SetClassfication(string classfication)
         {
