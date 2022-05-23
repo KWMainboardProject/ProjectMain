@@ -14,6 +14,8 @@
         <link href="css/styles.css" rel="stylesheet" />
 
         <script src="example.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="//code.jquery.com/jquery.min.js"></script>
     </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
@@ -51,7 +53,7 @@
                     <div class="mb-3 row">
                       <label class="col-md-3 col-form-label">제품명</label>
                       <div class="col-md-9">
-                        <input type="text" class="form-control">
+                        <input type="text" id="productid" name="productid" class="form-control">
                       </div>
                     </div>
                     <!--제품 가격 기입-->
@@ -70,6 +72,7 @@
                         <div class="col-md-9">
                           <input type="text" class="form-control">
                         </div>
+                        <p id="result">테스트 문구</p>
                       </div>
                     <!--제품 썸네일 기입-->
                     <div class="mb-3 row">
@@ -88,7 +91,7 @@
                     <!--AI 세미오토 버튼-->
                     <div class="mb-3 row">
                       <div class="col-12 d-grid p-1">
-                        <button type="button" class="btn btn-lg btn-outline-primary" onclick="printResult()">AI Image Analysis (Semi Auto)</button>
+                        <button type="button" class="btn btn-lg btn-outline-primary" onclick="printResult(); test(); semiauto()">AI Image Analysis (Semi Auto)</button>
                       </div>
                     </div>
                     <!--AI 세미오토 결과 받아왔을 때 or 세미오토 버튼이 눌렸을 때 => visibility 속성 변경(hidden -> visible)-->
@@ -96,13 +99,13 @@
                       <label class="col-md-3 col-form-label">AI 분석 결과</label>
                       <div class="col-md-9">
                         <!--아래 항목들 결과로 받아온 것대로 기입-->
-                        <p name="preMainCat">Main Category: ..</p>
-                        <p name="preSubCat">Sub Category: ..</p>
-                        <p name="preStyle">Style: ..</p>
-                        <p name="prePattern">Pattern: ..</p>
+                        <p name="preMainCat" id="result1">Main Category: ..</p>
+                        <p name="preSubCat" id="result2">Sub Category: ..</p>
+                        <p name="preStyle" id="result3">Style: ..</p>
+                        <p name="prePattern" id="result4">Pattern: ..</p>
                         <p>
                           Main Color: 
-                          <canvas name="preColor" style="width: 30px; height: 30px; background-color: rgb(255,166,0);"></div>
+                          <canvas name="preColor" style="width: 30px; height: 30px; background-color: rgb(40,42,57);"></div>
                         </p>
                       </div>
                     </div>
@@ -225,5 +228,24 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+        <script> function test(){ $.ajax({url:"product-regist.php" }) } </script>
+        
+        <script>
+          var index = 0;
+          function semiauto(){
+            $.ajax({
+              url:"lel.php",
+              type: "get",
+              
+            }).done(function(data){
+              data = JSON.parse(data);
+              $('#result1').text(data.desc[0] + ' : ' + data.name[0] );              
+              $('#result2').text(data.desc[1] + ' : ' + data.name[1] );
+              $('#result3').text(data.desc[2] + ' : ' + data.name[2] );              
+              $('#result4').text(data.desc[3] + ' : ' + data.name[3] );
+              
+            });
+          }
+        </script>
     </body>
 </html>

@@ -10,8 +10,7 @@ namespace RequestTaskProcessing
         //Empty
         EmptyMessage = 0,
         //Request
-        Request_ImageAnalysis_ImagePath,
-        Request_ImageAnalysis_JsonPath,
+        Request_ImageAnalysis_ImagePath, //Request_ImageSave_JsonPath,
         Request_Removebg_ImagePath,
         Request_FindMainCategory_ImagePath,
         Request_FindSubCategory_Top_ImagePath,
@@ -27,16 +26,17 @@ namespace RequestTaskProcessing
         Receive_ImagePath_RemoveBG,
         Receive_ImagePath_Original,
         Receive_JsonPath_ImageList,
-        Receive_JsonPath_MainCategory,
-        Receive_JsonPath_SubCategory_Top,
-        Receive_JsonPath_SubCategory_Bottom,
-        Receive_JsonPath_SubCategory_Outer,
-        Receive_JsonPath_SubCategory_Overall,
-        Receive_JsonPath_Pattern_Top,
-        Receive_JsonPath_Pattern_Bottom,
-        Response_JsonPath_Pattern_Outer,
-        Receive_JsonPath_Pattern_Overall,
-        Receive_JsonPath_Style,
+        Receive_Container_DetectedObjects,//Receive_Container_MainCategory,
+        Receive_Container_SubCategory_Top,
+        Receive_Container_SubCategory_Bottom,
+        Receive_Container_SubCategory_Outer,
+        Receive_Container_SubCategory_Overall,
+        Receive_Container_Pattern_Top,
+        Receive_Container_Pattern_Bottom,
+        Receive_Container_Pattern_Outer,
+        Receive_Container_Pattern_Overall,
+        Receive_Container_Style,
+        Receive_Container_Fashion,
         //special
         Response_Fail,
         MessageTypeNum,
@@ -64,7 +64,18 @@ namespace RequestTaskProcessing
             if (t != MessageType.EmptyMessage) this.type = t;
             if (r != null) this.resource = r;
         }
+        public TaskMessage(TaskMessage message)
+        {
+            SetMessage(message);
+        }
 
+        public void SetMessage(TaskMessage message)
+        {
+            this.ip.Value = message.ip.Value;
+            this.productor = message.productor;
+            this.type = message.type;
+            this.resource = message.resource;
+        }
         public void Print()
         {
             Console.WriteLine("===========Message===========");
@@ -85,8 +96,14 @@ namespace RequestTaskProcessing
     {
         public void Product(TaskMessage massage)
         {
-            if (q == null) throw new NullReferenceException();
-            q.Enqueue(massage);
+            try
+            {
+                q.Enqueue(massage);
+            }
+            catch(NullReferenceException ex)
+            {
+                Console.WriteLine("Deleted Q");
+            }
         }
         public void SetQueue(ConcurrentQueue<TaskMessage> Q)
         {

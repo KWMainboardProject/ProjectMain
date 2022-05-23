@@ -3,16 +3,33 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Collections.Concurrent;
+using RequestTaskProcessing.StrategyOperator;
 
 
 namespace RequestTaskProcessing
 {
+    
     public abstract class QTheading : IMessageConsumeAble
     {
         // 참고했음 Queue&Thread 구조 -> https://programerstory.tistory.com/8
 
+        /// <summary>
+        /// Time out 설정하는 함수
+        /// 기본적으로 0이 설정되어 있고 0은 Time out 이 없다는 뜻이다.
+        /// 해당 ms가 지나면 time out 된다.
+        /// </summary>
+        /// <param name="time">범위[0,큰값)</param>
         abstract public void SetTimeOutThreshold(int time = TimeOut.DEFAULT_TIME);
 
+
+        /// <summary>
+        /// message Q에 쌓여있는 것중에 가장 앞에 있는 message를 꺼내서 반환함
+        /// message Q를 반환에 성공하면 qTF는 true로 세팅된다.
+        /// 
+        /// Time out 이 설정 되었을 경우 time out 될 경우
+        /// TimeoutException을 반환한다.
+        /// </summary>
+        /// <returns>반환이 성공하면 message를 실패하는 null을 반환한다.</returns>
         public TaskMessage Consume()
         {
             if (q == null) throw new NullReferenceException();
@@ -24,13 +41,22 @@ namespace RequestTaskProcessing
             TaskMessage message = null;
             if (!q.IsEmpty)
             {
-                message = new TaskMessage();
-                qTF = q.TryDequeue(out message);
-            }     
+                lock (q)
+                {
+                    if (!q.IsEmpty)
+                    {
+                        message = new TaskMessage();
+                        qTF = q.TryDequeue(out message);
+                    }
+                }
+            }
 
             //time out check and Run
-            if (message != null && qTF) timeout.ResetTimeOut();//성공 시 timeout reset
-            else if(timeoutTF) StopAndClear();//message가 계속 없을 때, time out으로 멈춤
+            if (message != null && qTF)
+            {
+                timeout.ResetTimeOut();//성공 시 timeout reset
+            }
+            else if (timeoutTF) throw new TimeoutException();//message가 계속 없을 때, time out으로 멈춤
 
             //time start
             timeout.StartTime();
@@ -49,16 +75,23 @@ namespace RequestTaskProcessing
             return q.IsEmpty;
         }
 
+        /// <summary>
+        /// 연산에 필요한 operator Factory를 설정하는 함수이다.
+        /// </summary>
+        /// <param name="factory"></param>
         public void SetOperatorFactory(IOperatorFactory factory)
         {
             this.factory = factory;
         }
 
+        /// <summary>
+        /// 해당 스레드를 멈추고 싶을 때 작동한다.
+        /// </summary>
         public void StopAndClear()
         {
             stopAndClearTF = true;
             //plz add code
-            Console.WriteLine("plz Add code at StopAndClear");
+            Console.WriteLine("\tplz Add code at StopAndClear");
         }
         /// <summary>
         /// 실제로 manager에서 동작하게 될 동작
@@ -108,21 +141,26 @@ namespace RequestTaskProcessing
                         stopAndClearTF = false;
 
                         //need thread stop
-                        Console.WriteLine("plz thread stop at QThread.Run");
+                        Console.WriteLine("\tplz thread stop at QThread.Run");
                         break;
                     }
                 }
 
                 //Get message
-                TaskMessage m = Consume();
+                TaskMessage m = null;
+                try{m = Consume();}
+                catch(TimeoutException e)
+                {
+                    Console.WriteLine("Stop and Clear (Worker)");
+                    StopAndClear();
+                }
+
                 if (!qTF || m == null)//fali consume
                 {
                     continue;
                 }
                 //Success consume
 
-                
-                
                 //Get Operator
                 IStrategyOperateAble strategy = factory.GetOperator(m.type);
 
@@ -130,11 +168,21 @@ namespace RequestTaskProcessing
                     throw new NullReferenceException();
 
                 //Run operator
-                strategy.SetResource(m);
-                strategy.Work();
-                IMessageProductAble sender = m.productor;
-                sender.Product(strategy.GetMessage());
-                strategy.ClearResource();
+                lock (strategy)
+                {
+                    IMessageProductAble sender = m.productor;
+
+
+                    //Console.WriteLine(this.ToString() + "-> SetResource");
+                    strategy.SetResource(m);
+                    //Console.WriteLine(this.ToString() + "-> Work");
+                    strategy.Work();
+                    //Console.WriteLine(this.ToString() + "-> GetMessage");
+                    //strategy.GetMessage().Print();
+                    sender.Product(strategy.GetMessage());
+                    //Console.WriteLine(this.ToString() + "-> ClearResource");
+                    strategy.ClearResource();
+                }
             }
         }
         public override void Start()
@@ -152,7 +200,7 @@ namespace RequestTaskProcessing
             thread.Join();
         }
 
-        public override void SetTimeOutThreshold(int time = 5000)
+        public override void SetTimeOutThreshold(int time = TimeOut.DEFAULT_TIME)
         {
             timeout.SetThesholdTime(time);
         }
@@ -181,20 +229,32 @@ namespace RequestTaskProcessing
         /// 
         /// </summary>
         abstract public void SchedulingTaskProcess();
+
+        protected bool isStart = false;
         public override void Start()
         {
-            Run();
-
-            if (workers.Count == 0)
-                throw new NullReferenceException();
-
-            foreach(var worker in workers)
+            if (!isStart)
             {
-                worker.Start();
+                lock (this)
+                {
+                    if (!isStart)
+                    {
+                        Run();
+
+                        if (workers.Count == 0)
+                            throw new NullReferenceException();
+
+                        foreach (var worker in workers)
+                        {
+                            worker.Start();
+                        }
+                        Thread.Sleep(SLEEP_TIME);
+                        scheduleThread = new Thread(() => SchedulingTaskProcess());
+                        scheduleThread.Start();
+                        isStart = true;
+                    }
+                }
             }
-            Thread.Sleep(SLEEP_TIME);
-            scheduleThread = new Thread(() => SchedulingTaskProcess());
-            scheduleThread.Start();
         }
         public override void Join()
         {
@@ -203,9 +263,8 @@ namespace RequestTaskProcessing
                 worker.Join();
             }
             scheduleThread.Join();
-            
         }
-        public override void SetTimeOutThreshold(int time = 5000)
+        public override void SetTimeOutThreshold(int time = TimeOut.DEFAULT_TIME)
         {
             foreach(Worker worker in workers)
             {
@@ -239,7 +298,7 @@ namespace RequestTaskProcessing
     /// </summary>
     public class TaskManager : WorkManager
     {
-        const int THREAD_COUNT = 3;
+        const int THREAD_COUNT = 1;
 
         /// <summary>
         /// child process에서 counsume 해줌
@@ -266,7 +325,7 @@ namespace RequestTaskProcessing
             return Holder.instance;
         }
         /// <summary>
-        /// Lazy Initialization + holder
+        /// Lazy Initialization + holder\t
         /// </summary>
         private static class Holder
         {
@@ -279,16 +338,62 @@ namespace RequestTaskProcessing
     /// </summary>
     public class GPUWorkManager : WorkManager
     {
-        const int THREAD_COUNT = 3;
+        const int THREAD_COUNT = 1;
+
+        int messageCount = 0;
         public override void SchedulingTaskProcess()
         {
-            throw new NotImplementedException();
+            if (q == null)
+                throw new NullReferenceException();
+            while (scheduleThread.IsAlive)
+            {
+                Thread.Sleep(SLEEP_TIME);
+                //stop thread and claear Q
+                if (stopAndClearTF)
+                {
+                    lock (q)
+                    {
+                        do
+                        {
+                            Consume();
+                            //clear Q
+                        } while (!qTF);
+
+                        stopAndClearTF = false;
+
+                        //need thread stop
+                        Console.WriteLine("\tplz thread stop at QThread.Run");
+                        break;
+                    }
+                }
+
+                //Get message
+                TaskMessage m = null;
+                try { m = Consume(); /*Console.WriteLine("Try Counsume in gpu worker");*/ }
+                catch (TimeoutException e) { Console.WriteLine("Stop and Clear");  StopAndClear(); }
+
+                if (!qTF || m == null)//fali consume
+                {
+                    continue;
+                }
+                //Console.WriteLine("GPU Worker Catch Message");
+                //m.Print();
+
+                //Success consume
+                messageCount++;
+                IMessageProductAble p = workers[messageCount % THREAD_COUNT].GetProductor();
+                //plz change scheduling methods
+                p.Product(m);
+            }
         }
 
         protected override void Run()
         {
             Console.WriteLine("GpuWorkManaer - Run");
-            throw new NotImplementedException();
+            for (int i = 0; i < THREAD_COUNT; i++)
+            {
+                workers.Add(new GPUWorker());
+            }
         }
 
 
@@ -314,10 +419,28 @@ namespace RequestTaskProcessing
         public const int DEFAULT_TIME = 5000;
         int thresholdTime = 0;
         int waitTime = 0;
+        /// <summary>
+        /// Time out을 판별할 수 있는 Threashold 값 설정 함수
+        /// </summary>
+        /// <param name="time">
+        /// 음수 : 없음 / 
+        /// 0 : time out 설정 안함 / 
+        /// 1 이상 : 해당 시간 이 지나며 time out을 띄움
+        /// </param>
         public void SetThesholdTime(int time = DEFAULT_TIME)
         {
             thresholdTime = time;
         }
+        /// <summary>
+        /// time 만큼 시간이 흐를때 time out 인지를 판별해주는 함수
+        /// </summary>
+        /// <param name="time">
+        /// time 만큼 시간이 흘렀을 때
+        /// </param>
+        /// <returns>
+        /// time out 인지(TF)를 반환한다
+        /// ThresholdTime 이 0으로 설정되면 항상 F반환
+        /// </returns>
         public bool CheckTimeOut(int time)
         {
             if (thresholdTime == 0) return false;
@@ -325,6 +448,9 @@ namespace RequestTaskProcessing
             if (waitTime >= thresholdTime) return true;
             else return false;
         }
+        /// <summary>
+        /// Time out을 위해 측정하던 시간 초기화
+        /// </summary>
         public void ResetTimeOut()
         {
             waitTime = 0;
@@ -332,10 +458,20 @@ namespace RequestTaskProcessing
 
         //count time
         DateTime startTime;
+        /// <summary>
+        /// 측정하기 원하는 시작시간
+        /// </summary>
         public void StartTime()
         {
             startTime = DateTime.Now;
         }
+        /// <summary>
+        /// 측정이 완료되는 시점
+        /// </summary>
+        /// <returns>
+        /// StartTime 이후부터 흐른시간 반환
+        /// 단위(=ms)
+        /// </returns>
         public int EndTime()
         {
             if (thresholdTime == 0) return 0;

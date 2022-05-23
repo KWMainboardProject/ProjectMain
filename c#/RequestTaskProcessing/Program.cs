@@ -8,6 +8,7 @@ using RequestTaskProcessing;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 using System.Threading;
+using RequestTaskProcessing.StrategyOperator;
 
 namespace RequestTaskProcessing
 {
@@ -18,9 +19,67 @@ namespace RequestTaskProcessing
             //TestWorkResourceMethod();
             //TestTaskMessageMethod();
             //TestTaskMessageAndConsumer();
-            TestTaskManager();
+            //TestTaskManager();
+            TestReturnedResourceContiner();
+            //TestTaskMessage();
         }
 
+        static void TestTaskMessage()
+        {
+            TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
+            TaskMessage m = new TaskMessage(
+                    "Task" + 123123.ToString(),
+                    sender.GetProductor(),
+                    MessageType.Request_ImageAnalysis_ImagePath,
+                    new StringContainer("img_path", "./task/img_" + 123123.ToString()));
+
+            m.Print();
+
+            TaskMessage mCopy = new TaskMessage(m);
+            mCopy.Print();
+        }
+
+        //static void Test
+        static void TestReturnedResourceContiner()
+        {
+            const int TASK_NUM = 5;
+            TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
+            TaskManager taskManager = TaskManager.GetInstance();
+            GPUWorkManager gpuManager = GPUWorkManager.GetInstance();
+
+            Console.WriteLine("Consume Message");
+            sender.Start();
+            taskManager.Start();
+
+
+            IMessageProductAble p = taskManager.GetProductor();
+            Console.WriteLine("Strat Create Message");
+            for (int i = 0; i < TASK_NUM; i++)
+            {
+                TaskMessage m = new TaskMessage(
+                    "Task" + i.ToString(),
+                    sender.GetProductor(),
+                    MessageType.Request_ImageAnalysis_ImagePath,
+                    new StringContainer("img_path", "./task/img_"+i.ToString()));
+                p.Product(m);
+            }
+            Console.WriteLine("Complete Create Message");
+
+            
+            taskManager.SetTimeOutThreshold();
+            Console.WriteLine("Set Time out task manager");
+            taskManager.Join();
+
+            Console.WriteLine("Join taskManager");
+
+            sender.SetTimeOutThreshold();
+            Console.WriteLine("Set Time out task manager");
+            sender.Join();
+
+            gpuManager.SetTimeOutThreshold();
+            gpuManager.Join();
+            Console.WriteLine("complete##################################################");
+        }
         static void TestWorkResourceMethod()
         {
             TestWorkResouceClass test = new TestWorkResouceClass();
@@ -90,7 +149,7 @@ namespace RequestTaskProcessing
         }
         static void TestTaskManager()
         {
-            const int TASK_NUM = 50;
+            const int TASK_NUM = 10;
             TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
             TaskManager taskManager = TaskManager.GetInstance();
 
@@ -107,6 +166,7 @@ namespace RequestTaskProcessing
                     MessageType.Request_TestTask_container);
                 p.Product(m);
             }
+
             taskManager.SetTimeOutThreshold();
             taskManager.Join();
             sender.SetTimeOutThreshold();
@@ -158,7 +218,7 @@ namespace RequestTaskProcessing
                             stopAndClearTF = false;
 
                             //need thread stop
-                            Console.WriteLine("plz thread stop at QThread.Run");
+                            Console.WriteLine("\tplz thread stop at QThread.Run");
                             break;
                         }
                     }

@@ -1,10 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "Fd3reLpUgXacgM3ZtsBAQqibhzMaETgK+ueaOMX7+PHs/8x2Tfy04M8AHA4QIx6egK35U0nAIK8I0G0Gs6db7w==",
+  "dgSpecHash": "L5isOqPP0Rmb74YJKGt7TXLQO0ykHA0TwbBpNSf/tMm22GF+l+ax+aR7LjhLxs7ul13heE1uPjLON92tkoQPIw==",
   "success": true,
   "projectFilePath": "C:\\Users\\vbmrk\\Documents\\GitHub\\ProjectMain\\c#\\RequestTaskProcessing\\RequestTaskProcessing.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\vbmrk\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+    "C:\\Users\\vbmrk\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\vbmrk\\.nuget\\packages\\opencvsharp4\\4.5.5.20211231\\opencvsharp4.4.5.5.20211231.nupkg.sha512",
+    "C:\\Users\\vbmrk\\.nuget\\packages\\opencvsharp4.runtime.win\\4.5.5.20211231\\opencvsharp4.runtime.win.4.5.5.20211231.nupkg.sha512",
+    "C:\\Users\\vbmrk\\.nuget\\packages\\opencvsharp4.windows\\4.5.5.20211231\\opencvsharp4.windows.4.5.5.20211231.nupkg.sha512",
+    "C:\\Users\\vbmrk\\.nuget\\packages\\opencvsharp4.wpfextensions\\4.5.5.20211231\\opencvsharp4.wpfextensions.4.5.5.20211231.nupkg.sha512",
+    "C:\\Users\\vbmrk\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
+    "C:\\Users\\vbmrk\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
   ],
   "logs": []
 }
