@@ -9,9 +9,9 @@ namespace RequestTaskProcessing.StrategyOperator
     {
         protected ClothesObjectDetectOperatorYolov5()
         {
+            //plz set gpu device
             Console.WriteLine("\tplz yolov5 weight upload");
             ClearResource();
-            //plz set gpu device
         }
 
         public void ClearResource()
@@ -48,6 +48,8 @@ namespace RequestTaskProcessing.StrategyOperator
                 SetContainer();
                 Thread.Sleep(1000);
                 //Console.WriteLine(requestMessage.ip.Value + "_yolo는 작업을 완료했어요");
+
+                //Set container
                 return;
                 throw new NotImplementedException();
             }

@@ -373,8 +373,9 @@ namespace RequestTaskProcessing
 
     public class SubCategoryContainer : CompoundContainer
     {
-		public SubCategoryContainer()
+		public SubCategoryContainer(float confidence_threshold=0.55f)
         {
+			confidenceContainer = new ConfidenceContainer(confidence_threshold);
 			SetAtribute(classficationContainer);
 			SetAtribute(confidenceContainer);
         }
@@ -393,7 +394,7 @@ namespace RequestTaskProcessing
 		}
 		//string key;
 		public ClassficationContainer classficationContainer = new ClassficationContainer();
-		public ConfidenceContainer confidenceContainer = new ConfidenceContainer();
+		public ConfidenceContainer confidenceContainer;// = new ConfidenceContainer();
 	}
     public class WorkResourceClass
 	{
