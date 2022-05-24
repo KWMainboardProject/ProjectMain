@@ -32,7 +32,7 @@ namespace RequestTaskProcessing.StrategyOperator
                         strategyOperator = ClothesObjectDetectOperatorYolov5.GetInstance();
                         break;
                     case MessageType.Request_FindSubCategory_Top_ImagePath:
-                        throw new NotImplementedException();
+                        strategyOperator = TopClassification.GetInstance();
                         break;
                     case MessageType.Request_FindSubCategory_Bottom_ImagePath:
                         throw new NotImplementedException();
