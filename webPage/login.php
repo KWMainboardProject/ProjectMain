@@ -1,4 +1,13 @@
-<?php session_start(); ?>
+<?php session_start(); 
+ if($_SESSION['islogin']){
+    
+    $_SESSION['islogin'] = false;
+    $_SESSION['id']=NULL;
+    session_destroy();
+    }else{
+        $_SESSION['id']=NULL;
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -29,8 +38,8 @@
                     <a class="text"> <?php echo $idtext;?></a>}
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
                             <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Collections</a>
@@ -41,7 +50,7 @@
                                     <li><a class="dropdown-item" href="#!">Overall</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="product_create.html">Product Register</a></li>
+                            <li class="nav-item"><a class="nav-link" href="product_create.php">Product Register</a></li>
                         </ul>
                     </div>
                 </div>

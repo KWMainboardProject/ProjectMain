@@ -1,3 +1,4 @@
+<!---exposed page-->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -67,7 +68,7 @@
                 <div class="container px-5 my-5" data-aos="zoom-in">
                     <div class="row gx-5 align-items-center">
                         <div class="col-lg-6">
-                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="/GraduationProject/ProjectMain/clothes_cnn.png" alt="..."/>
+                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="image/clothes_cnn.png" alt="..."/>
                         </div>
                         <div class="col-lg-6">
                             <h2 class="fw-bolder">CNN</h2>
@@ -87,7 +88,7 @@
                 <div class="container px-5 my-5" data-aos="zoom-in">
                     <div class="row gx-5 align-items-center">
                         <div class="col-lg-6 order-first order-lg-last">    
-                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="/GraduationProject/ProjectMain/yolo.png" alt="..."/>
+                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="image/yolo.png" alt="..."/>
                         </div>
                         <div class="col-lg-6">
                             <h2 class="fw-bolder">Yolo v5 (You Only Look Once)</h2>
@@ -108,7 +109,7 @@
                 <div class="container px-5 my-5" data-aos="zoom-in">
                     <div class="row gx-5 align-items-center">
                         <div class="col-lg-6">
-                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="/GraduationProject/ProjectMain/resnet.png" alt="..."/>
+                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="image/resnet.png" alt="..."/>
                         </div>
                         <div class="col-lg-6">
                             <h2 class="fw-bolder">ResNet</h2>
@@ -129,7 +130,7 @@
                 <div class="container px-5 my-5" data-aos="zoom-in">
                     <div class="row gx-5 align-items-center">
                         <div class="col-lg-6 order-first order-lg-last">
-                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="/GraduationProject/ProjectMain/process.png" alt="..."/>
+                            <img class="img-fluid rounded mx-auto d-block mb-5 mb-lg-0" src="image/process.png" alt="..."/>
                         </div>
                         <div class="col-lg-6">
                             <h2 class="fw-bolder">Whole Process</h2>

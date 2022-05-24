@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12,7 +13,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
-        <link href="/GraduationProject/ProjectMain/webPage/additional_style.css" rel="stylesheet" />
+        <link href="additional_style.css" rel="stylesheet" />
 
         <!--AOS사용-->
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -29,11 +30,25 @@
                 <div class="container px-5">
                     <a class="navbar-brand" href="index.php">MainBoard</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <?php if(!is_null($_SESSION['id'])){
+                        $idtext = $_SESSION['id']."님으로 로그인 중입니다.";
+                    }else{
+                        $idtext = "로그인을 해주세요.";
+                    } ?>
+                    <a class="text"> <?php echo $idtext;?></a>}
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
-                            <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+                            <?php if(!is_null($_SESSION['id'])){
+                                $idbtn = "Logout";
+                                $_SESSION['islogin'] = false;
+                            }else{
+                                $idbtn = "Login";
+                                $_SESSION['islogin'] = false;
+                                
+                            } ?>
+                            <li class="nav-item"><a class="nav-link" href="login.php"><?php echo $idbtn;?></a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Collections</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
@@ -66,7 +81,7 @@
                         <div class="col-xl-5 col-xxl-6 d-xl-block text-center">
                             <div class="box" id="searchImg">
                                 <!--이미지 src의 앞부분 '/GraduationProject/ProjectMain' 은 서버 폴더에 맞게 수정. 그 이후는 정리된 이미지 폴더-->
-                                <img name="searchImg" class="img-fluid rounded-3 my-5" src="/GraduationProject/ProjectMain/webPage/ImageFolder/MainPage/search.png" width="300" height="300" alt="Responsive image"/>
+                                <img name="searchImg" class="img-fluid rounded-3 my-5" src="image/search.png" width="300" height="300" alt="Responsive image"/>
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
                                     <a class="btn btn-outline-light btn-lg px-4 me-sm-3" id="inner_btn" href="Image_input.php" style="background-color: rgb(0, 81, 255);">
                                         Get Started

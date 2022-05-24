@@ -2,6 +2,9 @@
 
 require_once 'config/ftp_connect.php';
 
+$ftp_send_file = "imgwork/";
+$ftp_remote_file = "imgwork/".basename($_FILES["imgFile"]["name"]);
+echo $_FILES = temp.;
 // FTP서버 접속
 $conn_id = ftp_connect($ftp_server);
 
@@ -20,6 +23,8 @@ if($login_result == false){
 
 // 패시브 모드 설정
 ftp_pasv($conn_id, true);
+
+move_uploaded_file($_FILES["imgFile"]["name"], $ftp_remote_file);
 
 // FTP 서버에 파일 전송
 if (ftp_put($conn_id, $ftp_remote_file, $ftp_send_file, FTP_BINARY)) {

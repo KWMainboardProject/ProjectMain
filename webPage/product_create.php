@@ -1,3 +1,10 @@
+<<<<<<< Updated upstream
+=======
+<?php
+ session_start();
+ 
+?>
+>>>>>>> Stashed changes
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -14,8 +21,45 @@
         <link href="css/styles.css" rel="stylesheet" />
 
         <script src="example.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="//code.jquery.com/jquery.min.js"></script>
+        <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+        
+        <script src="https://code.jquery.com/jquery-latest.js"></script>
+        <script>
+	        function file_frm_submit(frm) {
+
+		        var fileCheck = frm.upload_file.value;
+
+		        if(!fileCheck) {
+			        alert("업로드할 파일을 선택하세요.");
+			        return false;
+		        }
+
+	        	var formData = new FormData(frm);			// 파일전송을 위한 폼데이터 객체 생성
+
+		        formData.append("message", "ajax로 파일 전송하기");
+		        //formData.append("file", jQuery("#upload_file")[0].files[0]);
+
+	        	$.ajax({
+		        	url			: 'ajax_file_upload_test.php',
+		        	type		: 'POST',
+		        	dataType	: 'html',
+		        	enctype		: 'multipart/form-data',
+		          processData	: false,
+		        	contentType	: false,
+		        	data		: formData,
+		        	async		: false,
+		        	success		: function(response) {
+
+		      		console.log(response);
+              
+
+		        	  }
+	          	}).done(function(data){
+                alert(data);
+              });
+              
+	        }
+        </script>
     </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
@@ -43,10 +87,11 @@
                       </ul>
                   </div>
               </div>
-          </nav>
+            </nav>
             <!-- Page Content-->
             <section class="py-5">
-                <div class="container">
+                <div class="container" >
+                  <form name="reqform" method="post"  enctype="multipart/form-data"> 
                     <h2 class="text-center fw-bolder mb-5">Product Register</h2>
                     <hr>
                     <!--제품 이름 기입-->
@@ -58,7 +103,7 @@
                     </div>
                     <!--제품 가격 기입-->
                     <div class="mb-3 row">
-                      <label class="col-md-3 col-form-label">제품가격</label>
+                      <label class="col-md-3 col-form-label" id="testlabel">제품가격</label>
                       <div class="col-md-9">
                         <div class="input-group mb-3">
                           <input type="number" class="form-control">
@@ -72,13 +117,22 @@
                         <div class="col-md-9">
                           <input type="text" class="form-control">
                         </div>
-                        <p id="result">테스트 문구</p>
+                        <p id="result"><?php if(!isset($_SESSION["ProductName"])){echo $_SESSION["ProductName"]; }else{echo "??";} ?></p>
                       </div>
                     <!--제품 썸네일 기입-->
                     <div class="mb-3 row">
                       <label class="col-md-3 col-form-label">썸네일 이미지(AI분석)</label>
+<<<<<<< Updated upstream
                       <div class="col-md-9">
                         <input class="form-control" type="file" accept="image/png, image/jpg, image/jpeg">
+=======
+                      <div class="col-md-9" >
+                        <form id="file_frm">
+                        <input class="form-control" type="file" name="upload_file" id="upload_file"  accept="image/png, image/jpg, image/jpeg">
+                        <br><br>
+                        <button type="button" id="files_send" name = "files_send" value="Upload" class="btn btn-lg btn-outline-primary" onclick=" file_frm_submit(this.form); printResult();  semiauto() " >AI Image Analysis (Semi Auto)</button>
+                        </form>  
+>>>>>>> Stashed changes
                         <div class="alert alert-secondary" role="alert">
                           <ul>
                             <li>이미지 사이즈: 300*400</li>
@@ -91,7 +145,7 @@
                     <!--AI 세미오토 버튼-->
                     <div class="mb-3 row">
                       <div class="col-12 d-grid p-1">
-                        <button type="button" class="btn btn-lg btn-outline-primary" onclick="printResult(); test(); semiauto()">AI Image Analysis (Semi Auto)</button>
+                      
                       </div>
                     </div>
                     <!--AI 세미오토 결과 받아왔을 때 or 세미오토 버튼이 눌렸을 때 => visibility 속성 변경(hidden -> visible)-->
@@ -109,6 +163,7 @@
                         </p>
                       </div>
                     </div>
+                  </form>
                 </div>
                 <div class="container">
                   <!--제품 카테고리 기입-->
@@ -228,7 +283,11 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+<<<<<<< Updated upstream
         <script> function test(){ $.ajax({url:"product-regist.php" }) } </script>
+=======
+        <script> function test(){ $.ajax({url:"product-regist.php" }) } </script>        
+>>>>>>> Stashed changes
         
         <script>
           var index = 0;

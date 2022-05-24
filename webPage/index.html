@@ -1,53 +1,6 @@
-<?php
-// 안드로이드에서 넘어온 데이터라고 가정하고 직접 DB에 데이터 저장 테스트
-// 제대로 저장되는지 확인했으면 아래 4줄은 주석처리 또는 삭제해야 함
-session_start();
- $_SESSION['id'] = $_POST['userid'] ; 
-
-extract($_POST);
-
-require_once 'config/db_functions.php';
-
-$db = new DB_Functions();
-
-
-// json response array
-$response = array("error" => FALSE);
-
-if (isset($_POST['userid']) && isset($_POST['userpw'])) {
-
-    // POST 배열로 받은 데이터
-    $userID = $_POST['userid'];
-    $password = $_POST['userpw'];
-      
-    $user = $db->getUser($userID, $password);
-        
-    if ($user) { // 사용자 등록 성공
-        //storeUser($PID, $PPW, $LikeStyle, $Age, $Gender)
-        $response['error'] = FALSE;
-        $response['users']['PID'] = $user['PID'];
-        $response['users']['PPW'] = $user['PPW'];
-
-        echo $_POST["userid"] ."님으로 로그인하였습니다.";
-
-    } else {
-        // 로그인 실패
-        $response['error'] = TRUE;
-        $response['error_msg'] = "비밀번호가 틀렸습니다.";
-        echo "비밀번호가 틀렸습니다.";
-        session_destroy();
-    }
-
-} else { // 입력받은 데이터에 문제가 있을 경우
-    $response['error'] = TRUE;
-    $response['error_msg'] = "fail to registration because input data be incorrected";
-    echo json_encode($response);
-    session_destroy();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+    <head>        
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
@@ -59,12 +12,12 @@ if (isset($_POST['userid']) && isset($_POST['userpw'])) {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
-        <link href="/Bootstrap/ProjectMain/webPage/additional_style.css" rel="stylesheet" />
+        <link href="/GraduationProject/ProjectMain/webPage/additional_style.css" rel="stylesheet" />
 
         <!--AOS사용-->
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> 
-        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
+        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     </head>
     <body class="d-flex flex-column h-100">
         <script>
@@ -75,31 +28,24 @@ if (isset($_POST['userid']) && isset($_POST['userpw'])) {
             <!-- Navigation-->
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container px-5">
-                    <a class="navbar-brand" href="index.html">MainBoard</a>
+                    <a class="navbar-brand" href="index.php">MainBoard</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                    <?php if(!is_null($_SESSION['id'])){
-                        $idtext = $_SESSION['id']."님으로 로그인 중입니다.";
-                    }else{
-                        $idtext = "로그인을 해주세요.";
-                    } ?>
-                    <a class="text"> <?php echo $idtext;?></a>}
-
-                    
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
                             <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Collections</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                                    <li><a class="dropdown-item" href="product-list.html">Outer</a></li>
-                                    <li><a class="dropdown-item" href="product-list.html">Top</a></li>
-                                    <li><a class="dropdown-item" href="product-list.html">Bottom</a></li>
-                                    <li><a class="dropdown-item" href="product-list.html">Overall</a></li>
+                                    <li><a class="dropdown-item" href="Outer-list.php">Outer</a></li>
+                                    <li><a class="dropdown-item" href="Top-list.php">Top</a></li>
+                                    <li><a class="dropdown-item" href="Bottom-list.php">Bottom</a></li>
+                                    <li><a class="dropdown-item" href="Overall-list.php">Overall</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="product_create.html">Product Register</a></li>
+                            <li class="nav-item"><a class="nav-link" href="product_create.php">Product Register</a></li>
+                            <li name="nav_myproducts" class="nav-item"><a class="nav-link" href="myProduct-list.php" style="display: none;">My Products</a></li>
                         </ul>
                     </div>
                 </div>
@@ -113,16 +59,17 @@ if (isset($_POST['userid']) && isset($_POST['userpw'])) {
                                 <h1 class="display-5 fw-bolder text-white mb-2">몇 번의 터치로<br> 원하는 옷을.<br></h1>
                                 <p class="lead fw-normal text-white mb-4" style="font-size: 1em;">CNN 기반 YoloV5와 ResNet50을 사용한 유사 의류 추천.<br>찾고 싶은 옷의 사진만 있다면<br>원하는 옷과 빠르게 만날 수 있습니다.</p>
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                                    <a class="btn btn-outline-light btn-lg px-4" href="about.html" style="background-color: rgb(0, 81, 255);">Learn More</a>
+                                    <a class="btn btn-outline-light btn-lg px-4" href="about.php" style="background-color: rgb(0, 81, 255);">Learn More</a>
                                 </div>
                             </div>
                         </div>
                         <!--Image Search Section-->
                         <div class="col-xl-5 col-xxl-6 d-xl-block text-center">
                             <div class="box" id="searchImg">
-                                <img class="img-fluid rounded-3 my-5" src="/Bootstrap/ProjectMain/search.png" width="300" height="300" alt="Responsive image"/>
+                                <!--이미지 src의 앞부분 '/GraduationProject/ProjectMain' 은 서버 폴더에 맞게 수정. 그 이후는 정리된 이미지 폴더-->
+                                <img name="searchImg" class="img-fluid rounded-3 my-5" src="/GraduationProject/ProjectMain/webPage/ImageFolder/MainPage/search.png" width="300" height="300" alt="Responsive image"/>
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                                    <a class="btn btn-outline-light btn-lg px-4 me-sm-3" id="inner_btn" href="Image_input.html" style="background-color: rgb(0, 81, 255);">
+                                    <a class="btn btn-outline-light btn-lg px-4 me-sm-3" id="inner_btn" href="Image_input.php" style="background-color: rgb(0, 81, 255);">
                                         Get Started
                                     </a>
                                 </div>
@@ -138,41 +85,55 @@ if (isset($_POST['userid']) && isset($_POST['userpw'])) {
                         <div class="col-lg-4 mb-5 mb-lg-0"><h2 class="fw-bolder mb-0">실시간 상품 추천</h2></div>
                         <div class="col-lg-8">
                             <div class="row gx-5 row-cols-1 row-cols-md-2">
+                                <!--상품 랜덤 출력 하나의 컴포넌트-->
                                 <div class="col mb-5 h-100">
+                                    <!--이미지 버튼화-->
                                     <button type="button" class="btn_image" id="img_btn1" style="border: 0;">
-                                        <a href="product-info.html">
-                                            <img src="/Bootstrap/ProjectMain/clothes1.jpg" style="width: 250px; height: 325px" class="cImg">
+                                        <!--이동할 상품 페이지-->
+                                        <a href="product-info.php">
+                                            <!--이미지 DB 연동-->
+                                            <img name="randImg1" src="" style="width: 250px; height: 325px" class="cImg">
                                         </a>
                                     </button>
-                                    <h2 class="h5">Open Collar Shirts</h2>
-                                    <p class="mb-0">$135,000</p>
+                                    <!--상품명, 상품 가격 DB 연동-->
+                                    <h2 name="randName1" class="h5">Product Name</h2>
+                                    <p name="randPrice1" class="mb-0">Product Price</p>
                                 </div>
                                 <div class="col mb-5 h-100">
+                                    <!--이미지 버튼화-->
                                     <button type="button" class="btn_image" id="img_btn2" style="border: 0;">
-                                        <a href="product-info.html">
-                                            <img src="/Bootstrap/ProjectMain/clothes2.jpg" style="width: 250px; height: 325px" class="cImg">
+                                        <a href="product-info.php">
+                                            <!--이미지 DB 연동-->
+                                            <img name="randImg2" src="" style="width: 250px; height: 325px" class="cImg">
                                         </a>
                                     </button>
-                                    <h2 class="h5">Nicholson Pants</h2>
-                                    <p class="mb-0">$450,000</p>
+                                    <!--상품명, 상품 가격 DB 연동-->
+                                    <h2 name="randName2" class="h5">Product Name</h2>
+                                    <p name="randPrice2" class="mb-0">Product Price</p>
                                 </div>
                                 <div class="col mb-5 mb-md-0 h-100">
+                                    <!--이미지 버튼화-->
                                     <button type="button" class="btn_image" id="img_btn3" style="border: 0;">
-                                        <a href="product-info.html">
-                                            <img src="/Bootstrap/ProjectMain/clothes3.jpg" style="width: 250px; height: 325px" class="cImg">
+                                        <a href="product-info.php">
+                                            <!--이미지 DB 연동-->
+                                            <img name="randImg3" src="" style="width: 250px; height: 325px" class="cImg">
                                         </a>
                                     </button>
-                                    <h2 class="h5">Flower Shirts</h2>
-                                    <p class="mb-0">$179,000</p>
+                                    <!--상품명, 상품 가격 DB 연동-->
+                                    <h2 name="randName3" class="h5">Product Name</h2>
+                                    <p name="randPrice3" class="mb-0">Product Price</p>
                                 </div>
                                 <div class="col h-100">
+                                    <!--이미지 버튼화-->
                                     <button type="button" class="btn_image" id="img_btn4" style="border: 0;">
-                                        <a href="product-info.html">
-                                            <img src="/Bootstrap/ProjectMain/clothes5.jpg" style="width: 250px; height: 325px" class="cImg">
+                                        <a href="product-info.php">
+                                            <!--이미지 DB 연동-->
+                                            <img name="randImg4" src="" style="width: 250px; height: 325px" class="cImg">
                                         </a>
                                     </button>
-                                    <h2 class="h5">Studio Nicholson Dove</h2>
-                                    <p class="mb-0">$250,000</p>
+                                    <!--상품명, 상품 가격 DB 연동-->
+                                    <h2 name="randName4" class="h5">Product Name</h2>
+                                    <p name="randPrice4" class="mb-0">Product Price</p>
                                 </div>
                             </div>
                         </div>
