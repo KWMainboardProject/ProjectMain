@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.IO;
 
 namespace RequestTaskProcessing.StrategyOperator
 {
@@ -10,25 +11,31 @@ namespace RequestTaskProcessing.StrategyOperator
         protected TopClassification()
         {
             //plz set gpu device
-            Console.WriteLine("\tplz Top category weight upload");
             ClearResource();
+
+            var currentPath = Environment.CurrentDirectory;
+            var rootPath = Directory.GetParent(currentPath).ToString();
+            for(int i=0; i<4; i++)
+            {
+                rootPath = Directory.GetParent(rootPath).ToString();
+            }
+            Console.WriteLine(rootPath + @"\python\SubCategory\Top\Top.py");
 
             //파이썬 코드 연동
             engine = IronPython.Hosting.Python.CreateEngine();
             scope = engine.CreateScope();
-            source = engine.CreateScriptSourceFromFile("./ProjectMain/python/SubCategory/Top/Top.py");
+            source = engine.CreateScriptSourceFromFile(rootPath+@"\python\SubCategory\Top\Top.py");
             source.Execute(scope);
             string top_model_path = "./ProjectMain/python/SubCategory/Top/Top_classification.pt";
             var getPythonClass = scope.GetVariable("Top_classification")(top_model_path);
-            Console.WriteLine("\t Pt Loading...");
+            Console.WriteLine("\t Top Pt Loading...");
             getPythonClass.NN_load();
-            Console.WriteLine("\t Pt Done!");
+            Console.WriteLine("\t Top Pt Done!");
         }
 
         public void ClearResource()
         {
             container = new SubCategoryContainer();
-            Console.WriteLine("\tplz clear resource img");
         }
 
 

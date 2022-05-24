@@ -37,7 +37,7 @@ namespace RequestTaskProcessing
                 TaskMessage message = new TaskMessage();
                 message.ip.Value = "top" + i.ToString();
                 message.productor = sender.GetProductor();
-                message.resource = new StringContainer("img_path", "C:/Users/YS Choung/Desktop/후드티.jpg");//file name
+                message.resource = new StringContainer("img_path", @"C:\Users\vbmrk\Downloads/hud.jpg");//file name
                 message.type = MessageType.Request_FindSubCategory_Top_ImagePath;
 
                 tc.SetResource(message);
