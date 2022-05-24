@@ -55,6 +55,10 @@
             "OpenCvSharp4.Windows": {
               "target": "Package",
               "version": "[4.5.5.20211231, )"
+            },
+            "QuantConnect.pythonnet": {
+              "target": "Package",
+              "version": "[2.0.15, )"
             }
           },
           "imports": [

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Q6zNhmsGtVOWRA72R0ft0hIj/mSNm9QmYbmmnwzmy+LfUQ3ESn4pJw6MxZs7Xda/Xb2xutZWx1KHhjpVRoJLUg==",
+  "dgSpecHash": "AmQn4hP1MvKJXaa+ehvVbxJ2PW5qLTkbpbinOxVnLiIyxaWCKFUsAWYwr4CZfWFw01UhVJGFgqDDZqTr5pPE8g==",
   "success": true,
   "projectFilePath": "C:\\Users\\vbmrk\\Documents\\GitHub\\ProjectMain\\c#\\RequestTaskProcessing\\RequestTaskProcessing.csproj",
   "expectedPackageFiles": [
@@ -15,6 +15,7 @@
     "C:\\Users\\vbmrk\\.nuget\\packages\\opencvsharp4.runtime.win\\4.5.5.20211231\\opencvsharp4.runtime.win.4.5.5.20211231.nupkg.sha512",
     "C:\\Users\\vbmrk\\.nuget\\packages\\opencvsharp4.windows\\4.5.5.20211231\\opencvsharp4.windows.4.5.5.20211231.nupkg.sha512",
     "C:\\Users\\vbmrk\\.nuget\\packages\\opencvsharp4.wpfextensions\\4.5.5.20211231\\opencvsharp4.wpfextensions.4.5.5.20211231.nupkg.sha512",
+    "C:\\Users\\vbmrk\\.nuget\\packages\\quantconnect.pythonnet\\2.0.15\\quantconnect.pythonnet.2.0.15.nupkg.sha512",
     "C:\\Users\\vbmrk\\.nuget\\packages\\system.codedom\\4.7.0\\system.codedom.4.7.0.nupkg.sha512",
     "C:\\Users\\vbmrk\\.nuget\\packages\\system.configuration.configurationmanager\\4.7.0\\system.configuration.configurationmanager.4.7.0.nupkg.sha512",
     "C:\\Users\\vbmrk\\.nuget\\packages\\system.drawing.common\\4.7.0\\system.drawing.common.4.7.0.nupkg.sha512",

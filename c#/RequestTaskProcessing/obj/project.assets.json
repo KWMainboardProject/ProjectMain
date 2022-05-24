@@ -241,6 +241,59 @@
           "lib/netcoreapp3.1/OpenCvSharp.WpfExtensions.dll": {}
         }
       },
+      "QuantConnect.pythonnet/2.0.15": {
+        "type": "package",
+        "contentFiles": {
+          "contentFiles/any/any/clr.py": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "clr.py"
+          },
+          "contentFiles/any/any/pythonnet/__init__.py": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "pythonnet/__init__.py"
+          },
+          "contentFiles/any/any/pythonnet/find_libpython/__init__.py": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "pythonnet/find_libpython/__init__.py"
+          },
+          "contentFiles/any/any/pythonnet/find_libpython/__main__.py": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "pythonnet/find_libpython/__main__.py"
+          },
+          "contentFiles/any/any/pythonnet/runtime/Python.Runtime.deps.json": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "pythonnet/runtime/Python.Runtime.deps.json"
+          },
+          "contentFiles/any/any/pythonnet/runtime/Python.Runtime.dll": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "pythonnet/runtime/Python.Runtime.dll"
+          },
+          "contentFiles/any/any/pythonnet/runtime/Python.Runtime.pdb": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "pythonnet/runtime/Python.Runtime.pdb"
+          },
+          "contentFiles/any/any/pythonnet/util/__init__.py": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "pythonnet/util/__init__.py"
+          }
+        }
+      },
       "System.CodeDom/4.7.0": {
         "type": "package",
         "compile": {
@@ -708,6 +761,29 @@
         "opencvsharp4.wpfextensions.nuspec"
       ]
     },
+    "QuantConnect.pythonnet/2.0.15": {
+      "sha512": "+k9Tpwptm98bPUtzX717QCLeRxRKiIiziNyeuhU5CS3YYuHkDfJrmo68VOTOX5wsf2j7Q25Es67C5Skwgm9E/g==",
+      "type": "package",
+      "path": "quantconnect.pythonnet/2.0.15",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "contentFiles/any/any/clr.py",
+        "contentFiles/any/any/pythonnet/__init__.py",
+        "contentFiles/any/any/pythonnet/find_libpython/__init__.py",
+        "contentFiles/any/any/pythonnet/find_libpython/__main__.py",
+        "contentFiles/any/any/pythonnet/runtime/Python.Runtime.deps.json",
+        "contentFiles/any/any/pythonnet/runtime/Python.Runtime.dll",
+        "contentFiles/any/any/pythonnet/runtime/Python.Runtime.pdb",
+        "contentFiles/any/any/pythonnet/util/__init__.py",
+        "lib/net6.0/Python.Runtime.dll",
+        "python-clear.png",
+        "quantconnect.pythonnet.2.0.15.nupkg.sha512",
+        "quantconnect.pythonnet.nuspec"
+      ]
+    },
     "System.CodeDom/4.7.0": {
       "sha512": "Hs9pw/kmvH3lXaZ1LFKj3pLQsiGfj2xo3sxSzwiLlRL6UcMZUTeCfoJ9Udalvn3yq5dLlPEZzYegrTQ1/LhPOQ==",
       "type": "package",
@@ -1040,7 +1116,8 @@
       "IronPython >= 2.7.12",
       "Newtonsoft.Json >= 13.0.1",
       "OpenCvSharp4 >= 4.5.5.20211231",
-      "OpenCvSharp4.Windows >= 4.5.5.20211231"
+      "OpenCvSharp4.Windows >= 4.5.5.20211231",
+      "QuantConnect.pythonnet >= 2.0.15"
     ]
   },
   "packageFolders": {
@@ -1097,6 +1174,10 @@
           "OpenCvSharp4.Windows": {
             "target": "Package",
             "version": "[4.5.5.20211231, )"
+          },
+          "QuantConnect.pythonnet": {
+            "target": "Package",
+            "version": "[2.0.15, )"
           }
         },
         "imports": [
