@@ -22,9 +22,31 @@ namespace RequestTaskProcessing
             //TestTaskManager();
             //TestReturnedResourceContiner();
             //TestTaskMessage();
-            TestJsonFile();
+            //TestJsonFile();
+            TestSubCategory();
         }
 
+        static void TestSubCategory()
+        {
+            TopClassification tc = TopClassification.GetInstance();
+            TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
+            
+            const int iterNum = 10;
+            for(int i=0; i<iterNum; i++)
+            {
+                TaskMessage message = new TaskMessage();
+                message.ip.Value = "top" + i.ToString();
+                message.productor = sender.GetProductor();
+                message.resource = new StringContainer("img_path", "C:/Users/YS Choung/Desktop/후드티.jpg");//file name
+                message.type = MessageType.Request_FindSubCategory_Top_ImagePath;
+
+                tc.SetResource(message);
+                tc.Work();
+                TaskMessage m = tc.GetMessage();
+                m.Print();
+                tc.ClearResource();
+            }
+        }
         static void TestJsonFile()
         {
             FashionObjectsContainer fashion = new FashionObjectsContainer();
