@@ -686,7 +686,7 @@ namespace RequestTaskProcessing
 			foreach (var path in envList)
 			{
 				Console.WriteLine(path.GetKey() + "\t: " + path.Value);
-				CreateDirectory(path.Value);
+				//CreateDirectory(path.Value);
 			}
 		}
 

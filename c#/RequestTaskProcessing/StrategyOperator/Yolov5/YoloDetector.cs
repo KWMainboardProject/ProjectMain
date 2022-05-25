@@ -75,10 +75,11 @@ namespace RequestTaskProcessing.StrategyOperator.Yolov5
             using (var letterimg = CreateLetterbox(img, imgSize, padColor, out ratio, out diff1, out diff2, auto: isAuto, scaleFill: !isAuto))
             {
                 //{
-                    var dW = imgSize.Width - letterimg.Width;
-                    var dH = imgSize.Height - letterimg.Height;
-                    var dW_h = (int)Math.Round((float)dW / 2);
-                    var dH_h = (int)Math.Round((float)dH / 2);
+                    Size firstImgSize = letterimg.Size();
+                    //var dW = imgSize.Width - letterimg.Width;
+                    //var dH = imgSize.Height - letterimg.Height;
+                    //var dW_h = (int)Math.Round((float)dW / 2);
+                    //var dH_h = (int)Math.Round((float)dH / 2);
                     Cv2.Resize(letterimg, letterimg, imgSize);
                 //}
 
@@ -165,7 +166,9 @@ namespace RequestTaskProcessing.StrategyOperator.Yolov5
                     for (int ids = 0; ids < predictions.Count; ids++)
                     {
                         var pred = predictions[ids];
-                        var rescaleBox = CalcRescaleBox(pred.Box, img.Size(), imgSize, diff1, diff2);
+
+                        var rescaleBox = ResizeBox(pred.Box, firstImgSize, imgSize);
+                        rescaleBox = CalcRescaleBox(rescaleBox, img.Size(), imgSize, diff1, diff2);
                         rescale_predictions.Add(new Prediction
                         {
                             Box = rescaleBox,
@@ -177,6 +180,25 @@ namespace RequestTaskProcessing.StrategyOperator.Yolov5
                     return rescale_predictions;
                 }
             }
+        }
+
+        public Box ResizeBox(Box dBox, Size target, Size current)
+        {
+            Box rescaleBox = new Box
+            {
+                Xmin = 0,
+                Ymin = 0,
+                Xmax = 0,
+                Ymax = 0
+            };
+
+            var ratio_x = target.Width / (float)current.Width;
+            var ratio_y = target.Height / (float)current.Height;
+            rescaleBox.Xmin = ratio_x * (dBox.Xmin);
+            rescaleBox.Xmax = ratio_x * (dBox.Xmax);
+            rescaleBox.Ymin = ratio_y * (dBox.Ymin);
+            rescaleBox.Ymax = ratio_y * (dBox.Ymax);
+            return rescaleBox;
         }
 
         public List<Mat> objectSegmentation(Mat image)

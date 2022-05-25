@@ -47,9 +47,6 @@ namespace RequestTaskProcessing.StrategyOperator
             Console.WriteLine("\tplz Set resource");
             requestMessage = new TaskMessage(message);
 
-            Console.WriteLine("Open Image in yolo : " + requestMessage.resource.GetValue().ToString());
-            Mat img = Cv2.ImRead(requestMessage.resource.GetValue().ToString());
-            Console.WriteLine("Complete Open Image in yolo : " + requestMessage.resource.GetValue().ToString());
         }
         
         protected TaskMessage requestMessage = null;
@@ -58,34 +55,36 @@ namespace RequestTaskProcessing.StrategyOperator
         {
             lock (Holder.instance)
             {
-                Console.WriteLine("Start yolo work");
-                float ratio = 0.0f;
-                Point diff1 = new Point();
-                Point diff2 = new Point();
-                var result = yolo.objectDetection(img);
-
-
-                //Set Container
-                container = new EmptyDetectedObjectsContainer();
-                foreach (var prediction in result)
+                Console.WriteLine("Open Image in yolo : " + requestMessage.resource.GetValue().ToString());
+                using (var img = Cv2.ImRead(requestMessage.resource.GetValue().ToString()))
                 {
-                    MainCategoryContainer mc = new MainCategoryContainer();
-                    //Set Category
-                    mc.SetClassfication(prediction.Label);
-                    //Set Boundbox
-                    mc.SetBoundbox(
-                        (int)prediction.Box.Xmin,
-                        (int)prediction.Box.Xmax,
-                        (int)prediction.Box.Ymin,
-                        (int)prediction.Box.Ymax);
-                    //Set confidence
-                    ConfidenceContainer cdc = new ConfidenceContainer(0.45f);
-                    mc.SetAtribute(cdc);
+                    Console.WriteLine("Complete Open Image in yolo : " + requestMessage.resource.GetValue().ToString());
 
-                    //SetAtribute
-                    container.SetAtribute(mc);
+                    Console.WriteLine("Start yolo work");
+                    var result = yolo.objectDetection(img);
+
+
+                    //Set Container
+                    container = new EmptyDetectedObjectsContainer();
+                    foreach (var prediction in result)
+                    {
+                        MainCategoryContainer mc = new MainCategoryContainer();
+                        //Set Category
+                        mc.SetClassfication(prediction.Label);
+                        //Set Boundbox
+                        mc.SetBoundbox(
+                            (int)prediction.Box.Ymin,
+                            (int)prediction.Box.Ymax,
+                            (int)prediction.Box.Xmin,
+                            (int)prediction.Box.Xmax);
+                        //Set confidence
+                        ConfidenceContainer cdc = new ConfidenceContainer(0.45f);
+                        mc.SetAtribute(cdc);
+
+                        //SetAtribute
+                        container.SetAtribute(mc);
+                    }
                 }
-
                 Console.WriteLine("End yolo work");
                 return;
             }

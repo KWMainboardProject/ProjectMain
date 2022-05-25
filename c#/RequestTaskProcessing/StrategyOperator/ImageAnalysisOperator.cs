@@ -18,13 +18,7 @@ namespace RequestTaskProcessing.StrategyOperator
             this.q = new ConcurrentQueue<TaskMessage>();
             productor.SetQueue(q);
 
-            var currentPath = Environment.CurrentDirectory;
-            var rootPath = System.IO.Directory.GetParent(currentPath).ToString();
-            for (int i = 0; i < 3; i++)
-            {
-                rootPath = System.IO.Directory.GetParent(rootPath).ToString();
-            }// ProjectMain/C# 
-            workingPath = rootPath + @"\imageAnalysis";
+            workingPath = ShareWorkPath.GetInstance().WORKER_PATH + @"\imageAnalysis";
             ShareWorkPath.CreateDirectory(workingPath);
         }
         protected string workingPath = null;
