@@ -20,12 +20,12 @@ namespace RequestTaskProcessing
             //TestTaskMessageMethod();
             //TestTaskMessageAndConsumer();
             //TestTaskManager();
-            TestReturnedResourceContiner();
+            //TestReturnedResourceContiner();
             //TestTaskMessage();
             //TestJsonFile();
             //TestSubCategory();
+            Myftp.Run_server();
         }
-
         static void TestSubCategory()
         {
             TopClassification tc = TopClassification.GetInstance();
