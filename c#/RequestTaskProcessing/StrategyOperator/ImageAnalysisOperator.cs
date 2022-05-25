@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using RequestTaskProcessing;
+using Newtonsoft.Json.Linq;
 using System.Threading;
 using System.Collections.Concurrent;
+using OpenCvSharp;
+using OpenCvSharp.Dnn;
 
 namespace RequestTaskProcessing.StrategyOperator
 {
@@ -15,14 +18,7 @@ namespace RequestTaskProcessing.StrategyOperator
             this.q = new ConcurrentQueue<TaskMessage>();
             productor.SetQueue(q);
 
-
-            var currentPath = Environment.CurrentDirectory;
-            var rootPath = System.IO.Directory.GetParent(currentPath).ToString();
-            for (int i = 0; i < 3; i++)
-            {
-                rootPath = System.IO.Directory.GetParent(rootPath).ToString();
-            }// ProjectMain/C# 
-            workingPath = rootPath + @"\imageAnalysis";
+            workingPath = ShareWorkPath.GetInstance().WORKER_PATH + @"\imageAnalysis";
             ShareWorkPath.CreateDirectory(workingPath);
         }
         protected string workingPath = null;
@@ -138,7 +134,35 @@ namespace RequestTaskProcessing.StrategyOperator
 
         protected void SaveCropImg()
         {
+            Mat src = Cv2.ImRead(rbimgPath.GetValue().ToString()); 
+            foreach (CompoundContainer c in container.GetList())
+            {
+                MainCategoryContainer mc = c as MainCategoryContainer;
+                if(mc != null && !mc.IsEmpty)
+                {
+                    JArray box = mc.boundboxContainer.GetValue() as JArray;
+                    try
+                    {
 
+                        //Crop img
+                        Mat cropImg = src.SubMat(
+                            (int)box[0], (int)box[1],
+                            (int)box[2], (int)box[3]);
+
+                        //Set img name
+                        mc.cropimgPath.Value = workingPath + @"\croped_" + mc.GetKey() + @".jpg";
+
+                        //Write crop img
+                        cropImg.ImWrite(mc.cropimgPath.Value);
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine("SaveCropImg Error : " + ex.Message.ToString());
+                    }
+                }
+            }
+            Console.WriteLine("Test SaveCropImg");
+            Console.WriteLine(container.GetJObject().ToString());
         }
         /// <summary>
         /// 
@@ -158,7 +182,8 @@ namespace RequestTaskProcessing.StrategyOperator
 
         public void ClearResource()
         {
-            return;
+            Console.WriteLine("plz removed img delete");
+            Console.WriteLine("plz croped img delete");
         }
         /// <summary>
         /// Thread는 한번씩 밖에 start를 못하니

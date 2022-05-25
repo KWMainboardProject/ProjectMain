@@ -69,6 +69,10 @@
                                         <input type="password" name="userpw_ch" id="userpw_ch" autocomplete="off" required>
                                         <label for="userpw_ch">PASSWORD Repeat</label>
                                     </div>
+                                    <div class="int-area" >   
+                                            <input type="text" name="Age" id="Age" autocomplete="off" required>
+                                            <label >Age</label>        
+                                    </div>
                                     <div class style="padding: 40px 0px;">
                                         <div class="select" style="float:left;">
                                             <label >Gender</label>    
@@ -77,15 +81,7 @@
                                                 <option value="Man">Man</option>
                                                 <option value="Woman">Woman</option>
                                             </select>
-                                        </div>
-                                        <p class="hobbystr">
-                                            <label for="drive">Drive <input type="checkbox" name="hobby[]" id="drive" value="Drive"></label>
-                                            <label for="movie">Movie <input type="checkbox" name="hobby[]" id="movie" value="Movie"></label>
-                                            <label for="study">Study <input type="checkbox" name="hobby[]" id="study" value="Study"></label>
-                                            <label for="game">Game <input type="checkbox" name="hobby[]" id="game" value="Game"></label> 
-                                            <label for="health">Health <input type="checkbox" name="hobby[]" id="health" value="Health"></label>
-                                            <label for="coding">Coding <input type="checkbox" name="hobby[]" id="coding" value="Coding"></label>
-                                        </p>
+                                        </div>    
                                     </div>
                                     <div class="btn-area">
                                         <button type ="submit">회원 가입</button>

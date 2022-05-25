@@ -1,10 +1,7 @@
-<<<<<<< Updated upstream
-=======
 <?php
  session_start();
  
 ?>
->>>>>>> Stashed changes
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -50,15 +47,32 @@
 		        	async		: false,
 		        	success		: function(response) {
 
-		      		console.log(response);
+                //console.log(response);
               
-
 		        	  }
 	          	}).done(function(data){
-                alert(data);
+                //document.writeln(typeof(data));
+                alert("완료");
               });
               
 	        }
+        </script>
+        <script>
+          var index = 0;
+          function semiauto(){
+            $.ajax({
+            url: "lel.php",
+            type: "get"
+              }).done(function(data) {
+            const datax = <?php 
+              {$JsonParser = file_get_contents("./json/Outer.json");echo $JsonParser;}?>;
+            $('#result1').text(datax.type[0] + ' : ' + datax.prop[0] );              
+            $('#result2').text(datax.type[1] + ' : ' + datax.prop[1] );
+            $('#result3').text(datax.type[2] + ' : ' + datax.prop[2] );              
+            $('#result4').text(datax.type[3] + ' : ' + datax.prop[3] );
+            
+            });
+          }
         </script>
     </head>
     <body class="d-flex flex-column h-100">
@@ -117,22 +131,12 @@
                         <div class="col-md-9">
                           <input type="text" class="form-control">
                         </div>
-                        <p id="result"><?php if(!isset($_SESSION["ProductName"])){echo $_SESSION["ProductName"]; }else{echo "??";} ?></p>
                       </div>
                     <!--제품 썸네일 기입-->
                     <div class="mb-3 row">
                       <label class="col-md-3 col-form-label">썸네일 이미지(AI분석)</label>
-<<<<<<< Updated upstream
-                      <div class="col-md-9">
-                        <input class="form-control" type="file" accept="image/png, image/jpg, image/jpeg">
-=======
                       <div class="col-md-9" >
-                        <form id="file_frm">
                         <input class="form-control" type="file" name="upload_file" id="upload_file"  accept="image/png, image/jpg, image/jpeg">
-                        <br><br>
-                        <button type="button" id="files_send" name = "files_send" value="Upload" class="btn btn-lg btn-outline-primary" onclick=" file_frm_submit(this.form); printResult();  semiauto() " >AI Image Analysis (Semi Auto)</button>
-                        </form>  
->>>>>>> Stashed changes
                         <div class="alert alert-secondary" role="alert">
                           <ul>
                             <li>이미지 사이즈: 300*400</li>
@@ -145,7 +149,7 @@
                     <!--AI 세미오토 버튼-->
                     <div class="mb-3 row">
                       <div class="col-12 d-grid p-1">
-                      
+                      <button type="button" id="files_send" name = "files_send" value="Upload" class="btn btn-lg btn-outline-primary" onclick=" file_frm_submit(this.form); printResult(); semiauto() " >AI Image Analysis (Semi Auto)</button>
                       </div>
                     </div>
                     <!--AI 세미오토 결과 받아왔을 때 or 세미오토 버튼이 눌렸을 때 => visibility 속성 변경(hidden -> visible)-->
@@ -192,7 +196,7 @@
                   <div class="mb-3 row">
                   <label class="col-md-3 col-form-label">제품 이미지</label>
                   <div class="col-md-9">
-                    <input class="form-control" type="file" accept="image/png, image/jpg, image/jpeg" multiple>
+                    <input class="form-control" type="file" accept="image/png, image/jpg" multiple>
                     <div class="alert alert-secondary" role="alert">
                       <ul>
                         <li>최대 5개 가능</li>
@@ -283,28 +287,6 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
-<<<<<<< Updated upstream
-        <script> function test(){ $.ajax({url:"product-regist.php" }) } </script>
-=======
-        <script> function test(){ $.ajax({url:"product-regist.php" }) } </script>        
->>>>>>> Stashed changes
-        
-        <script>
-          var index = 0;
-          function semiauto(){
-            $.ajax({
-              url:"lel.php",
-              type: "get",
-              
-            }).done(function(data){
-              data = JSON.parse(data);
-              $('#result1').text(data.desc[0] + ' : ' + data.name[0] );              
-              $('#result2').text(data.desc[1] + ' : ' + data.name[1] );
-              $('#result3').text(data.desc[2] + ' : ' + data.name[2] );              
-              $('#result4').text(data.desc[3] + ' : ' + data.name[3] );
-              
-            });
-          }
-        </script>
+        <script> function test(){ $.ajax({url:"product-regist.php" }) } </script> 
     </body>
 </html>

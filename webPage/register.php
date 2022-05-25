@@ -5,7 +5,7 @@
 $_POST['userid'];
 $_POST['Gender'];
 $_POST['userpw'];
-$_POST['Age'] = '24';
+$_POST['Age'];
 $_POST['LikeStyle'] = 'Dandy';
 
 
@@ -87,6 +87,7 @@ if (isset($_POST['userid']) && isset($_POST['Age']) && isset($_POST['gender']) &
     <body class="d-flex flex-column h-100">
         <script>
             AOS.init();
+            location.replace('login.php');
         </script>
         <main class="flex-shrink-0">
             <!-- Navigation-->

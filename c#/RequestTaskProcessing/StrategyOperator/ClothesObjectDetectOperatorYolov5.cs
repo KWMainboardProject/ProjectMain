@@ -2,24 +2,33 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using RequestTaskProcessing.StrategyOperator.Yolov5;
+using OpenCvSharp;
+using OpenCvSharp.Dnn;
 
 namespace RequestTaskProcessing.StrategyOperator
 {
     class ClothesObjectDetectOperatorYolov5 : IStrategyOperateAble
     {
+        protected YoloDetector yolo = null;
+        protected Mat img = null;
+
         protected ClothesObjectDetectOperatorYolov5()
         {
             //plz set gpu device
-            Console.WriteLine("\tplz yolov5 weight upload");
+            Console.WriteLine("Loading : " + ShareWorkPath.GetInstance().WEIGHT_PATH + @"\FashionDetector.onnx");
+            yolo = new YoloDetector(ShareWorkPath.GetInstance().WEIGHT_PATH + @"\FashionDetector.onnx");
+            Console.WriteLine("Complete load FashionDetector.onnx");
             ClearResource();
         }
 
         public void ClearResource()
         {
+            yolo.InitResource();
+            img = null;
             container = new EmptyDetectedObjectsContainer();
-            Console.WriteLine("\tplz clear resource img");
+            //Console.WriteLine("\tplz clear resource img");
         }
-
 
         public TaskMessage GetMessage()
         {
@@ -37,21 +46,47 @@ namespace RequestTaskProcessing.StrategyOperator
         {
             Console.WriteLine("\tplz Set resource");
             requestMessage = new TaskMessage(message);
+
         }
+        
         protected TaskMessage requestMessage = null;
         protected EmptyDetectedObjectsContainer container;
         public void Work()
         {
             lock (Holder.instance)
             {
-                //Console.WriteLine(requestMessage.ip.Value + "_yolo를 실행 중이예요.\n remove bg는 자요");
-                SetContainer();
-                Thread.Sleep(1000);
-                //Console.WriteLine(requestMessage.ip.Value + "_yolo는 작업을 완료했어요");
+                Console.WriteLine("Open Image in yolo : " + requestMessage.resource.GetValue().ToString());
+                using (var img = Cv2.ImRead(requestMessage.resource.GetValue().ToString()))
+                {
+                    Console.WriteLine("Complete Open Image in yolo : " + requestMessage.resource.GetValue().ToString());
 
-                //Set container
+                    Console.WriteLine("Start yolo work");
+                    var result = yolo.objectDetection(img);
+
+
+                    //Set Container
+                    container = new EmptyDetectedObjectsContainer();
+                    foreach (var prediction in result)
+                    {
+                        MainCategoryContainer mc = new MainCategoryContainer();
+                        //Set Category
+                        mc.SetClassfication(prediction.Label);
+                        //Set Boundbox
+                        mc.SetBoundbox(
+                            (int)prediction.Box.Ymin,
+                            (int)prediction.Box.Ymax,
+                            (int)prediction.Box.Xmin,
+                            (int)prediction.Box.Xmax);
+                        //Set confidence
+                        ConfidenceContainer cdc = new ConfidenceContainer(0.45f);
+                        mc.SetAtribute(cdc);
+
+                        //SetAtribute
+                        container.SetAtribute(mc);
+                    }
+                }
+                Console.WriteLine("End yolo work");
                 return;
-                throw new NotImplementedException();
             }
         }
 
@@ -98,18 +133,22 @@ namespace RequestTaskProcessing.StrategyOperator
             switch (idx)
             {
                 case 0:
-                    name = "Top";
+                    name = "Overall";
+
                     break;
                 case 1:
                     name = "Bottom";
                     break;
                 case 2:
-                    name = "Overall";
+                    name = "Top";
+
                     break;
                 case 3:
                     name = "Outer";
                     break;
-
+                case 4:
+                    name = "Shoes";
+                    break;
             }
             return name;
         }

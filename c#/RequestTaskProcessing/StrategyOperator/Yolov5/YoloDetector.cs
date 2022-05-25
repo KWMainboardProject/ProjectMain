@@ -11,7 +11,7 @@ using System.Linq;
 /// Reference
 /// https://github.com/singetta/OnnxSample.git
 /// </summary>
-namespace OnnxSample.Yolov5
+namespace RequestTaskProcessing.StrategyOperator.Yolov5
 {
     public class YoloDetector : IDisposable
     {
@@ -22,25 +22,30 @@ namespace OnnxSample.Yolov5
         public float NmsThresh { get; set; }
         private float maxWH = 4096;
         public Size imgSize = new Size(IMG_SIZE, IMG_SIZE);
-        private Scalar padColor = new Scalar(114, 114, 114);
+        private Scalar padColor = new Scalar(pclr, pclr, pclr);
 
         private const int imsz = 640;
+        private const int pclr = 114;
         public static int IMG_SIZE
         {
             get { return imsz; }
+        }
+        public static int PAD_COLOR
+        {
+            get { return pclr; }
         }
 
         /// <summary>
         /// Initialize
         /// </summary>
         /// <param name="model_path"></param>
-        public YoloDetector(string model_path)
+        public YoloDetector(string model_path, int device_num=0)
         {
             var option = new SessionOptions();
             option.GraphOptimizationLevel = GraphOptimizationLevel.ORT_ENABLE_ALL;
             option.ExecutionMode = ExecutionMode.ORT_SEQUENTIAL;
             //Set cuda (gpu) device
-            option.AppendExecutionProvider_CUDA(0);
+            //option.AppendExecutionProvider_CUDA(device_num);
 
             sess = new InferenceSession(model_path, option);
 
@@ -69,6 +74,16 @@ namespace OnnxSample.Yolov5
             if (img.Width <= imgSize.Width || img.Height <= imgSize.Height) isAuto = false;
             using (var letterimg = CreateLetterbox(img, imgSize, padColor, out ratio, out diff1, out diff2, auto: isAuto, scaleFill: !isAuto))
             {
+                //{
+                    Size firstImgSize = letterimg.Size();
+                    //var dW = imgSize.Width - letterimg.Width;
+                    //var dH = imgSize.Height - letterimg.Height;
+                    //var dW_h = (int)Math.Round((float)dW / 2);
+                    //var dH_h = (int)Math.Round((float)dH / 2);
+                    Cv2.Resize(letterimg, letterimg, imgSize);
+                //}
+
+
                 letterimg.ConvertTo(imageFloat, MatType.CV_32FC3, (float)(1 / 255.0));
                 var input = new DenseTensor<float>(MatToList(imageFloat), new[] { 1, 3, imgSize.Height, imgSize.Width });
                 // Setup inputs and outputs
@@ -151,7 +166,9 @@ namespace OnnxSample.Yolov5
                     for (int ids = 0; ids < predictions.Count; ids++)
                     {
                         var pred = predictions[ids];
-                        var rescaleBox = CalcRescaleBox(pred.Box, img.Size(), imgSize, diff1, diff2);
+
+                        var rescaleBox = ResizeBox(pred.Box, firstImgSize, imgSize);
+                        rescaleBox = CalcRescaleBox(rescaleBox, img.Size(), imgSize, diff1, diff2);
                         rescale_predictions.Add(new Prediction
                         {
                             Box = rescaleBox,
@@ -163,6 +180,25 @@ namespace OnnxSample.Yolov5
                     return rescale_predictions;
                 }
             }
+        }
+
+        public Box ResizeBox(Box dBox, Size target, Size current)
+        {
+            Box rescaleBox = new Box
+            {
+                Xmin = 0,
+                Ymin = 0,
+                Xmax = 0,
+                Ymax = 0
+            };
+
+            var ratio_x = target.Width / (float)current.Width;
+            var ratio_y = target.Height / (float)current.Height;
+            rescaleBox.Xmin = ratio_x * (dBox.Xmin);
+            rescaleBox.Xmax = ratio_x * (dBox.Xmax);
+            rescaleBox.Ymin = ratio_y * (dBox.Ymin);
+            rescaleBox.Ymax = ratio_y * (dBox.Ymax);
+            return rescaleBox;
         }
 
         public List<Mat> objectSegmentation(Mat image)
