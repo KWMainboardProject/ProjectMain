@@ -20,10 +20,16 @@ namespace RequestTaskProcessing
             //TestTaskMessageMethod();
             //TestTaskMessageAndConsumer();
             //TestTaskManager();
-            TestReturnedResourceContiner();
+            //TestReturnedResourceContiner();
             //TestTaskMessage();
             //TestJsonFile();
             //TestSubCategory();
+            TestSharePath();
+        }
+
+        static void TestSharePath()
+        {
+            ShareWorkPath swp = ShareWorkPath.GetInstance();
         }
 
         static void TestSubCategory()

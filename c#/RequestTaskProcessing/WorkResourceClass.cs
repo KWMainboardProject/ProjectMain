@@ -437,7 +437,7 @@ namespace RequestTaskProcessing
 					+ (int)boundbox[2]
 					+ (int)boundbox[3];
 				}
-				return (sum > threashold);
+				return (sum < threashold);
 			}
 		}
 
@@ -605,20 +605,16 @@ namespace RequestTaskProcessing
 			boundboxContainer.SetBoundBox(x_min, x_max, y_min, y_max);
 
         }
-
 		public bool IsEmpty
         {
             get { return boundboxContainer.IsEmpty; }
         }
-		ClassficationContainer GetClassficationContainer()
-        {
-			return classficationContainer;
-        }
-		BoundBoxContainer GetBoundBoxContainer()
-        {
-			return boundboxContainer;
-        }
 
+		public void CropImgAndSave(string imgPath, string rootPath)
+        {
+
+        }
+		public StringContainer cropimgPath = new StringContainer("img_path");
 		public ClassficationContainer classficationContainer;
 		public BoundBoxContainer boundboxContainer;
     }
@@ -699,10 +695,97 @@ namespace RequestTaskProcessing
 		public ConfidenceContainer confidenceContainer;// = new ConfidenceContainer();
 	}
 	
-	public class WorkResourceClass
+	public class ShareWorkPath
 	{
-		public WorkResourceClass()
+		protected ShareWorkPath()
 		{
+			currentPath.Value = Environment.CurrentDirectory;
+			rootPath.Value = System.IO.Directory.GetParent(currentPath.Value).ToString();
+			for (int i = 0; i < 4; i++)
+			{
+				rootPath.Value = System.IO.Directory.GetParent(rootPath.Value).ToString();
+			}
+			weightPath.Value = rootPath.Value + @"\weight";
+			pythonPath.Value = rootPath.Value + @"\python";
+			cPath.Value = rootPath.Value + @"\c#";
+
+			string outPath = System.IO.Directory.GetParent(rootPath.Value).ToString();
+
+			workerPath.Value = outPath + @"\WORKER_PATH";
+
+			envList.Add(currentPath);
+			envList.Add(rootPath);
+			envList.Add(weightPath);
+			envList.Add(pythonPath);
+			envList.Add(cPath);
+			envList.Add(workerPath);
+			foreach (var path in envList)
+            {
+				Console.WriteLine(path.GetKey() + "\t: " + path.Value);
+				CreateDirectory(path.Value);
+            }
+		}
+
+		static public void CreateDirectory(string dirPath)
+		{
+			if (System.IO.Directory.Exists(dirPath) == false)
+			{
+				System.IO.Directory.CreateDirectory(dirPath);
+				Console.WriteLine("Create Directory : " + dirPath);
+			}
+		}
+		private StringContainer currentPath = new StringContainer("CURRENT_PATH");
+		private StringContainer rootPath = new StringContainer("ROOT_PATH");
+		private StringContainer weightPath = new StringContainer("WEIGHT_PATH");
+		private StringContainer pythonPath = new StringContainer("PYTHON_PATH");
+		private StringContainer cPath = new StringContainer("C#_PATH");
+		private StringContainer workerPath = new StringContainer("WORKER_PATH");
+
+
+
+		private List<StringContainer> envList = new List<StringContainer>();
+		public List<StringContainer> GetEnvList()
+        {
+			return new List<StringContainer>(envList);
+        }
+		public string WORKER_PATH
+        {
+            get { return workerPath.Value; }
+        }
+		public string CURRENT_PATH
+        {
+            get { return currentPath.Value; }
+        }
+		public string ROOT_PATH
+		{
+			get { return rootPath.Value; }
+		}
+		public string WEIGHT_PATH
+		{
+			get { return weightPath.Value; }
+		}
+		public string PYTHON_PATH
+		{
+			get { return pythonPath.Value; }
+		}
+		public string C____PATH
+        {
+			get { return cPath.Value; }
+		}
+		/// <summary>
+		/// singleton pattern
+		/// </summary>
+		/// <returns></returns>
+		public static ShareWorkPath GetInstance()
+		{
+			return Holder.instance;
+		}
+		/// <summary>
+		/// Lazy Initialization + holder
+		/// </summary>
+		private static class Holder
+		{
+			public static ShareWorkPath instance = new ShareWorkPath();
 		}
 	}
 }

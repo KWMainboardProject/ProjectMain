@@ -23,7 +23,7 @@ namespace RequestTaskProcessing.StrategyOperator
                 rootPath = System.IO.Directory.GetParent(rootPath).ToString();
             }// ProjectMain/C# 
             workingPath = rootPath + @"\imageAnalysis";
-            CreateDirectory(workingPath);
+            ShareWorkPath.CreateDirectory(workingPath);
         }
         protected string workingPath = null;
         /// <summary>
@@ -46,18 +46,11 @@ namespace RequestTaskProcessing.StrategyOperator
                 workingPath = workingPath + @"\" + message.ip.Value;
             }
             
-            CreateDirectory(workingPath);
+            ShareWorkPath.CreateDirectory(workingPath);
         }
         protected TaskMessage requestMessage = null;
 
-        public void CreateDirectory(string dirPath)
-        {
-            if (System.IO.Directory.Exists(dirPath) == false)
-            {
-                System.IO.Directory.CreateDirectory(dirPath);
-                Console.WriteLine("Create Directory : " + dirPath);
-            }
-        }
+        
 
         public void Work()
         {
@@ -100,8 +93,30 @@ namespace RequestTaskProcessing.StrategyOperator
 
             //save croped img - crop된 이미지를 저장해서 각 객체 밑에 croped save img path를 추가해 준다.
             SaveCropImg();
-            //request subcategory * (0,4)
-            
+            //request subcategory * (0,4) 
+            foreach (CompoundContainer c in container.GetList())
+            {
+                MainCategoryContainer mc = c as MainCategoryContainer;
+                if(mc != null && !mc.IsEmpty)
+                {
+                    TaskMessage subM, ptnM = null;
+                    subM = new TaskMessage(requestMessage);
+                    ptnM = new TaskMessage(requestMessage);
+
+                    //Console.WriteLine(mc.GetJObject().ToString());
+                    switch (mc.GetKey())
+                    {
+                        case "Top":
+                            break;
+                        case "Bottom":
+                            break;
+                        case "Overall":
+                            break;
+                        case "Outer":
+                            break;
+                    }
+                }
+            }
 
 
             //request pattern * (0,4)
