@@ -118,47 +118,6 @@ namespace RequestTaskProcessing
         Thread thread = null;
     }
 
-    public class TestTask_ResourceContainer_NoHelper : IStrategyOperateAble
-    {
-        const int SLEEP_TIME = 500;
-        public TestTask_ResourceContainer_NoHelper()
-        {
-            WORKER_NUM++;
-            workerNumber = WORKER_NUM;
-        }
-        public void ClearResource()
-        {
-            return;
-        }
-
-        public TaskMessage GetMessage()
-        {
-            TaskMessage m = new TaskMessage(ip, p, MessageType.Response_TestTask_container, r);
-            return m;
-        }
-
-        public void SetResource(TaskMessage m)
-        {
-            //Worng
-            if (m.type != MessageType.Request_TestTask_container)
-                throw new NullReferenceException();
-
-            ip = m.ip.Value;
-            //r = (StringContainer)m.resource;
-            p = m.productor;
-        }
-
-        public void Work()
-        {
-            Thread.Sleep(SLEEP_TIME);
-            r = new StringContainer("resource", "Worker" + workerNumber.ToString());
-        }
-        static int WORKER_NUM = 0;
-        private int workerNumber;
-        protected string ip = null;
-        protected IMessageProductAble p = null;
-        protected StringContainer r = null;
-    }
     static class Myftp
     {
         private static JToken json;
