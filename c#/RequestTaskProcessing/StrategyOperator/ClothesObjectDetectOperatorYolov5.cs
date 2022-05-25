@@ -16,7 +16,7 @@ namespace RequestTaskProcessing.StrategyOperator
 
         public void ClearResource()
         {
-            container = new DetectedObjectsContainer();
+            container = new EmptyDetectedObjectsContainer();
             Console.WriteLine("\tplz clear resource img");
         }
 
@@ -39,7 +39,7 @@ namespace RequestTaskProcessing.StrategyOperator
             requestMessage = new TaskMessage(message);
         }
         protected TaskMessage requestMessage = null;
-        protected DetectedObjectsContainer container;
+        protected EmptyDetectedObjectsContainer container;
         public void Work()
         {
             lock (Holder.instance)

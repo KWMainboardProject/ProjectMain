@@ -20,10 +20,10 @@ namespace RequestTaskProcessing
             //TestTaskMessageMethod();
             //TestTaskMessageAndConsumer();
             //TestTaskManager();
-            //TestReturnedResourceContiner();
+            TestReturnedResourceContiner();
             //TestTaskMessage();
             //TestJsonFile();
-            TestSubCategory();
+            //TestSubCategory();
         }
 
         static void TestSubCategory()
@@ -49,7 +49,7 @@ namespace RequestTaskProcessing
         }
         static void TestJsonFile()
         {
-            FashionObjectsContainer fashion = new FashionObjectsContainer();
+            DetectedObjectsContainer fashion = new DetectedObjectsContainer();
             Random random = new Random();
             if (random.Next(2) == 0)
             {
@@ -79,7 +79,7 @@ namespace RequestTaskProcessing
                 }
 
                 {
-                    StayleContainer c = new StayleContainer();
+                    StyleContainer c = new StyleContainer();
                     c.classficationContainer.SetClassfication("casual");
                     c.confidenceContainer.SetConfidence(0.7f);
                     container.SetAtribute(c);
@@ -114,7 +114,7 @@ namespace RequestTaskProcessing
                 }
 
                 {
-                    StayleContainer c = new StayleContainer();
+                    StyleContainer c = new StyleContainer();
                     c.classficationContainer.SetClassfication("casual");
                     c.confidenceContainer.SetConfidence(0.7f);
                     container.SetAtribute(c);
@@ -148,7 +148,7 @@ namespace RequestTaskProcessing
                 }
 
                 {
-                    StayleContainer c = new StayleContainer();
+                    StyleContainer c = new StyleContainer();
                     c.classficationContainer.SetClassfication("casual");
                     c.confidenceContainer.SetConfidence(0.7f);
                     container.SetAtribute(c);
@@ -182,7 +182,7 @@ namespace RequestTaskProcessing
                 }
 
                 {
-                    StayleContainer c = new StayleContainer();
+                    StyleContainer c = new StyleContainer();
                     c.classficationContainer.SetClassfication("casual");
                     c.confidenceContainer.SetConfidence(0.7f);
                     container.SetAtribute(c);

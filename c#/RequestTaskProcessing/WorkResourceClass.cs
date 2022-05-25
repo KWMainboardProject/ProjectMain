@@ -86,7 +86,7 @@ namespace RequestTaskProcessing
             {
 				foreach (IJObjectUseAbleContainer container in containers)
 				{
-					value.Add(container.GetKey(), container.GetJObject()[container.GetKey()]);
+					value.Add(container.GetKey(), container.GetValue());
 				}
 			}
 			
@@ -126,61 +126,62 @@ namespace RequestTaskProcessing
 
 		public JToken GetValue()
 		{
-			return GetJObject()[GetKey()];
+			return classfication;
+			//return GetJObject()[GetKey()];
 		}
 
 		protected string classfication;
 	}
 
-	public class ReturnedResourceContainer : IJObjectUseAbleContainer
-	{
-		public ReturnedResourceContainer(MessageType type = MessageType.EmptyMessage, IJObjectUseAbleContainer container = null)
-		{
-			SetKey(type);
-			if (container != null) SetContainer(container);
-		}
-		public JObject GetJObject()
-		{
-			JObject json = new JObject();
-			json.Add(GetKey(), container);
-			return json;
-		}
+	//public class ReturnedResourceContainer : IJObjectUseAbleContainer
+	//{
+	//	public ReturnedResourceContainer(MessageType type = MessageType.EmptyMessage, IJObjectUseAbleContainer container = null)
+	//	{
+	//		SetKey(type);
+	//		if (container != null) SetContainer(container);
+	//	}
+	//	public JObject GetJObject()
+	//	{
+	//		JObject json = new JObject();
+	//		json.Add(GetKey(), container);
+	//		return json;
+	//	}
 
-		public string GetKey()
-		{
-			return type.ToString();
-		}
+	//	public string GetKey()
+	//	{
+	//		return type.ToString();
+	//	}
 
-		protected MessageType type = MessageType.EmptyMessage;
-		protected JObject container = null;
-		public void SetKey(MessageType type)
-		{
-			this.type = type;
-		}
-		public void SetContainer(IJObjectUseAbleContainer container)
-		{
-			if (container == null) throw new NullReferenceException();
-			this.container = container.GetJObject();
-		}
-		public void SetContainer(JObject container)
-		{
-			this.container = container;
-		}
+	//	protected MessageType type = MessageType.EmptyMessage;
+	//	protected JObject container = null;
+	//	public void SetKey(MessageType type)
+	//	{
+	//		this.type = type;
+	//	}
+	//	public void SetContainer(IJObjectUseAbleContainer container)
+	//	{
+	//		if (container == null) throw new NullReferenceException();
+	//		this.container = container.GetJObject();
+	//	}
+	//	public void SetContainer(JObject container)
+	//	{
+	//		this.container = container;
+	//	}
 
-		public JToken GetValue()
-		{
-			return container;
-		}
+	//	public JToken GetValue()
+	//	{
+	//		return container;
+	//	}
 
-		public void SetJObject(JObject obj)
-		{
-			if (obj == null) return;
-			string key = obj.Properties().ToString();
-			SetKey((MessageType)Enum.Parse(typeof(MessageType), key));
+	//	public void SetJObject(JObject obj)
+	//	{
+	//		if (obj == null) return;
+	//		string key = obj.Properties().ToString();
+	//		SetKey((MessageType)Enum.Parse(typeof(MessageType), key));
 
-			SetContainer(obj.Value<JObject>());
-		}
-	}
+	//		SetContainer(obj.Value<JObject>());
+	//	}
+	//}
 
 	public class ConfidenceContainer : IJObjectUseAbleContainer
 	{
@@ -193,7 +194,7 @@ namespace RequestTaskProcessing
 		public JObject GetJObject()
 		{
 			JObject json = new JObject();
-			json.Add(GetKey(), confidence);
+			json.Add(GetKey(), GetValue());
 			return json;
 		}
 
@@ -204,7 +205,7 @@ namespace RequestTaskProcessing
 
 		public JToken GetValue()
 		{
-			return GetJObject()[GetKey()];
+			return confidence;
 		}
 
 		public void SetJObject(JObject obj)
@@ -229,7 +230,7 @@ namespace RequestTaskProcessing
 		public JObject GetJObject()
 		{
 			JObject json = new JObject() ;
-			json.Add(GetKey(), Value);
+			json.Add(GetKey(), GetValue());
 			return json;
 		}
 
@@ -240,7 +241,7 @@ namespace RequestTaskProcessing
 
 		public JToken GetValue()
 		{
-			return GetJObject()[GetKey()];
+			return Value;
 		}
 
 		public void SetJObject(JObject obj)
@@ -335,7 +336,7 @@ namespace RequestTaskProcessing
 		{
 			//if (boundbox[0]+ boundbox[1]+ boundbox[2]+ boundbox[3] =< 0) throw NullReferenceException;
 			JObject json = new JObject();
-			json.Add(GetKey(), rgb);
+			json.Add(GetKey(), GetValue());
 			return json;
 		}
 		public void SetJObject(JObject obj)
@@ -361,7 +362,7 @@ namespace RequestTaskProcessing
 
 		public JToken GetValue()
 		{
-			return GetJObject()[GetKey()];
+			return rgb;
 		}
 		/// <summary>
 		/// 0:x_min / 1:x_max / 2:y_min / 3:y_max
@@ -379,7 +380,7 @@ namespace RequestTaskProcessing
 		{
 			//if (boundbox[0]+ boundbox[1]+ boundbox[2]+ boundbox[3] =< 0) throw NullReferenceException;
 			JObject json = new JObject();
-			json.Add(GetKey(), boundbox);
+			json.Add(GetKey(), GetValue());
 			return json;
 		}
 		public void SetJObject(JObject obj)
@@ -423,7 +424,7 @@ namespace RequestTaskProcessing
 
 		public JToken GetValue()
 		{
-			return GetJObject()[GetKey()];
+			return boundbox;
 		}
 		/// <summary>
 		/// 0:x_min / 1:x_max / 2:y_min / 3:y_max
@@ -453,13 +454,34 @@ namespace RequestTaskProcessing
 				container.SetJObject(value);
 			}
 		}
-		public MainCategoryContainer top = new MainCategoryContainer("Top");
-		public MainCategoryContainer bottom = new MainCategoryContainer("Bottom");
-		public MainCategoryContainer overall = new MainCategoryContainer("Overall");
-		public MainCategoryContainer outer = new MainCategoryContainer("Outer");
+		public FashionObjectContainer top = new FashionObjectContainer("Top");
+		public FashionObjectContainer bottom = new FashionObjectContainer("Bottom");
+		public FashionObjectContainer overall = new FashionObjectContainer("Overall");
+		public FashionObjectContainer outer = new FashionObjectContainer("Outer");
 	}
-    public class DetectedObjectsContainer : CompoundContainer
+
+	public class EmptyDetectedObjectsContainer : CompoundContainer
     {
+		public override string GetKey()
+		{
+			return "Fashion";
+		}
+
+        public override void SetJObject(JObject obj)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+	public class DetectedObjectsContainer : CompoundContainer
+    {
+		public DetectedObjectsContainer()
+        {
+			SetAtribute(top);
+			SetAtribute(bottom);
+			SetAtribute(overall);
+			SetAtribute(outer);
+		}
         public override string GetKey()
         {
 			return "Fashion";
@@ -467,12 +489,53 @@ namespace RequestTaskProcessing
 
         public override void SetJObject(JObject obj)
         {
-			Console.WriteLine("Can't use SetJObject in DetectedObjectsContainer");
-            throw new NotImplementedException();
-        }
-    }
+			if (obj == null) return;
+			try
+			{
+				JObject value = (JObject)obj[GetKey()];
+				foreach (IJObjectUseAbleContainer container in containers)
+				{
+					container.SetJObject(value);
+				}
+			}
+			catch { }
+		}
+		public MainCategoryContainer top = new MainCategoryContainer("Top");
+		public MainCategoryContainer bottom = new MainCategoryContainer("Bottom");
+		public MainCategoryContainer overall = new MainCategoryContainer("Overall");
+		public MainCategoryContainer outer = new MainCategoryContainer("Outer");
+	}
+	public class FashionObjectContainer : CompoundContainer
+	{
+		public FashionObjectContainer(string key="Top")
+		{
+			this.key = key;
+			SetAtribute(boundbox);
+			SetAtribute(subcategory);
+			SetAtribute(pattern);
+			SetAtribute(style);
+		}
+		public override string GetKey()
+		{
+			return key;
+		}
 
-    public class MainCategoryContainer : CompoundContainer
+		public override void SetJObject(JObject obj)
+		{
+			if (obj == null) return;
+			JObject value = (JObject)obj[GetKey()];
+			foreach (IJObjectUseAbleContainer container in containers)
+			{
+				container.SetJObject(value);
+			}
+		}
+		protected string key = null;
+		public BoundBoxContainer boundbox = new BoundBoxContainer();
+		public SubCategoryContainer subcategory = new SubCategoryContainer();
+		public PatternContainer pattern = new PatternContainer();
+		public StyleContainer style = new StyleContainer();
+	}
+	public class MainCategoryContainer : CompoundContainer
     {
 		public MainCategoryContainer(string classfication= "maincategory")
         {
@@ -577,9 +640,9 @@ namespace RequestTaskProcessing
 		public ClassficationContainer classficationContainer = new ClassficationContainer();
 		public ConfidenceContainer confidenceContainer;// = new ConfidenceContainer();
 	}
-	public class StayleContainer : CompoundContainer
+	public class StyleContainer : CompoundContainer
 	{
-		public StayleContainer(float confidence_threshold = 0.55f)
+		public StyleContainer(float confidence_threshold = 0.55f)
 		{
 			confidenceContainer = new ConfidenceContainer(confidence_threshold);
 			SetAtribute(classficationContainer);

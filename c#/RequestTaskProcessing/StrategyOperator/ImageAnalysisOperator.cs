@@ -14,7 +14,18 @@ namespace RequestTaskProcessing.StrategyOperator
         {
             this.q = new ConcurrentQueue<TaskMessage>();
             productor.SetQueue(q);
+
+
+            var currentPath = Environment.CurrentDirectory;
+            var rootPath = System.IO.Directory.GetParent(currentPath).ToString();
+            for (int i = 0; i < 3; i++)
+            {
+                rootPath = System.IO.Directory.GetParent(rootPath).ToString();
+            }// ProjectMain/C# 
+            workingPath = rootPath + @"\imageAnalysis";
+            CreateDirectory(workingPath);
         }
+        protected string workingPath = null;
         /// <summary>
         /// 
         /// </summary>
@@ -26,8 +37,27 @@ namespace RequestTaskProcessing.StrategyOperator
         public void SetResource(TaskMessage message)
         {
             requestMessage = new TaskMessage(message);
+            try
+            {
+                workingPath = workingPath + @"\" + System.IO.Path.GetFileNameWithoutExtension(message.ip.Value);
+            }
+            catch
+            {
+                workingPath = workingPath + @"\" + message.ip.Value;
+            }
+            
+            CreateDirectory(workingPath);
         }
         protected TaskMessage requestMessage = null;
+
+        public void CreateDirectory(string dirPath)
+        {
+            if (System.IO.Directory.Exists(dirPath) == false)
+            {
+                System.IO.Directory.CreateDirectory(dirPath);
+                Console.WriteLine("Create Directory : " + dirPath);
+            }
+        }
 
         public void Work()
         {
@@ -63,17 +93,16 @@ namespace RequestTaskProcessing.StrategyOperator
             Start(); // Set container
             Join();
             InitThread();
-           // Console.WriteLine("Set Detected Objects Message");
-
-            //Console.WriteLine(container.GetJObject().ToString());
 
             // Yolo postprocessing
 
             //crop img each object
 
-            //save croped img
-
+            //save croped img - crop된 이미지를 저장해서 각 객체 밑에 croped save img path를 추가해 준다.
+            SaveCropImg();
             //request subcategory * (0,4)
+            
+
 
             //request pattern * (0,4)
 
@@ -90,6 +119,11 @@ namespace RequestTaskProcessing.StrategyOperator
             //prepare resoure for GetMessage
 
             //origin img delete
+        }
+
+        protected void SaveCropImg()
+        {
+
         }
         /// <summary>
         /// 
@@ -133,7 +167,7 @@ namespace RequestTaskProcessing.StrategyOperator
             timeout.SetThesholdTime(time);
         }
 
-        protected FashionObjectsContainer container = new FashionObjectsContainer();
+        protected DetectedObjectsContainer container = new DetectedObjectsContainer();
         protected StringContainer rbimgPath = null;
         protected List<MessageType> waitMessage = new List<MessageType>();
 
