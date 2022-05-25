@@ -74,6 +74,15 @@ namespace RequestTaskProcessing.StrategyOperator.Yolov5
             if (img.Width <= imgSize.Width || img.Height <= imgSize.Height) isAuto = false;
             using (var letterimg = CreateLetterbox(img, imgSize, padColor, out ratio, out diff1, out diff2, auto: isAuto, scaleFill: !isAuto))
             {
+                //{
+                    var dW = imgSize.Width - letterimg.Width;
+                    var dH = imgSize.Height - letterimg.Height;
+                    var dW_h = (int)Math.Round((float)dW / 2);
+                    var dH_h = (int)Math.Round((float)dH / 2);
+                    Cv2.Resize(letterimg, letterimg, imgSize);
+                //}
+
+
                 letterimg.ConvertTo(imageFloat, MatType.CV_32FC3, (float)(1 / 255.0));
                 var input = new DenseTensor<float>(MatToList(imageFloat), new[] { 1, 3, imgSize.Height, imgSize.Width });
                 // Setup inputs and outputs
