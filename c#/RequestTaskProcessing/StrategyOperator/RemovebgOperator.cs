@@ -28,9 +28,9 @@ namespace RequestTaskProcessing.StrategyOperator
                 TaskMessage taskMessage = new TaskMessage(requestMessage);
                 taskMessage.type = MessageType.Receive_ImagePath_RemoveBG;        //set
                 taskMessage.productor = null;                                   //set
-                taskMessage.resource =
-                    new StringContainer("img_path",
-                    requestMessage.resource.GetValue().ToString() + "/gpu_worker/removed_img.jpg");         //set
+                //taskMessage.resource = 
+                    //new StringContainer("img_path",
+                    //requestMessage.resource.GetValue().ToString() + "/gpu_worker/removed_img.jpg");         //set
                 return taskMessage;
             }
         }
