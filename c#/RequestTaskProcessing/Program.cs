@@ -24,8 +24,8 @@ namespace RequestTaskProcessing
             //TestTaskMessage();
             //TestJsonFile();
             //TestSubCategory();
-            Myftp.Run_server();
-            //TestSharePath();
+            //Myftp.Run_server();
+            TestSharePath();
         }
 
         static void TestSharePath()
