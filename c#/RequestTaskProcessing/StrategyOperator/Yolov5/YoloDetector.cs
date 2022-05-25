@@ -11,7 +11,7 @@ using System.Linq;
 /// Reference
 /// https://github.com/singetta/OnnxSample.git
 /// </summary>
-namespace OnnxSample.Yolov5
+namespace RequestTaskProcessing.StrategyOperator.Yolov5
 {
     public class YoloDetector : IDisposable
     {
@@ -22,25 +22,30 @@ namespace OnnxSample.Yolov5
         public float NmsThresh { get; set; }
         private float maxWH = 4096;
         public Size imgSize = new Size(IMG_SIZE, IMG_SIZE);
-        private Scalar padColor = new Scalar(114, 114, 114);
+        private Scalar padColor = new Scalar(pclr, pclr, pclr);
 
         private const int imsz = 640;
+        private const int pclr = 114;
         public static int IMG_SIZE
         {
             get { return imsz; }
+        }
+        public static int PAD_COLOR
+        {
+            get { return pclr; }
         }
 
         /// <summary>
         /// Initialize
         /// </summary>
         /// <param name="model_path"></param>
-        public YoloDetector(string model_path)
+        public YoloDetector(string model_path, int device_num=0)
         {
             var option = new SessionOptions();
             option.GraphOptimizationLevel = GraphOptimizationLevel.ORT_ENABLE_ALL;
             option.ExecutionMode = ExecutionMode.ORT_SEQUENTIAL;
             //Set cuda (gpu) device
-            option.AppendExecutionProvider_CUDA(0);
+            option.AppendExecutionProvider_CUDA(device_num);
 
             sess = new InferenceSession(model_path, option);
 

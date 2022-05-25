@@ -1,4 +1,4 @@
-﻿namespace OnnxSample.Yolov5
+﻿namespace RequestTaskProcessing.StrategyOperator.Yolov5
 {
     public class Prediction
     {
