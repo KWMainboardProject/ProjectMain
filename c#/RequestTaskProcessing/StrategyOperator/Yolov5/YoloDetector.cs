@@ -45,7 +45,7 @@ namespace RequestTaskProcessing.StrategyOperator.Yolov5
             option.GraphOptimizationLevel = GraphOptimizationLevel.ORT_ENABLE_ALL;
             option.ExecutionMode = ExecutionMode.ORT_SEQUENTIAL;
             //Set cuda (gpu) device
-            option.AppendExecutionProvider_CUDA(device_num);
+            //option.AppendExecutionProvider_CUDA(device_num);
 
             sess = new InferenceSession(model_path, option);
 

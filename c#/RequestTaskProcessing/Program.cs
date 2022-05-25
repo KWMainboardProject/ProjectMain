@@ -24,8 +24,52 @@ namespace RequestTaskProcessing
             //TestTaskMessage();
             //TestJsonFile();
             //TestSubCategory();
-            Myftp.Run_server();
+            //Myftp.Run_server();
             //TestSharePath();
+            TestYolo();
+        }
+
+        static void TestYolo()
+        {
+            
+            TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
+            TaskManager taskManager = TaskManager.GetInstance();
+            GPUWorkManager gpuManager = GPUWorkManager.GetInstance();
+
+            Console.WriteLine("Consume Message");
+            sender.Start();
+            taskManager.Start();
+
+
+            IMessageProductAble p = taskManager.GetProductor();
+            Console.WriteLine("Strat Create Message");
+            Console.WriteLine(ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH);
+            foreach (var file in ShareWorkPath.GetFileList(ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH))
+            {
+                var fname = Path.GetFileName(file);
+                TaskMessage m = new TaskMessage(
+                    fname,
+                    sender.GetProductor(),
+                    MessageType.Request_ImageAnalysis_ImagePath,
+                    new StringContainer("img_path", file));
+                p.Product(m);
+            }
+            Console.WriteLine("Complete Create Message");
+
+
+            taskManager.SetTimeOutThreshold();
+            Console.WriteLine("Set Time out task manager");
+            taskManager.Join();
+
+            Console.WriteLine("Join taskManager");
+
+            sender.SetTimeOutThreshold();
+            Console.WriteLine("Set Time out task manager");
+            sender.Join();
+
+            gpuManager.SetTimeOutThreshold();
+            gpuManager.Join();
+            Console.WriteLine("complete##################################################");
         }
 
         static void TestSharePath()
