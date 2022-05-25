@@ -258,6 +258,7 @@ namespace RequestTaskProcessing
             Console.WriteLine("Start Observe...");
             while (true)
             {
+                Thread.Sleep(100);
                 file_list = (string[])GetFileList().Clone();
                 if (file_list.Length > 2)
                     foreach (string file in file_list)
