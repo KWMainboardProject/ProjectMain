@@ -93,15 +93,48 @@ namespace RequestTaskProcessing
                             case "Overall": end = "_a.json"; break;
                             default: throw new NullReferenceException();
                         }
+                        string sub = "";
+                        switch (f.GetKey())
+                        {
+                            case "Top": sub = "Pullover"; break;
+                            case "Bottom": sub = "Jogger Pants"; break;
+                            case "Outer": sub = "Short Blouson"; break;
+                            case "Overall": sub = "OnePieceDress"; break;
+                            default: throw new NullReferenceException();
+                        }
+                        string pat = "";
+                        switch (f.GetKey())
+                        {
+                            case "Top": pat = "solid"; break;
+                            case "Bottom": pat = "solid"; break;
+                            case "Outer": pat = "solid"; break;
+                            case "Overall": pat = "solid"; break;
+                            default: throw new NullReferenceException();
+                        }
+                        string stl = "";
+                        switch (f.GetKey())
+                        {
+                            case "Top": stl = "casual"; break;
+                            case "Bottom": stl = "casual"; break;
+                            case "Outer": stl = "casual"; break;
+                            case "Overall": stl = "casual"; break;
+                            default: throw new NullReferenceException();
+                        }
 
                         MainCategoryContainer mc = new MainCategoryContainer(f.GetKey());
                         mc.SetBoundbox((JArray)f.boundbox.GetValue());
+                        f.subcategory.classficationContainer.SetClassfication(sub);///////////////////
                         mc.SetAtribute(f.subcategory);
+                        f.color.main.SetDumi();///////////////////////////////////////////////////////////////
                         mc.SetAtribute(f.color.main);
+                        f.color.sub.SetDumi();///////////////////////////////////////////////////////////////
                         mc.SetAtribute(f.color.sub);
+                        f.pattern.classficationContainer.SetClassfication(pat);/////////////////////////
                         mc.SetAtribute(f.pattern);
+                        f.style.classficationContainer.SetClassfication(stl);//////////////////////
                         mc.SetAtribute(f.style);
 
+                        Console.WriteLine(mc.GetJObject().ToString());
                         File.WriteAllText(dir + @"\result\" + file_name + end, mc.GetJObject().ToString());
                         Myftp.Upload(dir + @"\result\" + file_name + end, file_name + end);
                         File.Delete(dir + @"\result\" + file_name + end);
@@ -205,7 +238,7 @@ namespace RequestTaskProcessing
                 {
                     using (FileStream fs = new FileStream(saveFilePath, FileMode.Create))
                     {
-                        byte[] buffer = new byte[102400];
+                        byte[] buffer = new byte[750000];
                         int read = 0;
                         do
                         {
@@ -215,7 +248,6 @@ namespace RequestTaskProcessing
                         } while (!(read == 0));
 
                         fs.Flush();
-                        fs.Close();
                     }
                 }
             }
