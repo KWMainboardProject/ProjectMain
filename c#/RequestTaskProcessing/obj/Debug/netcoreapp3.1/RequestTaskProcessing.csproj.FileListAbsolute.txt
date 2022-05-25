@@ -15,12 +15,6 @@ C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\obj\Debug\n
 C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\obj\Debug\netcoreapp3.1\RequestTaskProcessing.pdb
 C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\obj\Debug\netcoreapp3.1\RequestTaskProcessing.genruntimeconfig.cache
 C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\OpenCvSharp.dll
-C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\OpenCvSharp.WpfExtensions.dll
-C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\System.Runtime.CompilerServices.Unsafe.dll
-C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\OpenCvSharpExtern.dll
-C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\opencv_videoio_ffmpeg455_64.dll
-C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\OpenCvSharpExtern.dll
-C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\opencv_videoio_ffmpeg455.dll
 C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\Microsoft.Dynamic.dll
 C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\Microsoft.Scripting.Metadata.dll
 C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\Debug\netcoreapp3.1\Microsoft.Scripting.dll
