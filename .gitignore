@@ -6,3 +6,6 @@
 /c#/RequestTaskProcessing/bin/Debug/netcoreapp3.1/runtimes
 /c#/RequestTaskProcessing/bin/Debug/netcoreapp3.1
 /weight
+/c#/RequestTaskProcessing/obj/Win32/Release/netcoreapp3.1
+/c#/RequestTaskProcessing/obj/Win32/Debug/netcoreapp3.1
+/c#/RequestTaskProcessing/bin/image

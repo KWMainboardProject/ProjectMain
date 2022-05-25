@@ -20,12 +20,18 @@ namespace RequestTaskProcessing
             //TestTaskMessageMethod();
             //TestTaskMessageAndConsumer();
             //TestTaskManager();
-            TestReturnedResourceContiner();
+            //TestReturnedResourceContiner();
             //TestTaskMessage();
             //TestJsonFile();
             //TestSubCategory();
+            //Myftp.Run_server();
+            TestSharePath();
         }
 
+        static void TestSharePath()
+        {
+            ShareWorkPath swp = ShareWorkPath.GetInstance();
+        }
         static void TestSubCategory()
         {
             TopClassification tc = TopClassification.GetInstance();
