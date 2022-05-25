@@ -605,6 +605,12 @@ namespace RequestTaskProcessing
 			boundboxContainer.SetBoundBox(x_min, x_max, y_min, y_max);
 
         }
+		public void SetBoundbox(JArray box)
+		{
+			if (box == null) return;
+			boundboxContainer.SetBoundBox((int)box[0], (int)box[1], (int)box[2], (int)box[3]);
+		}
+
 		public bool IsEmpty
         {
             get { return boundboxContainer.IsEmpty; }

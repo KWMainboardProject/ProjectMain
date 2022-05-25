@@ -1,21 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\vbmrk\\Documents\\GitHub\\ProjectMain\\c#\\RequestTaskProcessing\\RequestTaskProcessing.csproj": {}
+    "C:\\Users\\손우진\\Source\\Repos\\KWMainboardProject\\ProjectMain\\c#\\RequestTaskProcessing\\RequestTaskProcessing.csproj": {}
   },
   "projects": {
-    "C:\\Users\\vbmrk\\Documents\\GitHub\\ProjectMain\\c#\\RequestTaskProcessing\\RequestTaskProcessing.csproj": {
+    "C:\\Users\\손우진\\Source\\Repos\\KWMainboardProject\\ProjectMain\\c#\\RequestTaskProcessing\\RequestTaskProcessing.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\vbmrk\\Documents\\GitHub\\ProjectMain\\c#\\RequestTaskProcessing\\RequestTaskProcessing.csproj",
+        "projectUniqueName": "C:\\Users\\손우진\\Source\\Repos\\KWMainboardProject\\ProjectMain\\c#\\RequestTaskProcessing\\RequestTaskProcessing.csproj",
         "projectName": "RequestTaskProcessing",
-        "projectPath": "C:\\Users\\vbmrk\\Documents\\GitHub\\ProjectMain\\c#\\RequestTaskProcessing\\RequestTaskProcessing.csproj",
-        "packagesPath": "C:\\Users\\vbmrk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\vbmrk\\Documents\\GitHub\\ProjectMain\\c#\\RequestTaskProcessing\\obj\\",
+        "projectPath": "C:\\Users\\손우진\\Source\\Repos\\KWMainboardProject\\ProjectMain\\c#\\RequestTaskProcessing\\RequestTaskProcessing.csproj",
+        "packagesPath": "C:\\Users\\손우진\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\손우진\\Source\\Repos\\KWMainboardProject\\ProjectMain\\c#\\RequestTaskProcessing\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        ],
         "configFilePaths": [
-          "C:\\Users\\vbmrk\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\손우진\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"

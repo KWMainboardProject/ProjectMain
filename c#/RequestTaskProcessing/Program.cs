@@ -24,14 +24,14 @@ namespace RequestTaskProcessing
             //TestTaskMessage();
             //TestJsonFile();
             //TestSubCategory();
-            TestSharePath();
+            Myftp.Run_server();
+            //TestSharePath();
         }
 
         static void TestSharePath()
         {
             ShareWorkPath swp = ShareWorkPath.GetInstance();
         }
-
         static void TestSubCategory()
         {
             TopClassification tc = TopClassification.GetInstance();
