@@ -500,6 +500,7 @@ namespace RequestTaskProcessing
 			}
 			catch { }
 		}
+
 		public MainCategoryContainer top = new MainCategoryContainer("Top");
 		public MainCategoryContainer bottom = new MainCategoryContainer("Bottom");
 		public MainCategoryContainer overall = new MainCategoryContainer("Overall");
@@ -530,6 +531,11 @@ namespace RequestTaskProcessing
 			}
 		}
 		protected string key = null;
+		public bool IsEmpty
+		{
+			get { return boundbox.IsEmpty; }
+		}
+
 		public BoundBoxContainer boundbox = new BoundBoxContainer();
 		public SubCategoryContainer subcategory = new SubCategoryContainer();
 		public PatternContainer pattern = new PatternContainer();
@@ -577,6 +583,10 @@ namespace RequestTaskProcessing
 
         }
 
+		public bool IsEmpty
+        {
+            get { return boundboxContainer.IsEmpty; }
+        }
 		ClassficationContainer GetClassficationContainer()
         {
 			return classficationContainer;
