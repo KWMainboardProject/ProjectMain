@@ -567,10 +567,8 @@ namespace RequestTaskProcessing
             get { return boundboxContainer.IsEmpty; }
         }
 
-		public void CropImgAndSave(string imgPath, string rootPath)
-        {
 
-        }
+
 		public StringContainer cropimgPath = new StringContainer("img_path");
 		public ClassficationContainer classficationContainer;
 		public BoundBoxContainer boundboxContainer;
@@ -668,7 +666,10 @@ namespace RequestTaskProcessing
 
 			string outPath = System.IO.Directory.GetParent(rootPath.Value).ToString();
 
-			workerPath.Value = outPath + @"\WORKER_PATH";
+			workerPath.Value = outPath + @"\WORKER";
+			keyPath.Value = outPath + @"\KEY";
+			resourcePath.Value = outPath + @"\RESOURCE";
+
 
 			envList.Add(currentPath);
 			envList.Add(rootPath);
@@ -676,6 +677,8 @@ namespace RequestTaskProcessing
 			envList.Add(pythonPath);
 			envList.Add(cPath);
 			envList.Add(workerPath);
+			envList.Add(keyPath);
+			envList.Add(resourcePath);
 			foreach (var path in envList)
             {
 				Console.WriteLine(path.GetKey() + "\t: " + path.Value);
@@ -691,19 +694,43 @@ namespace RequestTaskProcessing
 				Console.WriteLine("Create Directory : " + dirPath);
 			}
 		}
+
 		private StringContainer currentPath = new StringContainer("CURRENT_PATH");
 		private StringContainer rootPath = new StringContainer("ROOT_PATH");
 		private StringContainer weightPath = new StringContainer("WEIGHT_PATH");
 		private StringContainer pythonPath = new StringContainer("PYTHON_PATH");
 		private StringContainer cPath = new StringContainer("C#_PATH");
 		private StringContainer workerPath = new StringContainer("WORKER_PATH");
+		private StringContainer keyPath = new StringContainer("KEY_PATH");
+		private StringContainer resourcePath = new StringContainer("RESOURCE_PATH");
 
+
+		static public List<string> GetFileList(string directoryPath)
+        {
+			List<string> fileList = new List<string>();
+			System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(directoryPath);
+
+			foreach (System.IO.FileInfo File in di.GetFiles())
+			{
+				fileList<
+				//if (File.Extension.ToLower().CompareTo(".jpg") == 0){}
+			}
+
+		}
 
 
 		private List<StringContainer> envList = new List<StringContainer>();
 		public List<StringContainer> GetEnvList()
         {
 			return new List<StringContainer>(envList);
+        }
+		public string REWOURCE_PATH
+        {
+            get { return resourcePath.Value; }
+        }
+		public string KEY_PATH
+        {
+            get { return keyPath.Value; }
         }
 		public string WORKER_PATH
         {
