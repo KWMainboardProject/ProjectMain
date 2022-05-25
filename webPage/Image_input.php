@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -14,6 +15,43 @@
         <link href="css/styles.css" rel="stylesheet" />
 
         <script src="example.js"></script>
+        <script src="https://code.jquery.com/jquery-latest.js"></script>
+        <script>
+	        function file_frm_submit(frm) {
+
+		        var fileCheck = frm.upload_file.value;
+
+		        if(!fileCheck) {
+			        alert("업로드할 파일을 선택하세요.");
+			        return false;
+		        }
+
+	        	var formData = new FormData(frm);			// 파일전송을 위한 폼데이터 객체 생성
+
+		        formData.append("message", "ajax로 파일 전송하기");
+		        //formData.append("file", jQuery("#upload_file")[0].files[0]);
+
+	        	$.ajax({
+		        	url			: 'ajax_file_upload_test.php',
+		        	type		: 'POST',
+		        	dataType	: 'html',
+		        	enctype		: 'multipart/form-data',
+		          processData	: false,
+		        	contentType	: false,
+		        	data		: formData,
+		        	async		: false,
+		        	success		: function(response) {
+
+		      		console.log(response);
+              
+
+		        	  }
+	          	}).done(function(data){
+                alert(data);
+              });
+              
+	        }
+        </script>
     </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
@@ -22,11 +60,25 @@
                 <div class="container px-5">
                     <a class="navbar-brand" href="index.php">MainBoard</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <?php if(!is_null($_SESSION['id'])){
+                        $idtext = $_SESSION['id']."님으로 로그인 중입니다.";
+                    }else{
+                        $idtext = "로그인을 해주세요.";
+                    } ?>
+                    <a class="text"> <?php echo $idtext;?></a>}
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
-                            <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+                            <?php if(!is_null($_SESSION['id'])){
+                                $idbtn = "Logout";
+                                $_SESSION['islogin'] = false;
+                            }else{
+                                $idbtn = "Login";
+                                $_SESSION['islogin'] = false;
+                                
+                            } ?>
+                            <li class="nav-item"><a class="nav-link" href="login.php"><?php echo $idbtn;?></a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Collections</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
@@ -49,7 +101,8 @@
                     <hr class="mb-5">
                     <div class="mt-5 mb-3 row">
                         <div class="col-lg-6">
-                            <input type="file" onchange="readURL(this);" accept="image/png, image/jpg, image/jpeg">
+                            <form name="reqform" method="post"  enctype="multipart/form-data">
+                            <input type="file" onchange="readURL(this);" name='upload_file' id='upload_file' accept="image/png, image/jpg, image/jpeg">
                             <div class="alert alert-secondary mb-3" role="alert">
                                 <ul>
                                   <li>파일 사이즈: 1MB 이하</li>
@@ -76,7 +129,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <a href="Image_result.php">
-                                                    <button type="button" class="btn btn-primary">Yes</button>
+                                                    <button type="button" class="btn btn-primary" onclick="file_frm_submit(this.form)">Yes</button>
                                                 </a>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                                             </div>
@@ -87,6 +140,7 @@
                                     <button type="button" class="btn btn-lg btn-outline-danger" id="Cancel_btn">Cancel</button>
                                 </a>
                             </div>
+                            </form>
                         </div>
                         <div class="col-lg-6">
                             <p style="font-weight:bold">이미지 미리보기</p>

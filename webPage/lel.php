@@ -1,11 +1,8 @@
 <?php
     //$index = $_GET['index'];
-    sleep(3);
+    sleep(1);
     
-    $desc = ['Main Category', 'Sub Category', 'Style', 'Pattern'];
-    $name = ['Top', 'Pullover', 'Casual', 'Solid'];
-
-    $json = json_encode(array('desc' => $desc, 'name' => $name));
+    $json=file_get_contents("./json/Overall.json");
 
     echo($json);
 ?>
