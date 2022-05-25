@@ -284,6 +284,14 @@ namespace RequestTaskProcessing
 				container.SetJObject(value);
 			}
 		}
+		public void SetDumi()
+        {
+			Random r = new Random();
+			main.rgbContainer.SetDumi();
+			main.SetProportion(r.Next(30, 100));
+			sub.rgbContainer.SetDumi();
+			sub.SetProportion(r.Next(0, 100 - main.proportionContainer.Value));
+		}
 		public ProportionRgbContainer main = new ProportionRgbContainer("maincolor");
 		public ProportionRgbContainer sub = new ProportionRgbContainer("subcolor");
 	}
@@ -319,6 +327,11 @@ namespace RequestTaskProcessing
         {
 			proportionContainer.Value = proportion;
         }
+
+		public void SetDumi()
+        {
+			rgbContainer.SetDumi();
+		}
 
 		protected string key = null;
 		public IntigerContainer proportionContainer = new IntigerContainer();
