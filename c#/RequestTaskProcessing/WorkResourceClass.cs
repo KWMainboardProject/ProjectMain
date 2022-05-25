@@ -43,14 +43,14 @@ namespace RequestTaskProcessing
 
 		public void SetJObject(JObject obj)
 		{
-            try
-            {
+			try
+			{
 				Value = (string)obj[GetKey()];
 			}
-			catch(NullReferenceException ex)
-            {
+			catch (NullReferenceException ex)
+			{
 				Value = null;
-            }
+			}
 		}
 		protected string key = null;
 		protected string str = null;
@@ -78,18 +78,18 @@ namespace RequestTaskProcessing
 		public JToken GetValue()
 		{
 			JObject value = new JObject();
-			if(containers.Count == 0)
-            {
+			if (containers.Count == 0)
+			{
 				value = null;
-            }
-            else
-            {
+			}
+			else
+			{
 				foreach (IJObjectUseAbleContainer container in containers)
 				{
 					value.Add(container.GetKey(), container.GetValue());
 				}
 			}
-			
+
 			return value;
 		}
 
@@ -171,8 +171,8 @@ namespace RequestTaskProcessing
 		bool confidence;
 	}
 
-    public class IntigerContainer : IJObjectUseAbleContainer
-    {
+	public class IntigerContainer : IJObjectUseAbleContainer
+	{
 		public IntigerContainer(string key = "proportion", int num = -1)
 		{
 			Value = num;
@@ -180,7 +180,7 @@ namespace RequestTaskProcessing
 		}
 		public JObject GetJObject()
 		{
-			JObject json = new JObject() ;
+			JObject json = new JObject();
 			json.Add(GetKey(), GetValue());
 			return json;
 		}
@@ -211,23 +211,23 @@ namespace RequestTaskProcessing
 		public int Value
 		{
 			get { return num; }
-			set { if (value  >= 0) num = value; }
+			set { if (value >= 0) num = value; }
 		}
 	}
-    public class MainSubColorContainer : CompoundContainer
-    {
+	public class MainSubColorContainer : CompoundContainer
+	{
 		public MainSubColorContainer()
-        {
+		{
 			SetAtribute(main);
 			SetAtribute(sub);
-        }
-        public override string GetKey()
-        {
+		}
+		public override string GetKey()
+		{
 			return "color";
-        }
+		}
 
-        public override void SetJObject(JObject obj)
-        {
+		public override void SetJObject(JObject obj)
+		{
 			if (obj == null) return;
 			JObject value = (JObject)obj[GetKey()];
 			foreach (IJObjectUseAbleContainer container in containers)
@@ -236,7 +236,7 @@ namespace RequestTaskProcessing
 			}
 		}
 		public void SetDumi()
-        {
+		{
 			Random r = new Random();
 			main.rgbContainer.SetDumi();
 			main.SetProportion(r.Next(30, 100));
@@ -247,21 +247,21 @@ namespace RequestTaskProcessing
 		public ProportionRgbContainer sub = new ProportionRgbContainer("subcolor");
 	}
 
-    public class ProportionRgbContainer : CompoundContainer
-    {
-		public ProportionRgbContainer(string key="maincolor")
-        {
+	public class ProportionRgbContainer : CompoundContainer
+	{
+		public ProportionRgbContainer(string key = "maincolor")
+		{
 			this.key = key;
 			SetAtribute(rgbContainer);
 			SetAtribute(proportionContainer);
 		}
 		public override string GetKey()
-        {
+		{
 			return key;
-        }
+		}
 
-        public override void SetJObject(JObject obj)
-        {
+		public override void SetJObject(JObject obj)
+		{
 			if (obj == null) return;
 			JObject value = (JObject)obj[GetKey()];
 			foreach (IJObjectUseAbleContainer container in containers)
@@ -275,12 +275,12 @@ namespace RequestTaskProcessing
 			rgbContainer.SetRGB(r, g, b);
 		}
 		public void SetProportion(int proportion)
-        {
+		{
 			proportionContainer.Value = proportion;
-        }
+		}
 
 		public void SetDumi()
-        {
+		{
 			rgbContainer.SetDumi();
 		}
 
@@ -288,14 +288,14 @@ namespace RequestTaskProcessing
 		public IntigerContainer proportionContainer = new IntigerContainer();
 		public RgbContainer rgbContainer = new RgbContainer();
 
-    }
-    public class RgbContainer : IJObjectUseAbleContainer
-    {
+	}
+	public class RgbContainer : IJObjectUseAbleContainer
+	{
 		public RgbContainer(int r = -1, int g = -1, int b = -1)
-		{ 
-			if(r+g+b >= 0)
+		{
+			if (r + g + b >= 0)
 				SetRGB((char)r, (char)g, (char)b);
-        }
+		}
 		public JObject GetJObject()
 		{
 			//if (boundbox[0]+ boundbox[1]+ boundbox[2]+ boundbox[3] =< 0) throw NullReferenceException;
@@ -316,12 +316,12 @@ namespace RequestTaskProcessing
 			this.rgb.Add(b);
 		}
 		public void SetDumi()
-        {
+		{
 			Random r = new Random();
-			SetRGB((char)r.Next(0,255),
+			SetRGB((char)r.Next(0, 255),
 				(char)r.Next(0, 255),
 				(char)r.Next(0, 255));
-        }
+		}
 		public string GetKey() { return "rgb"; }
 
 		public JToken GetValue()
@@ -331,9 +331,9 @@ namespace RequestTaskProcessing
 		/// <summary>
 		/// 0:x_min / 1:x_max / 2:y_min / 3:y_max
 		/// </summary>
-		protected JArray rgb=null;
+		protected JArray rgb = null;
 	}
-    public class BoundBoxContainer : IJObjectUseAbleContainer
+	public class BoundBoxContainer : IJObjectUseAbleContainer
 	{
 		private int threashold = 5;
 		public BoundBoxContainer(int x_min = 0, int x_max = 0, int y_min = 0, int y_max = 0)
@@ -381,8 +381,8 @@ namespace RequestTaskProcessing
 			get
 			{
 				int sum = 0;
-                if (boundbox != null)
-                {
+				if (boundbox != null)
+				{
 					sum = (int)boundbox[0]
 					+ (int)boundbox[1]
 					+ (int)boundbox[2]
@@ -433,34 +433,34 @@ namespace RequestTaskProcessing
 	}
 
 	public class EmptyDetectedObjectsContainer : CompoundContainer
-    {
+	{
 		public override string GetKey()
 		{
 			return "Fashion";
 		}
 
-        public override void SetJObject(JObject obj)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public override void SetJObject(JObject obj)
+		{
+			throw new NotImplementedException();
+		}
+	}
 
 	public class DetectedObjectsContainer : CompoundContainer
-    {
+	{
 		public DetectedObjectsContainer()
-        {
+		{
 			SetAtribute(top);
 			SetAtribute(bottom);
 			SetAtribute(overall);
 			SetAtribute(outer);
 		}
-        public override string GetKey()
-        {
+		public override string GetKey()
+		{
 			return "Fashion";
 		}
 
-        public override void SetJObject(JObject obj)
-        {
+		public override void SetJObject(JObject obj)
+		{
 			if (obj == null) return;
 			try
 			{
@@ -480,7 +480,7 @@ namespace RequestTaskProcessing
 	}
 	public class FashionObjectContainer : CompoundContainer
 	{
-		public FashionObjectContainer(string key="Top")
+		public FashionObjectContainer(string key = "Top")
 		{
 			this.key = key;
 			SetAtribute(boundbox);
@@ -516,28 +516,28 @@ namespace RequestTaskProcessing
 		public StyleContainer style = new StyleContainer();
 	}
 	public class MainCategoryContainer : CompoundContainer
-    {
-		public MainCategoryContainer(string classfication= "maincategory")
-        {
+	{
+		public MainCategoryContainer(string classfication = "maincategory")
+		{
 			classficationContainer = new ClassficationContainer();
 			classficationContainer.SetClassfication(classfication);
 			boundboxContainer = new BoundBoxContainer();
-            //SetAtribute(classficationContainer);
-            SetAtribute(boundboxContainer);
-        }
-        public override string GetKey()
-        {
+			//SetAtribute(classficationContainer);
+			SetAtribute(boundboxContainer);
+		}
+		public override string GetKey()
+		{
 			return classficationContainer.GetValue().ToString();
-        }
+		}
 		public override void SetJObject(JObject obj)
-        {
+		{
 			JObject value = null;
 
-            try
-            {
+			try
+			{
 				value = (JObject)obj[GetKey()];
 			}
-			catch (NullReferenceException ex){}
+			catch (NullReferenceException ex) { }
 
 			if (value != null)
 			{
@@ -546,16 +546,16 @@ namespace RequestTaskProcessing
 					container.SetJObject(value);
 				}
 			}
-        }
+		}
 		public void SetClassfication(string classfication)
-        {
+		{
 			this.classficationContainer.SetClassfication(classfication);
 		}
 		public void SetBoundbox(int x_min, int x_max, int y_min, int y_max)
-        {
+		{
 			boundboxContainer.SetBoundBox(x_min, x_max, y_min, y_max);
 
-        }
+		}
 		public void SetBoundbox(JArray box)
 		{
 			if (box == null) return;
@@ -563,32 +563,32 @@ namespace RequestTaskProcessing
 		}
 
 		public bool IsEmpty
-        {
-            get { return boundboxContainer.IsEmpty; }
-        }
+		{
+			get { return boundboxContainer.IsEmpty; }
+		}
 
 
 
 		public StringContainer cropimgPath = new StringContainer("img_path");
 		public ClassficationContainer classficationContainer;
 		public BoundBoxContainer boundboxContainer;
-    }
+	}
 
-    public class SubCategoryContainer : CompoundContainer
-    {
-		public SubCategoryContainer(float confidence_threshold=0.55f)
-        {
+	public class SubCategoryContainer : CompoundContainer
+	{
+		public SubCategoryContainer(float confidence_threshold = 0.55f)
+		{
 			confidenceContainer = new ConfidenceContainer(confidence_threshold);
 			SetAtribute(classficationContainer);
 			SetAtribute(confidenceContainer);
-        }
-        public override string GetKey()
-        {
+		}
+		public override string GetKey()
+		{
 			return "subcategory";
-        }
+		}
 
-        public override void SetJObject(JObject obj)
-        {
+		public override void SetJObject(JObject obj)
+		{
 			JObject value = (JObject)obj[GetKey()];
 			foreach (IJObjectUseAbleContainer container in containers)
 			{
@@ -649,7 +649,7 @@ namespace RequestTaskProcessing
 		public ClassficationContainer classficationContainer = new ClassficationContainer();
 		public ConfidenceContainer confidenceContainer;// = new ConfidenceContainer();
 	}
-	
+
 	public class ShareWorkPath
 	{
 		protected ShareWorkPath()
@@ -680,10 +680,10 @@ namespace RequestTaskProcessing
 			envList.Add(keyPath);
 			envList.Add(resourcePath);
 			foreach (var path in envList)
-            {
+			{
 				Console.WriteLine(path.GetKey() + "\t: " + path.Value);
 				CreateDirectory(path.Value);
-            }
+			}
 		}
 
 		static public void CreateDirectory(string dirPath)
@@ -706,7 +706,7 @@ namespace RequestTaskProcessing
 
 
 		static public List<string> GetFileList(string directoryPath)
-        {
+		{
 			List<string> fileList = new List<string>();
 			System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(directoryPath);
 
@@ -721,25 +721,35 @@ namespace RequestTaskProcessing
 
 		private List<StringContainer> envList = new List<StringContainer>();
 		public List<StringContainer> GetEnvList()
-        {
+		{
 			return new List<StringContainer>(envList);
-        }
+		}
+
+		public string IMAGE_RESOURCE_PATH
+		{
+			get { return imgsrcPath.Value; }
+		}
+		public string RESULT_RESOURCE_PATH
+		{
+			get { return resultsrcPath.Value; }
+		}
+
 		public string REWOURCE_PATH
-        {
-            get { return resourcePath.Value; }
-        }
+		{
+			get { return resourcePath.Value; }
+		}
 		public string KEY_PATH
-        {
-            get { return keyPath.Value; }
-        }
+		{
+			get { return keyPath.Value; }
+		}
 		public string WORKER_PATH
-        {
-            get { return workerPath.Value; }
-        }
+		{
+			get { return workerPath.Value; }
+		}
 		public string CURRENT_PATH
-        {
-            get { return currentPath.Value; }
-        }
+		{
+			get { return currentPath.Value; }
+		}
 		public string ROOT_PATH
 		{
 			get { return rootPath.Value; }
@@ -753,7 +763,7 @@ namespace RequestTaskProcessing
 			get { return pythonPath.Value; }
 		}
 		public string C____PATH
-        {
+		{
 			get { return cPath.Value; }
 		}
 		/// <summary>

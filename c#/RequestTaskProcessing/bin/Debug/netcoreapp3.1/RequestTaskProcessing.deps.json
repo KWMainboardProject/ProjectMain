@@ -9,10 +9,12 @@
       "RequestTaskProcessing/1.0.0": {
         "dependencies": {
           "IronPython": "2.7.12",
+          "Microsoft.ML.OnnxRuntime": "1.11.0",
           "Microsoft.ML.OnnxRuntime.Gpu": "1.11.0",
+          "Microsoft.ML.OnnxRuntime.MKLML": "1.6.0",
+          "Microsoft.ML.OnnxRuntime.Managed": "1.11.0",
           "Newtonsoft.Json": "13.0.1",
-          "OpenCvSharp4": "4.5.5.20211231",
-          "OpenCvSharp4.Windows": "4.5.5.20211231",
+          "OpenCvSharp3-AnyCPU": "4.0.0.20181129",
           "QuantConnect.pythonnet": "2.0.15"
         },
         "runtime": {
@@ -64,16 +66,198 @@
           }
         }
       },
-      "Microsoft.ML.OnnxRuntime.Gpu/1.11.0": {
+      "Microsoft.ML.OnnxRuntime/1.11.0": {
         "dependencies": {
           "Microsoft.ML.OnnxRuntime.Managed": "1.11.0"
         },
         "runtimeTargets": {
+          "runtimes/android/native/onnxruntime.aar": {
+            "rid": "android",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64/onnxruntime.framework/Headers/coreml_provider_factory.h": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64/onnxruntime.framework/Headers/cpu_provider_factory.h": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64/onnxruntime.framework/Headers/onnxruntime_c_api.h": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64/onnxruntime.framework/Headers/onnxruntime_cxx_api.h": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64/onnxruntime.framework/Headers/onnxruntime_cxx_inline.h": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64/onnxruntime.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64/onnxruntime.framework/onnxruntime": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64_x86_64-simulator/onnxruntime.framework/Headers/coreml_provider_factory.h": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64_x86_64-simulator/onnxruntime.framework/Headers/cpu_provider_factory.h": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64_x86_64-simulator/onnxruntime.framework/Headers/onnxruntime_c_api.h": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64_x86_64-simulator/onnxruntime.framework/Headers/onnxruntime_cxx_api.h": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64_x86_64-simulator/onnxruntime.framework/Headers/onnxruntime_cxx_inline.h": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64_x86_64-simulator/onnxruntime.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/onnxruntime.xcframework/ios-arm64_x86_64-simulator/onnxruntime.framework/onnxruntime": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-arm64/native/libonnxruntime.so": {
+            "rid": "linux-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
           "runtimes/linux-x64/native/libonnxruntime.so": {
             "rid": "linux-x64",
             "assetType": "native",
             "fileVersion": "0.0.0.0"
           },
+          "runtimes/osx.10.14-arm64/native/libonnxruntime.dylib": {
+            "rid": "osx.10.14-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx.10.14-x64/native/libonnxruntime.dylib": {
+            "rid": "osx.10.14-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-arm/native/onnxruntime.dll": {
+            "rid": "win-arm",
+            "assetType": "native",
+            "fileVersion": "1.11.22.318"
+          },
+          "runtimes/win-arm/native/onnxruntime.lib": {
+            "rid": "win-arm",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-arm/native/onnxruntime_providers_shared.dll": {
+            "rid": "win-arm",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-arm/native/onnxruntime_providers_shared.lib": {
+            "rid": "win-arm",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-arm64/native/onnxruntime.dll": {
+            "rid": "win-arm64",
+            "assetType": "native",
+            "fileVersion": "1.11.22.318"
+          },
+          "runtimes/win-arm64/native/onnxruntime.lib": {
+            "rid": "win-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-arm64/native/onnxruntime_providers_shared.dll": {
+            "rid": "win-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-arm64/native/onnxruntime_providers_shared.lib": {
+            "rid": "win-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/onnxruntime.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "1.11.22.318"
+          },
+          "runtimes/win-x64/native/onnxruntime.lib": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/onnxruntime_providers_shared.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/onnxruntime_providers_shared.lib": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/onnxruntime.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "1.11.22.318"
+          },
+          "runtimes/win-x86/native/onnxruntime.lib": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/onnxruntime_providers_shared.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/onnxruntime_providers_shared.lib": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Microsoft.ML.OnnxRuntime.Gpu/1.11.0": {
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.11.0"
+        },
+        "runtimeTargets": {
           "runtimes/linux-x64/native/libonnxruntime_providers_cuda.so": {
             "rid": "linux-x64",
             "assetType": "native",
@@ -89,32 +273,12 @@
             "assetType": "native",
             "fileVersion": "0.0.0.0"
           },
-          "runtimes/win-x64/native/onnxruntime.dll": {
-            "rid": "win-x64",
-            "assetType": "native",
-            "fileVersion": "1.11.22.318"
-          },
-          "runtimes/win-x64/native/onnxruntime.lib": {
-            "rid": "win-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
           "runtimes/win-x64/native/onnxruntime_providers_cuda.dll": {
             "rid": "win-x64",
             "assetType": "native",
             "fileVersion": "0.0.0.0"
           },
           "runtimes/win-x64/native/onnxruntime_providers_cuda.lib": {
-            "rid": "win-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/win-x64/native/onnxruntime_providers_shared.dll": {
-            "rid": "win-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/win-x64/native/onnxruntime_providers_shared.lib": {
             "rid": "win-x64",
             "assetType": "native",
             "fileVersion": "0.0.0.0"
@@ -133,11 +297,63 @@
       },
       "Microsoft.ML.OnnxRuntime.Managed/1.11.0": {
         "dependencies": {
-          "System.Memory": "4.5.4"
+          "System.Memory": "4.5.3"
         },
         "runtime": {
           "lib/netcoreapp3.1/Microsoft.ML.OnnxRuntime.dll": {
             "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Microsoft.ML.OnnxRuntime.MKLML/1.6.0": {
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.11.0"
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/libmklml_gnu.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/libiomp5.dylib": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/libmklml.dylib": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/libonnxruntime.dylib": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/libonnxruntime.dylib.dSYM/Contents/Info.plist": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/libonnxruntime.dylib.dSYM/Contents/Resources/DWARF/libonnxruntime.dylib": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/libiomp5md.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "5.0.2019.109"
+          },
+          "runtimes/win-x64/native/mklml.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2020.0.0.1"
+          },
+          "runtimes/win-x64/native/onnxruntime.pdb": {
+            "rid": "win-x64",
+            "assetType": "native",
             "fileVersion": "0.0.0.0"
           }
         }
@@ -276,57 +492,44 @@
           }
         }
       },
-      "OpenCvSharp4/4.5.5.20211231": {
+      "OpenCvSharp3-AnyCPU/4.0.0.20181129": {
         "dependencies": {
-          "System.Memory": "4.5.4",
-          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+          "System.Drawing.Common": "4.7.0"
         },
         "runtime": {
-          "lib/netcoreapp3.1/OpenCvSharp.dll": {
+          "lib/netstandard2.0/OpenCvSharp.Blob.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          },
+          "lib/netstandard2.0/OpenCvSharp.Extensions.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          },
+          "lib/netstandard2.0/OpenCvSharp.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
-        }
-      },
-      "OpenCvSharp4.runtime.win/4.5.5.20211231": {
+        },
         "runtimeTargets": {
-          "runtimes/win-x64/native/OpenCvSharpExtern.dll": {
-            "rid": "win-x64",
+          "runtimes/win10-x64/native/OpenCvSharpExtern.dll": {
+            "rid": "win10-x64",
             "assetType": "native",
             "fileVersion": "0.0.0.0"
           },
-          "runtimes/win-x64/native/opencv_videoio_ffmpeg455_64.dll": {
-            "rid": "win-x64",
+          "runtimes/win10-x64/native/opencv_ffmpeg400_64.dll": {
+            "rid": "win10-x64",
             "assetType": "native",
-            "fileVersion": "2021.12.0.0"
+            "fileVersion": "2018.11.0.0"
           },
-          "runtimes/win-x86/native/OpenCvSharpExtern.dll": {
-            "rid": "win-x86",
+          "runtimes/win10-x86/native/OpenCvSharpExtern.dll": {
+            "rid": "win10-x86",
             "assetType": "native",
             "fileVersion": "0.0.0.0"
           },
-          "runtimes/win-x86/native/opencv_videoio_ffmpeg455.dll": {
-            "rid": "win-x86",
+          "runtimes/win10-x86/native/opencv_ffmpeg400.dll": {
+            "rid": "win10-x86",
             "assetType": "native",
-            "fileVersion": "2021.12.0.0"
-          }
-        }
-      },
-      "OpenCvSharp4.Windows/4.5.5.20211231": {
-        "dependencies": {
-          "OpenCvSharp4": "4.5.5.20211231",
-          "OpenCvSharp4.WpfExtensions": "4.5.5.20211231",
-          "OpenCvSharp4.runtime.win": "4.5.5.20211231"
-        }
-      },
-      "OpenCvSharp4.WpfExtensions/4.5.5.20211231": {
-        "dependencies": {
-          "OpenCvSharp4": "4.5.5.20211231"
-        },
-        "runtime": {
-          "lib/netcoreapp3.1/OpenCvSharp.WpfExtensions.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
+            "fileVersion": "2018.11.0.0"
           }
         }
       },
@@ -377,15 +580,7 @@
           }
         }
       },
-      "System.Memory/4.5.4": {},
-      "System.Runtime.CompilerServices.Unsafe/6.0.0": {
-        "runtime": {
-          "lib/netcoreapp3.1/System.Runtime.CompilerServices.Unsafe.dll": {
-            "assemblyVersion": "6.0.0.0",
-            "fileVersion": "6.0.21.52210"
-          }
-        }
-      },
+      "System.Memory/4.5.3": {},
       "System.Security.AccessControl/4.7.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "3.1.0",
@@ -462,6 +657,13 @@
       "path": "ironpython/2.7.12",
       "hashPath": "ironpython.2.7.12.nupkg.sha512"
     },
+    "Microsoft.ML.OnnxRuntime/1.11.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TXYTQhuvQok0jH29+4yWSir2TyYV+JoUDd95Mx9Ozlqt9AhIeREDkAPDoM1Hyw9l01W3YwJ6OIwpQVyhmWwJBA==",
+      "path": "microsoft.ml.onnxruntime/1.11.0",
+      "hashPath": "microsoft.ml.onnxruntime.1.11.0.nupkg.sha512"
+    },
     "Microsoft.ML.OnnxRuntime.Gpu/1.11.0": {
       "type": "package",
       "serviceable": true,
@@ -475,6 +677,13 @@
       "sha512": "sha512-EeQaZQWhTBM9e4GB5OBKgp6/eJ+46TfOI1jKyUEt8crrHAD6CWFUQ8dR3yXp6e+3qZNOaOul+tjqOPIxMqn9hw==",
       "path": "microsoft.ml.onnxruntime.managed/1.11.0",
       "hashPath": "microsoft.ml.onnxruntime.managed.1.11.0.nupkg.sha512"
+    },
+    "Microsoft.ML.OnnxRuntime.MKLML/1.6.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-g1/qmJyaBeSVJtnAwnnx6H9V6dFaUmYQNz7hDWavqGIRcbhz9rEfckggoHhbxgQDoSReNLSBbikr5ogVZihXtA==",
+      "path": "microsoft.ml.onnxruntime.mklml/1.6.0",
+      "hashPath": "microsoft.ml.onnxruntime.mklml.1.6.0.nupkg.sha512"
     },
     "Microsoft.NETCore.Platforms/3.1.0": {
       "type": "package",
@@ -511,33 +720,12 @@
       "path": "newtonsoft.json/13.0.1",
       "hashPath": "newtonsoft.json.13.0.1.nupkg.sha512"
     },
-    "OpenCvSharp4/4.5.5.20211231": {
+    "OpenCvSharp3-AnyCPU/4.0.0.20181129": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-if3zWvwJHo4FAupCdrv+B1PN+50MP7OdQHQSiy5Am9/fGepvEzNxbamd3Hk0akKHnLtzsHa5icGta4Vr4lGLQw==",
-      "path": "opencvsharp4/4.5.5.20211231",
-      "hashPath": "opencvsharp4.4.5.5.20211231.nupkg.sha512"
-    },
-    "OpenCvSharp4.runtime.win/4.5.5.20211231": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-hywJLVuHQTHxroPTYWPhj59VIpoPTGoKJYyvHWWs0hnqPLPemnPCWZLJtdehdpf00U6l1QgvARJMFqc3RtSXGQ==",
-      "path": "opencvsharp4.runtime.win/4.5.5.20211231",
-      "hashPath": "opencvsharp4.runtime.win.4.5.5.20211231.nupkg.sha512"
-    },
-    "OpenCvSharp4.Windows/4.5.5.20211231": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-Se42Zsv8v/Afr8WvtDBCNy4hHsuMNBmdg67y4ANkI+sQUuPN3UGyFo8trsy3L+sqsF/cglBIfTX6MBp871OZpg==",
-      "path": "opencvsharp4.windows/4.5.5.20211231",
-      "hashPath": "opencvsharp4.windows.4.5.5.20211231.nupkg.sha512"
-    },
-    "OpenCvSharp4.WpfExtensions/4.5.5.20211231": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-zIiNWygafSV80IENnMNFKWQvOTTQ9ZK2pP48n8FAFR/gCOkYOBkZ2kSi+QFm0JTQwys9yKvCxJhxAtBp+3Xfwg==",
-      "path": "opencvsharp4.wpfextensions/4.5.5.20211231",
-      "hashPath": "opencvsharp4.wpfextensions.4.5.5.20211231.nupkg.sha512"
+      "sha512": "sha512-fAXJW98FU3ZAlS3LDrRAXeg7h5ufA9Z1mAQNsXIPSTQHS+Ql2+KdzdYXs+p+lZhyH9baJWPDB42E+EN1KJ0Y3w==",
+      "path": "opencvsharp3-anycpu/4.0.0.20181129",
+      "hashPath": "opencvsharp3-anycpu.4.0.0.20181129.nupkg.sha512"
     },
     "QuantConnect.pythonnet/2.0.15": {
       "type": "package",
@@ -567,19 +755,12 @@
       "path": "system.drawing.common/4.7.0",
       "hashPath": "system.drawing.common.4.7.0.nupkg.sha512"
     },
-    "System.Memory/4.5.4": {
+    "System.Memory/4.5.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-1MbJTHS1lZ4bS4FmsJjnuGJOu88ZzTT2rLvrhW7Ygic+pC0NWA+3hgAen0HRdsocuQXCkUTdFn9yHJJhsijDXw==",
-      "path": "system.memory/4.5.4",
-      "hashPath": "system.memory.4.5.4.nupkg.sha512"
-    },
-    "System.Runtime.CompilerServices.Unsafe/6.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-/iUeP3tq1S0XdNNoMz5C9twLSrM/TH+qElHkXWaPvuNOt+99G75NrV0OS2EqHx5wMN7popYjpc8oTjC1y16DLg==",
-      "path": "system.runtime.compilerservices.unsafe/6.0.0",
-      "hashPath": "system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+      "sha512": "sha512-3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
+      "path": "system.memory/4.5.3",
+      "hashPath": "system.memory.4.5.3.nupkg.sha512"
     },
     "System.Security.AccessControl/4.7.0": {
       "type": "package",
