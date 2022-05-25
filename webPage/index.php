@@ -1,4 +1,27 @@
-<?php session_start(); ?>
+<?php session_start(); 
+
+require_once 'config/db_connection.php';
+
+$sql = "select * from products ";
+$result = mysqli_query($conn, $sql);
+$data = mysqli_fetch_array($result);
+
+//$sql = "select Image from products";
+//$result = mysqli_query($conn, $sql);
+//$data1 = mysqli_fetch_array($result);
+
+$name_arr=[];
+$img_arr=[];
+while($row = mysqli_fetch_array($result)) {
+    array_push($name_arr,$row['Name']);
+    
+    array_push($img_arr,$row['Image']);
+    }
+/*foreach($name_arr as $key =>$value){
+    echo $value."<br>";
+}*/
+
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -102,15 +125,15 @@
                                 <!--상품 랜덤 출력 하나의 컴포넌트-->
                                 <div class="col mb-5 h-100">
                                     <!--이미지 버튼화-->
-                                    <button type="button" class="btn_image" id="img_btn1" style="border: 0;">
+                                    <button type="button" class="btn_image" id="img_btn1"  style="border: 0;" >
                                         <!--이동할 상품 페이지-->
                                         <a href="product-info.php">
                                             <!--이미지 DB 연동-->
-                                            <img name="randImg1" src="" style="width: 250px; height: 325px" class="cImg">
+                                            <img name="randImg1" src="<?php $randc=mt_rand(0,count($name_arr)-1); echo $img_arr[$randc]; ?>" style="width: 250px; height: 325px" class="cImg">
                                         </a>
                                     </button>
                                     <!--상품명, 상품 가격 DB 연동-->
-                                    <h2 name="randName1" class="h5">Product Name</h2>
+                                    <h2 name="randName1" class="h5"><?php echo $name_arr[$randc]; ?></h2>
                                     <p name="randPrice1" class="mb-0">Product Price</p>
                                 </div>
                                 <div class="col mb-5 h-100">
@@ -118,11 +141,11 @@
                                     <button type="button" class="btn_image" id="img_btn2" style="border: 0;">
                                         <a href="product-info.php">
                                             <!--이미지 DB 연동-->
-                                            <img name="randImg2" src="" style="width: 250px; height: 325px" class="cImg">
+                                            <img name="randImg2" src="<?php $randc=mt_rand(0,count($name_arr)-1); echo $img_arr[$randc]; ?>" style="width: 250px; height: 325px" class="cImg">
                                         </a>
                                     </button>
                                     <!--상품명, 상품 가격 DB 연동-->
-                                    <h2 name="randName2" class="h5">Product Name</h2>
+                                    <h2 name="randName2" class="h5"><?php echo $name_arr[$randc]; ?></h2>
                                     <p name="randPrice2" class="mb-0">Product Price</p>
                                 </div>
                                 <div class="col mb-5 mb-md-0 h-100">
@@ -130,11 +153,11 @@
                                     <button type="button" class="btn_image" id="img_btn3" style="border: 0;">
                                         <a href="product-info.php">
                                             <!--이미지 DB 연동-->
-                                            <img name="randImg3" src="" style="width: 250px; height: 325px" class="cImg">
+                                            <img name="randImg3" src="<?php $randc=mt_rand(0,count($name_arr)-1); echo $img_arr[$randc]; ?>" style="width: 250px; height: 325px" class="cImg">
                                         </a>
                                     </button>
                                     <!--상품명, 상품 가격 DB 연동-->
-                                    <h2 name="randName3" class="h5">Product Name</h2>
+                                    <h2 name="randName3" class="h5"><?php echo $name_arr[$randc]; ?></h2>
                                     <p name="randPrice3" class="mb-0">Product Price</p>
                                 </div>
                                 <div class="col h-100">
@@ -142,11 +165,11 @@
                                     <button type="button" class="btn_image" id="img_btn4" style="border: 0;">
                                         <a href="product-info.php">
                                             <!--이미지 DB 연동-->
-                                            <img name="randImg4" src="" style="width: 250px; height: 325px" class="cImg">
+                                            <img name="randImg4" src="<?php $randc=mt_rand(0,count($name_arr)-1); echo $img_arr[$randc]; ?>" style="width: 250px; height: 325px" class="cImg">
                                         </a>
                                     </button>
                                     <!--상품명, 상품 가격 DB 연동-->
-                                    <h2 name="randName4" class="h5">Product Name</h2>
+                                    <h2 name="randName4" class="h5"><?php echo $name_arr[$randc]; ?></h2>
                                     <p name="randPrice4" class="mb-0">Product Price</p>
                                 </div>
                             </div>

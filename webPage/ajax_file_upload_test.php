@@ -14,7 +14,7 @@
 	} else {
 		echo "failed";
 	}
-    sleep(2);
+    
     require_once 'config/ftp_connect.php';
 
     // FTP서버 접속
@@ -36,9 +36,108 @@
     // 패시브 모드 설정
     ftp_pasv($conn_id, true);
 
-    $contents = ftp_nlist($conn_id, "./json");
+    $filePathA = "./json/".$Random_str."_a.json";
+    $filePathB = "./json/".$Random_str."_b.json";
+    $filePathO = "./json/".$Random_str."_o.json";
+    $filePathT = "./json/".$Random_str."_t.json";
+    $a = 0;
+    while(!file_exists($filePathA) && !file_exists($filePathB) && !file_exists($filePathO) && !file_exists($filePathT)){
 
-    var_dump($contents);
+        sleep(1);
+        
+        $a = $a +1;
+        if($a==20){
+            break;
+        }        
+    }
+    sleep(1);
+    $contents = [];
+    if(file_exists($filePathA)){
+    $JsonParser = file_get_contents("$filePathA");
+    $data = json_decode($JsonParser);
+    $overallarr=[];
+    array_push($overallarr,'Overall');
+    array_push( $overallarr,$data->Overall->subcategory->classfication);
+    array_push( $overallarr,$data->Overall->maincolor->rgb);
+    array_push( $overallarr,$data->Overall->subcolor->rgb);
+    array_push( $overallarr,$data->Overall->pattern->classfication);
+    array_push( $overallarr,$data->Overall->style->classfication);
+    
+    array_push($contents,'Maincategory','Subcategory','MainColor','SubColor','Pattern','Style');
+        
+        $json = json_encode(array('type' => $contents, 'prop'=> $overallarr));
+        file_put_contents("./json/Overall.json", $json);
+
+        unlink($filePathA);
+    }
+    $contents = [];
+    if(file_exists($filePathB)){
+        $JsonParser = file_get_contents("$filePathB");
+        $data = json_decode($JsonParser);
+        $bottomarr=[];
+        array_push($bottomarr,'Bottom');
+        array_push( $bottomarr,$data->Bottom->subcategory->classfication);
+        array_push( $bottomarr,$data->Bottom->maincolor->rgb);
+        array_push( $bottomarr,$data->Bottom->subcolor->rgb);
+        array_push( $bottomarr,$data->Bottom->pattern->classfication);
+        array_push( $bottomarr,$data->Bottom->style->classfication);
+        array_push($contents,'Maincategory','Subcategory','MainColor','SubColor','Pattern','Style');
+        
+        $json = json_encode(array('type' => $contents, 'prop'=> $bottomarr));
+        file_put_contents("./json/Bottom.json", $json);
+
+        unlink($filePathB);
+    }
+    $contents = [];
+    if(file_exists($filePathO)){
+        $JsonParser = file_get_contents("$filePathO");
+        $data = json_decode($JsonParser);
+        $outerarr=[];
+        array_push($outerarr,'Outer');
+        array_push( $outerarr,$data ->Outer->subcategory->classfication);
+        array_push( $outerarr,$data ->Outer->maincolor->rgb);
+        array_push( $outerarr,$data ->Outer->subcolor->rgb);
+        array_push( $outerarr,$data ->Outer->pattern->classfication);
+        array_push( $outerarr,$data ->Outer->style->classfication);
+        array_push($contents,'Maincategory','Subcategory','MainColor','SubColor','Pattern','Style');
+        
+        $json = json_encode(array('type' => $contents, 'prop'=> $outerarr));
+        file_put_contents("./json/Outer.json", $json);
+
+        unlink($filePathO);
+                
+    }
+    $contents = [];
+    if(file_exists($filePathT)){
+        $JsonParser = file_get_contents("$filePathT");
+        $data = json_decode($JsonParser);
+        $toparr=[];
+        array_push($toparr,'Top');
+        array_push( $toparr,$data ->Top->subcategory->classfication);
+        array_push( $toparr,$data ->Top->maincolor->rgb);
+        array_push( $toparr,$data ->Top->subcolor->rgb);
+        array_push( $toparr,$data ->Top->pattern->classfication);
+        array_push( $toparr,$data ->Top->style->classfication);
+        array_push($contents,'Maincategory','Subcategory','MainColor','SubColor','Pattern','Style');
+        
+        $json = json_encode(array('type' => $contents, 'prop'=> $toparr));
+        file_put_contents("./json/Top.json", $json);
+
+        unlink($filePathT);
+            
+    }
+    //$json = json_encode($contents);
+    
+    //echo($json);
+    
+    //var_dump($contents);
 // FTP 서버와 연결 끊음
     ftp_close($conn_id);
+
+    
+
+
+
+
+
 ?>

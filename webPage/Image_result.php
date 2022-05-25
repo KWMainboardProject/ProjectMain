@@ -1,3 +1,73 @@
+<?php session_start();
+
+include 'config/db_connection.php';
+
+if(file_exists("./json/Overall.json")){
+    $jsona = file_get_contents("./json/Overall.json");
+    $overjson = json_decode($jsona);
+
+    $sql = "select * from products where MCategory = '".$overjson->prop[0]."'AN"."D SCategory = '".$overjson->prop[1]."'AN"."D Pattern = '".$overjson->prop[4]."'";
+    $result = mysqli_query($conn, $sql);
+    
+    $overname_arr=[];
+    $overimg_arr=[];
+    while($row = mysqli_fetch_array($result)) {
+        array_push($overname_arr,$row['Name']);
+        
+        array_push($overimg_arr,$row['Image']);
+        }
+    
+}
+if(file_exists("./json/Bottom.json")){
+    $jsonb = file_get_contents("./json/Bottom.json");
+    $btmjson = json_decode($jsonb);
+
+    $sql = "select * from products where MCategory = '".$btmjson->prop[0]."'AN"."D SCategory = '".$btmjson->prop[1]."'AN"."D Pattern = '".$btmjson->prop[4]."'";
+    $result = mysqli_query($conn, $sql);
+    
+    $btmname_arr=[];
+    $btmimg_arr=[];
+    while($row = mysqli_fetch_array($result)) {
+        array_push($btmname_arr,$row['Name']);
+        
+        array_push($btmimg_arr,$row['Image']);
+        }
+    
+}
+if(file_exists("./json/Outer.json")){
+    $jsono = file_get_contents("./json/Outer.json");
+    $oujson = json_decode($jsono);
+
+    $sql = "select * from products where MCategory = '".$oujson->prop[0]."'AN"."D SCategory = '".$oujson->prop[1]."'AN"."D Pattern = '".$oujson->prop[4]."'";
+    $result = mysqli_query($conn, $sql);
+    
+    $ouname_arr=[];
+    $ouimg_arr=[];
+    while($row = mysqli_fetch_array($result)) {
+        array_push($ouname_arr,$row['Name']);
+        
+        array_push($ouimg_arr,$row['Image']);
+        }
+    
+}
+if(file_exists("./json/Top.json")){
+    $jsont = file_get_contents("./json/Top.json");
+    $topjson = json_decode($jsont);
+
+    $sql = "select * from products where MCategory = '".$topjson->prop[0]."'AN"."D SCategory = '".$topjson->prop[1]."'AN"."D Pattern = '".$topjson->prop[4]."'";
+    $result = mysqli_query($conn, $sql);
+    
+    $topname_arr=[];
+    $topimg_arr=[];
+    while($row = mysqli_fetch_array($result)) {
+        array_push($topname_arr,$row['Name']);
+        
+        array_push($topimg_arr,$row['Image']);
+        }
+    
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -22,11 +92,25 @@
                 <div class="container px-5">
                     <a class="navbar-brand" href="index.php">MainBoard</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <?php if(!is_null($_SESSION['id'])){
+                        $idtext = $_SESSION['id']."님으로 로그인 중입니다.";
+                    }else{
+                        $idtext = "로그인을 해주세요.";
+                    } ?>
+                    <a class="text"> <?php echo $idtext;?></a>}
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
-                            <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+                            <?php if(!is_null($_SESSION['id'])){
+                                $idbtn = "Logout";
+                                $_SESSION['islogin'] = false;
+                            }else{
+                                $idbtn = "Login";
+                                $_SESSION['islogin'] = false;
+                                
+                            } ?>
+                            <li class="nav-item"><a class="nav-link" href="login.php"><?php echo $idbtn;?></a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Collections</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
@@ -50,91 +134,111 @@
                     <hr class="mb-5">
                     <!--각 추천 section의 visibility default value = hidden-->
                     <!--Outer 추천 (Outer가 존재한다면 visibility hidden->visible)-->
-                    <div class="mt-5 row g-3" style="visibility: visible;"  data-aos="fade-up" aos-offset="300" aos-easing="ease-in-sine" aos-duration="500">
+                    <div class="mt-5 row g-3" style="visibility: <?php if(file_exists("./json/Outer.json")){echo "visible";unlink("./json/Outer.json");}else{echo "hidden";}?>;"  data-aos="fade-up" aos-offset="300" aos-easing="ease-in-sine" aos-duration="500">
                         <h4 class="mb-3">Similar Outer Recommend</h4>
-                        <!--카드 하나 컴포넌트 => DB에서 for문으로 5개 가져와야함-->
-                        <div class="col xl-3 col-lg-4 col-md-6">
-                            <div class="card" style="width: 300px;">
+                        <?php
+                        for($i=0; $i<5; $i=$i+1){
+                        echo
+                        "<!--카드하나 컴포넌트 => DB에서 for문으로 가져와야함-->
+                        <div class='col xl-3 col-lg-4 col-md-6'>
+                            <div class='card' style='width: 300px;'>
                                 <!--이미지 버튼화-->
-                                <a href="product-info.php">
+                                <a href='product-info.php'>
                                     <!--상품 썸네일 DB 연동-->
-                                    <img src="" class="card-img-top" style="width: 300px; height: 400px; object-fit: contain;">
+                                    <img name='product-thumbnail' src='".$ouimg_arr[$i]."' class='card-img-top' style='width: 300px; height: 400px; object-fit: contain;'>
                                 </a>
-                                <div class="card-body">
+                                <div class='card-body'>
                                     <!--상품명, 가격 DB연동-->
-                                    <h5 class="card-title">Product Name</h5>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <p>Product Price</p>
+                                    <h5 name='product-name' class='card-title'>".$ouname_arr[$i]."</h5>
+                                    <div class='d-flex justify-content-between align-items-center'>
+                                        <p name='product-price'>Product Price</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>";
+                        }
+                        ?>
                     </div>
 
                     <!--Top 추천 (Top이 존재한다면 visibility hidden->visible)-->
-                    <div class="mt-5 row g-3" style="visibility: visible;"  data-aos="fade-up" aos-offset="300" aos-easing="ease-in-sine" aos-duration="500">
+                    <div class="mt-5 row g-3" style="visibility: <?php if(file_exists("./json/Top.json")){echo "visible";unlink("./json/Top.json");}else{echo "hidden";}?>;"  data-aos="fade-up" aos-offset="300" aos-easing="ease-in-sine" aos-duration="500">
                         <h4 class="mb-3">Similar Top Recommend</h4>
-                        <!--카드 하나 컴포넌트 => DB에서 for문으로 5개 가져와야함-->
-                        <div class="col xl-3 col-lg-4 col-md-6">
-                            <div class="card" style="width: 300px;">
+                        <?php
+                        for($i=0; $i<5; $i=$i+1){
+                        echo
+                        "<!--카드하나 컴포넌트 => DB에서 for문으로 가져와야함-->
+                        <div class='col xl-3 col-lg-4 col-md-6'>
+                            <div class='card' style='width: 300px;'>
                                 <!--이미지 버튼화-->
-                                <a href="product-info.php">
+                                <a href='product-info.php'>
                                     <!--상품 썸네일 DB 연동-->
-                                    <img src="" class="card-img-top" style="width: 300px; height: 400px; object-fit: contain;">
+                                    <img name='product-thumbnail' src='".$topimg_arr[$i]."' class='card-img-top' style='width: 300px; height: 400px; object-fit: contain;'>
                                 </a>
-                                <div class="card-body">
+                                <div class='card-body'>
                                     <!--상품명, 가격 DB연동-->
-                                    <h5 class="card-title">Product Name</h5>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <p>Product Price</p>
+                                    <h5 name='product-name' class='card-title'>".$topname_arr[$i]."</h5>
+                                    <div class='d-flex justify-content-between align-items-center'>
+                                        <p name='product-price'>Product Price</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>";
+                        }
+                        ?>
                     </div>
 
                     <!--Bottom 추천 (Bottom이 존재한다면 visibility hidden->visible)-->
-                    <div class="mt-5 row g-3" style="visibility: visible;"  data-aos="fade-up" aos-offset="300" aos-easing="ease-in-sine" aos-duration="500">
+                    <div class="mt-5 row g-3" style="visibility: <?php if(file_exists("./json/Bottom.json")){echo "visible";unlink("./json/Bottom.json");}else{echo "hidden";}?>;"  data-aos="fade-up" aos-offset="300" aos-easing="ease-in-sine" aos-duration="500">
                         <h4 class="mb-3">Similar Bottom Recommend</h4>
-                        <!--카드 하나 컴포넌트 => DB에서 for문으로 5개 가져와야함-->
-                        <div class="col xl-3 col-lg-4 col-md-6">
-                            <div class="card" style="width: 300px;">
+                        <?php
+                        for($i=0; $i<5; $i=$i+1){
+                        echo
+                        "<!--카드하나 컴포넌트 => DB에서 for문으로 가져와야함-->
+                        <div class='col xl-3 col-lg-4 col-md-6'>
+                            <div class='card' style='width: 300px;'>
                                 <!--이미지 버튼화-->
-                                <a href="product-info.php">
+                                <a href='product-info.php'>
                                     <!--상품 썸네일 DB 연동-->
-                                    <img src="" class="card-img-top" style="width: 300px; height: 400px; object-fit: contain;">
+                                    <img name='product-thumbnail' src='".$btmimg_arr[$i]."' class='card-img-top' style='width: 300px; height: 400px; object-fit: contain;'>
                                 </a>
-                                <div class="card-body">
+                                <div class='card-body'>
                                     <!--상품명, 가격 DB연동-->
-                                    <h5 class="card-title">Product Name</h5>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <p>Product Price</p>
+                                    <h5 name='product-name' class='card-title'>".$btmname_arr[$i]."</h5>
+                                    <div class='d-flex justify-content-between align-items-center'>
+                                        <p name='product-price'>Product Price</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>";
+                        }
+                        ?>
                     </div>
 
                     <!--Overall 추천 (Overall이 존재한다면 visibility hidden->visible)-->
-                    <div class="mt-5 row g-3" style="visibility: visible;"  data-aos="fade-up" aos-offset="300" aos-easing="ease-in-sine" aos-duration="500">
+                    <div class="mt-5 row g-3" style="visibility: <?php if(file_exists("./json/Overall.json")){echo "visible";unlink("./json/Overall.json");}else{echo "hidden";}?>;"  data-aos="fade-up" aos-offset="300" aos-easing="ease-in-sine" aos-duration="500">
                         <h4 class="mb-3">Similar Overall Recommend</h4>
-                        <!--카드 하나 컴포넌트 => DB에서 for문으로 가져와야함-->
-                        <div class="col xl-3 col-lg-4 col-md-6">
-                            <div class="card" style="width: 300px;">
+                        <?php
+                        for($i=0; $i<5; $i=$i+1){
+                        echo
+                        "<!--카드하나 컴포넌트 => DB에서 for문으로 가져와야함-->
+                        <div class='col xl-3 col-lg-4 col-md-6'>
+                            <div class='card' style='width: 300px;'>
                                 <!--이미지 버튼화-->
-                                <a href="product-info.php">
+                                <a href='product-info.php'>
                                     <!--상품 썸네일 DB 연동-->
-                                    <img src="" class="card-img-top" style="width: 300px; height: 400px; object-fit: contain;">
+                                    <img name='product-thumbnail' src='".$overimg_arr[$i]."' class='card-img-top' style='width: 300px; height: 400px; object-fit: contain;'>
                                 </a>
-                                <div class="card-body">
+                                <div class='card-body'>
                                     <!--상품명, 가격 DB연동-->
-                                    <h5 class="card-title">Product Name</h5>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <p>Product Price</p>
+                                    <h5 name='product-name' class='card-title'>".$overname_arr[$i]."</h5>
+                                    <div class='d-flex justify-content-between align-items-center'>
+                                        <p name='product-price'>Product Price</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>";
+                        }
+                        ?>
                     </div>
 
                     <div class="mt-5 row g-3">
