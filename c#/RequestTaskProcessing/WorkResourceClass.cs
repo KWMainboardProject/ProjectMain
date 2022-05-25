@@ -520,6 +520,7 @@ namespace RequestTaskProcessing
 		{
 			this.key = key;
 			SetAtribute(boundbox);
+			SetAtribute(color);
 			SetAtribute(subcategory);
 			SetAtribute(pattern);
 			SetAtribute(style);
@@ -545,6 +546,7 @@ namespace RequestTaskProcessing
 		}
 
 		public BoundBoxContainer boundbox = new BoundBoxContainer();
+		public MainSubColorContainer color = new MainSubColorContainer();
 		public SubCategoryContainer subcategory = new SubCategoryContainer();
 		public PatternContainer pattern = new PatternContainer();
 		public StyleContainer style = new StyleContainer();

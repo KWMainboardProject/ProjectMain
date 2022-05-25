@@ -400,8 +400,10 @@ namespace RequestTaskProcessing
                     }
                     
                     //Success consume
-                    Console.WriteLine(thread.ToString());
-                    m.Print();
+                    Console.WriteLine(thread.ToString()+" : resource");
+                    FashionObjectsContainer fc = new FashionObjectsContainer();
+                    fc.SetJObject(m.resource.GetJObject());
+                    Console.WriteLine(fc.GetJObject().ToString());
                 }
             }
             public override void SetTimeOutThreshold(int time = 5000)

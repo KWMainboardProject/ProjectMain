@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "AmQn4hP1MvKJXaa+ehvVbxJ2PW5qLTkbpbinOxVnLiIyxaWCKFUsAWYwr4CZfWFw01UhVJGFgqDDZqTr5pPE8g==",
+  "dgSpecHash": "tIwxaGGQNgnwGQHPQqXChEN1swAhWwV0C2+6bG9cW33aEKOmDNAQeEAR2uVH8WG/G7MyIHBMoDqFj3TskDWX5g==",
   "success": true,
   "projectFilePath": "C:\\Users\\vbmrk\\Documents\\GitHub\\ProjectMain\\c#\\RequestTaskProcessing\\RequestTaskProcessing.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\vbmrk\\.nuget\\packages\\dynamiclanguageruntime\\1.3.1\\dynamiclanguageruntime.1.3.1.nupkg.sha512",
     "C:\\Users\\vbmrk\\.nuget\\packages\\ironpython\\2.7.12\\ironpython.2.7.12.nupkg.sha512",
+    "C:\\Users\\vbmrk\\.nuget\\packages\\microsoft.ml.onnxruntime.gpu\\1.11.0\\microsoft.ml.onnxruntime.gpu.1.11.0.nupkg.sha512",
+    "C:\\Users\\vbmrk\\.nuget\\packages\\microsoft.ml.onnxruntime.managed\\1.11.0\\microsoft.ml.onnxruntime.managed.1.11.0.nupkg.sha512",
     "C:\\Users\\vbmrk\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\vbmrk\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\vbmrk\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",

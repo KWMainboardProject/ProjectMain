@@ -106,5 +106,6 @@
   </ItemGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)opencvsharp4.runtime.win\4.5.5.20211231\build\netcoreapp\OpenCvSharp4.runtime.win.props" Condition="Exists('$(NuGetPackageRoot)opencvsharp4.runtime.win\4.5.5.20211231\build\netcoreapp\OpenCvSharp4.runtime.win.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.ml.onnxruntime.gpu\1.11.0\build\netstandard2.0\Microsoft.ML.OnnxRuntime.Gpu.props" Condition="Exists('$(NuGetPackageRoot)microsoft.ml.onnxruntime.gpu\1.11.0\build\netstandard2.0\Microsoft.ML.OnnxRuntime.Gpu.props')" />
   </ImportGroup>
 </Project>
