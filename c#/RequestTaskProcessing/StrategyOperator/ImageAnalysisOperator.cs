@@ -152,9 +152,8 @@ namespace RequestTaskProcessing.StrategyOperator
 
                         //Crop img
                         Mat cropImg = src.SubMat(
-                            new Rect(
                             (int)box[0], (int)box[1],
-                            (int)box[2], (int)box[3]));
+                            (int)box[2], (int)box[3]);
 
                         //Set img name
                         mc.cropimgPath.Value = workingPath + @"\croped_" + mc.GetKey() + @".jpg";

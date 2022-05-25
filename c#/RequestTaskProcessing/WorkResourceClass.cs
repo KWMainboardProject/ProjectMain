@@ -669,6 +669,8 @@ namespace RequestTaskProcessing
 			workerPath.Value = outPath + @"\WORKER";
 			keyPath.Value = outPath + @"\KEY";
 			resourcePath.Value = outPath + @"\RESOURCE";
+			resultsrcPath.Value = resourcePath.Value + @"\result";
+			imgsrcPath.Value = resourcePath.Value + @"\image"; 
 
 
 			envList.Add(currentPath);
@@ -679,6 +681,8 @@ namespace RequestTaskProcessing
 			envList.Add(workerPath);
 			envList.Add(keyPath);
 			envList.Add(resourcePath);
+			envList.Add(resultsrcPath);
+			envList.Add(imgsrcPath);
 			foreach (var path in envList)
 			{
 				Console.WriteLine(path.GetKey() + "\t: " + path.Value);
@@ -703,6 +707,8 @@ namespace RequestTaskProcessing
 		private StringContainer workerPath = new StringContainer("WORKER_PATH");
 		private StringContainer keyPath = new StringContainer("KEY_PATH");
 		private StringContainer resourcePath = new StringContainer("RESOURCE_PATH");
+		private StringContainer resultsrcPath = new StringContainer("RESULT_RESOURCE_PATH");
+		private StringContainer imgsrcPath = new StringContainer("IMGE_RESOURCE_PATH");
 
 
 		static public List<string> GetFileList(string directoryPath)
@@ -710,12 +716,12 @@ namespace RequestTaskProcessing
 			List<string> fileList = new List<string>();
 			System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(directoryPath);
 
-			foreach (System.IO.FileInfo File in di.GetFiles())
+			foreach (System.IO.FileInfo file in di.GetFiles())
 			{
-				fileList<
+				fileList.Add(file.FullName);
 				//if (File.Extension.ToLower().CompareTo(".jpg") == 0){}
 			}
-
+			return fileList;
 		}
 
 

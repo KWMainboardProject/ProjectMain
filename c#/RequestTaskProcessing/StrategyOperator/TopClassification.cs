@@ -22,15 +22,15 @@ namespace RequestTaskProcessing.StrategyOperator
             Console.WriteLine(rootPath + @"\python\SubCategory\Top\Top.py");
 
             //파이썬 코드 연동
-            engine = IronPython.Hosting.Python.CreateEngine();
-            scope = engine.CreateScope();
-            source = engine.CreateScriptSourceFromFile(rootPath+@"\python\SubCategory\Top\Top.py");
-            source.Execute(scope);
-            string top_model_path = "./ProjectMain/python/SubCategory/Top/Top_classification.pt";
-            var getPythonClass = scope.GetVariable("Top_classification")(top_model_path);
-            Console.WriteLine("\t Top Pt Loading...");
-            getPythonClass.NN_load();
-            Console.WriteLine("\t Top Pt Done!");
+            //engine = IronPython.Hosting.Python.CreateEngine();
+            //scope = engine.CreateScope();
+            //source = engine.CreateScriptSourceFromFile(rootPath+@"\python\SubCategory\Top\Top.py");
+            //source.Execute(scope);
+            //string top_model_path = "./ProjectMain/python/SubCategory/Top/Top_classification.pt";
+            //var getPythonClass = scope.GetVariable("Top_classification")(top_model_path);
+            //Console.WriteLine("\t Top Pt Loading...");
+            //getPythonClass.NN_load();
+            //Console.WriteLine("\t Top Pt Done!");
         }
 
         public void ClearResource()
@@ -60,25 +60,25 @@ namespace RequestTaskProcessing.StrategyOperator
         }
         protected TaskMessage requestMessage = null;
         protected SubCategoryContainer container;
-        protected Microsoft.Scripting.Hosting.ScriptEngine engine = null;
-        protected Microsoft.Scripting.Hosting.ScriptScope scope = null;
-        protected Microsoft.Scripting.Hosting.ScriptSource source = null;
+        //protected Microsoft.Scripting.Hosting.ScriptEngine engine = null;
+        //protected Microsoft.Scripting.Hosting.ScriptScope scope = null;
+        //protected Microsoft.Scripting.Hosting.ScriptSource source = null;
 
         public void Work()
         {
             lock (Holder.instance)
             {
                 //절대 경로
-                string img_abs_path = requestMessage.resource.GetValue().ToString();
-                var getPythonClass = scope.GetVariable("Top_classification")(0, img_abs_path);
-                getPythonClass.set_device();        //디바이스 설정
-                getPythonClass.img_load();          //이미지 로드
-                getPythonClass.img_transform();     //이미지 전처리, 정규화
-                getPythonClass.classification();    //분류
+                //string img_abs_path = requestMessage.resource.GetValue().ToString();
+                //var getPythonClass = scope.GetVariable("Top_classification")(0, img_abs_path);
+                //getPythonClass.set_device();        //디바이스 설정
+                //getPythonClass.img_load();          //이미지 로드
+                //getPythonClass.img_transform();     //이미지 전처리, 정규화
+                //getPythonClass.classification();    //분류
 
-                //결과 (conf, class)
-                container.confidenceContainer.SetConfidence(getPythonClass.getConf());
-                container.classficationContainer.SetClassfication(getPythonClass.getResult());
+                ////결과 (conf, class)
+                //container.confidenceContainer.SetConfidence(getPythonClass.getConf());
+                //container.classficationContainer.SetClassfication(getPythonClass.getResult());
                
                 Thread.Sleep(1000);
 

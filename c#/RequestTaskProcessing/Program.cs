@@ -31,7 +31,7 @@ namespace RequestTaskProcessing
 
         static void TestYolo()
         {
-            const int TASK_NUM = 5;
+            
             TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
             TaskManager taskManager = TaskManager.GetInstance();
             GPUWorkManager gpuManager = GPUWorkManager.GetInstance();
@@ -43,13 +43,15 @@ namespace RequestTaskProcessing
 
             IMessageProductAble p = taskManager.GetProductor();
             Console.WriteLine("Strat Create Message");
-            for (int i = 0; i < TASK_NUM; i++)
+            Console.WriteLine(ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH);
+            foreach (var file in ShareWorkPath.GetFileList(ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH))
             {
+                var fname = Path.GetFileName(file);
                 TaskMessage m = new TaskMessage(
-                    "Task" + i.ToString(),
+                    fname,
                     sender.GetProductor(),
                     MessageType.Request_ImageAnalysis_ImagePath,
-                    new StringContainer("img_path", "./task/img_" + i.ToString()));
+                    new StringContainer("img_path", file));
                 p.Product(m);
             }
             Console.WriteLine("Complete Create Message");

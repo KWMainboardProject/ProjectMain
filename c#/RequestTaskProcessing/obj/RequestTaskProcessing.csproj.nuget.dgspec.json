@@ -40,11 +40,15 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "dependencies": {
-            "IronPython": {
+            "Microsoft.ML.OnnxRuntime": {
               "target": "Package",
-              "version": "[2.7.12, )"
+              "version": "[1.11.0, )"
             },
             "Microsoft.ML.OnnxRuntime.Gpu": {
+              "target": "Package",
+              "version": "[1.11.0, )"
+            },
+            "Microsoft.ML.OnnxRuntime.Managed": {
               "target": "Package",
               "version": "[1.11.0, )"
             },
@@ -52,17 +56,9 @@
               "target": "Package",
               "version": "[13.0.1, )"
             },
-            "OpenCvSharp4": {
+            "OpenCvSharp3-AnyCPU": {
               "target": "Package",
-              "version": "[4.5.5.20211231, )"
-            },
-            "OpenCvSharp4.Windows": {
-              "target": "Package",
-              "version": "[4.5.5.20211231, )"
-            },
-            "QuantConnect.pythonnet": {
-              "target": "Package",
-              "version": "[2.0.15, )"
+              "version": "[4.0.0.20181129, )"
             }
           },
           "imports": [

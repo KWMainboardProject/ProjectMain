@@ -62,12 +62,6 @@ namespace RequestTaskProcessing.StrategyOperator
                 float ratio = 0.0f;
                 Point diff1 = new Point();
                 Point diff2 = new Point();
-                //var letter_image = YoloDetector.CreateLetterbox(img, 
-                //    new Size(YoloDetector.IMG_SIZE, YoloDetector.IMG_SIZE), 
-                //    new Scalar(YoloDetector.PAD_COLOR, YoloDetector.PAD_COLOR, YoloDetector.PAD_COLOR), 
-                //    out ratio, out diff1, out diff2);
-
-                //Run
                 var result = yolo.objectDetection(img);
 
 
