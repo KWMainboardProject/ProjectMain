@@ -385,8 +385,12 @@ namespace RequestTaskProcessing
 		}
 		public void SetJObject(JObject obj)
 		{
-			JArray value = (JArray)obj[GetKey()];
-			this.boundbox = value;
+			try
+			{
+				JArray value = (JArray)obj[GetKey()];
+				this.boundbox = value;
+			}
+			catch { }
 		}
 		public void SetBoundBox(int x_min, int x_max, int y_min, int y_max)
 		{
@@ -412,10 +416,14 @@ namespace RequestTaskProcessing
 		{
 			get
 			{
-				int sum = (int)boundbox[0]
+				int sum = 0;
+                if (boundbox != null)
+                {
+					sum = (int)boundbox[0]
 					+ (int)boundbox[1]
 					+ (int)boundbox[2]
 					+ (int)boundbox[3];
+				}
 				return (sum > threashold);
 			}
 		}
