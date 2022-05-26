@@ -36,13 +36,13 @@ namespace RequestTaskProcessing.StrategyOperator
                         strategyOperator = TopClassification.GetInstance();
                         break;
                     case MessageType.Request_FindSubCategory_Bottom_ImagePath:
-                        throw new NotImplementedException();
+                        strategyOperator = BottomClassification.GetInstance();
                         break;
                     case MessageType.Request_FindSubCategory_Outer_ImagePath:
-                        throw new NotImplementedException();
+                        strategyOperator = OuterClassification.GetInstance();
                         break;
                     case MessageType.Request_FindSubCategory_Overall_ImagePath:
-                        throw new NotImplementedException();
+                        strategyOperator = OverallClassification.GetInstance();
                         break;
                     case MessageType.Request_FindPattern_Top_ImagePath:
                         throw new NotImplementedException();

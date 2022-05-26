@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace RequestTaskProcessing.StrategyOperator.SubCategory
 {
-    class OverallClassification : IStrategyOperateAble
+    class OuterClassification : IStrategyOperateAble
     {
         private Mat imageFloat = null;
         public Size imgSize = new Size(224, 224);
@@ -22,7 +22,7 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
 
         private 
 
-        protected OverallClassification()
+        protected OuterClassification()
         {
             //plz set gpu device
             ClearResource();
@@ -33,7 +33,7 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
             //Set cuda (gpu) device
             //option.AppendExecutionProvider_CUDA(0);
 
-            session = new InferenceSession(ShareWorkPath.GetInstance().WEIGHT_PATH + @"\Overall_classification.onnx", option);
+            session = new InferenceSession(ShareWorkPath.GetInstance().WEIGHT_PATH + @"\Outer_classification.onnx", option);
         }
 
         public void classification(string imagePath)
@@ -76,7 +76,7 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
             float sum = output.Sum(x => (float)Math.Exp(x));
             IEnumerable<float> softmax = output.Select(x => (float)Math.Exp(x) / sum);
 
-            IEnumerable<Prediction> top10 = softmax.Select((x, i) => new Prediction { Label = LabelMap.Overalls[i], Confidence = x })
+            IEnumerable<Prediction> top10 = softmax.Select((x, i) => new Prediction { Label = LabelMap.Outers[i], Confidence = x })
                                        .OrderByDescending(x => x.Confidence)
                                        .Take(1);
 
@@ -193,7 +193,7 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
             lock (Holder.instance)
             {
                 TaskMessage taskMessage = new TaskMessage(requestMessage);
-                taskMessage.type = MessageType.Receive_Container_SubCategory_Overall;        //set
+                taskMessage.type = MessageType.Receive_Container_SubCategory_Outer;        //set
                 taskMessage.productor = null;                                   //set
                 taskMessage.resource = container;
                 return taskMessage;
@@ -234,7 +234,7 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
         /// singleton pattern
         /// </summary>
         /// <returns></returns>
-        public static OverallClassification GetInstance()
+        public static OuterClassification GetInstance()
         {
             return Holder.instance;
         }
@@ -244,7 +244,7 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
         private static class Holder
         {
             //객체 생성 시 모델 경로와 파일 경로 넣고 싶은데 How?
-            public static OverallClassification instance = new OverallClassification();
+            public static OuterClassification instance = new OuterClassification();
         }
     }
 }
