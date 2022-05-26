@@ -61,18 +61,58 @@
           var index = 0;
           function semiauto(){
             $.ajax({
-            url: "lel.php",
+            url: "lel_t.php",
             type: "get"
               }).done(function(data) {
-            const datax = <?php 
-              {$JsonParser = file_get_contents("./json/Outer.json");echo $JsonParser;}?>;
-            $('#result1').text(datax.type[0] + ' : ' + datax.prop[0] );              
-            $('#result2').text(datax.type[1] + ' : ' + datax.prop[1] );
-            $('#result3').text(datax.type[2] + ' : ' + datax.prop[2] );              
-            $('#result4').text(datax.type[3] + ' : ' + datax.prop[3] );
+            const datat = <?php 
+              {$JsonParser = file_get_contents("./json/Top.json");unlink("./json/Top.json");echo $JsonParser;}?>;
+            $('#result1_t').text(datat.type[0] + ' : ' + datat.prop[0] );              
+            $('#result2_t').text(datat.type[1] + ' : ' + datat.prop[1] );
+            $('#result3_t').text(datat.type[2] + ' : ' + datat.prop[2] );              
+            $('#result4_t').text(datat.type[3] + ' : ' + datat.prop[3] );
             
             });
+            
+            $.ajax({
+            url: "lel_b.php",
+            type: "get"
+              }).done(function(data) {
+            const datab = <?php 
+              {$JsonParser = file_get_contents("./json/Bottom.json");unlink("./json/Bottom.json");echo $JsonParser;}?>;
+            $('#result1_b').text(datab.type[0] + ' : ' + datab.prop[0] );              
+            $('#result2_b').text(datab.type[1] + ' : ' + datab.prop[1] );
+            $('#result3_b').text(datab.type[2] + ' : ' + datab.prop[2] );              
+            $('#result4_b').text(datab.type[3] + ' : ' + datab.prop[3] );
+            
+            });
+            
+            $.ajax({
+            url: "lel_o.php",
+            type: "get"
+              }).done(function(data) {
+            const datao = <?php 
+              {$JsonParser = file_get_contents("./json/Outer.json");unlink("./json/Outer.json");echo $JsonParser;}?>;
+            $('#result1_o').text(datao.type[0] + ' : ' + datao.prop[0] );              
+            $('#result2_o').text(datao.type[1] + ' : ' + datao.prop[1] );
+            $('#result3_o').text(datao.type[2] + ' : ' + datao.prop[2] );              
+            $('#result4_o').text(datao.type[3] + ' : ' + datao.prop[3] );
+            
+            });
+            $.ajax({
+            url: "lel_a.php",
+            type: "get"
+              }).done(function(data) {
+            const dataa = <?php 
+              {$JsonParser = file_get_contents("./json/Overall.json");unlink("./json/Overall.json");echo $JsonParser;}?>;
+            $('#result1_a').text(dataa.type[0] + ' : ' + dataa.prop[0] );              
+            $('#result2_a').text(dataa.type[1] + ' : ' + dataa.prop[1] );
+            $('#result3_a').text(dataa.type[2] + ' : ' + dataa.prop[2] );              
+            $('#result4_a').text(dataa.type[3] + ' : ' + dataa.prop[3] );
+            
+            });
+            
           }
+          
         </script>
     </head>
     <body class="d-flex flex-column h-100">
@@ -149,7 +189,15 @@
                     <!--AI 세미오토 버튼-->
                     <div class="mb-3 row">
                       <div class="col-12 d-grid p-1">
-                      <button type="button" id="files_send" name = "files_send" value="Upload" class="btn btn-lg btn-outline-primary" onclick=" file_frm_submit(this.form); printResult(); semiauto() " >AI Image Analysis (Semi Auto)</button>
+                      <button type="button" id="files_send" name = "files_send" value="Upload" class="btn btn-lg btn-outline-primary" onclick=" file_frm_submit(this.form); printResult();semiauto()" >AI Image Analysis (Semi Auto)</button>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <div id="semi_buttons" class="col-12 d-grid p-1" style="visibility: hidden;">
+                      <button type="button" id="topbtn" name = "files_send" value="Upload" class="btn btn-lg btn-outline-primary" onclick="printResult1()" style="visibility: hidden;">Top</button>
+                      <button type="button" id="btmbtn" name = "files_send" value="Upload" class="btn btn-lg btn-outline-primary" onclick="printResult2()" style="visibility: hidden;">Bottom</button>
+                      <button type="button" id="outbtn" name = "files_send" value="Upload" class="btn btn-lg btn-outline-primary" onclick="printResult3()" style="visibility: hidden;">Outer</button>
+                      <button type="button" id="overbtn" name = "files_send" value="Upload" class="btn btn-lg btn-outline-primary" onclick="printResult4()" style="visibility: hidden;">Overall</button>
                       </div>
                     </div>
                     <!--AI 세미오토 결과 받아왔을 때 or 세미오토 버튼이 눌렸을 때 => visibility 속성 변경(hidden -> visible)-->
@@ -157,15 +205,55 @@
                       <label class="col-md-3 col-form-label">AI 분석 결과</label>
                       <div class="col-md-9">
                         <!--아래 항목들 결과로 받아온 것대로 기입-->
-                        <p name="preMainCat" id="result1">Main Category: ..</p>
-                        <p name="preSubCat" id="result2">Sub Category: ..</p>
-                        <p name="preStyle" id="result3">Style: ..</p>
-                        <p name="prePattern" id="result4">Pattern: ..</p>
+                        <p name="preMainCat" id="result1_t">Main Category: ..</p>
+                        <p name="preSubCat" id="result2_t">Sub Category: ..</p>
+                        <p name="preStyle" id="result3_t">Style: ..</p>
+                        <p name="prePattern" id="result4_t">Pattern: ..</p>
+                        <p>
+                          Main Color: 
+                          <canvas name="preColor" style="width: 30px; height: 30px; background-color: rgb(40,42,57);">
+                        </p>
+                      </div>
+                    </div>
+                    <div id="semi_result2" class="mb-3 row" style="visibility: hidden;">
+                      <label class="col-md-3 col-form-label">AI 분석 결과</label>
+                      <div class="col-md-9">
+                        <!--아래 항목들 결과로 받아온 것대로 기입-->
+                        <p name="preMainCat" id="result1_b">Main Category: ..</p>
+                        <p name="preSubCat" id="result2_b">Sub Category: ..</p>
+                        <p name="preStyle" id="result3_b">Style: ..</p>
+                        <p name="prePattern" id="result4_b">Pattern: ..</p>
+                        <p>
+                          Main Color: 
+                          <canvas name="preColor" style="width: 30px; height: 30px; background-color: rgb(40,42,57);">
+                        </p>
+                      </div> 
+                    </div>
+                    <div id="semi_result3" class="mb-3 row" style="visibility: hidden;">
+                      <label class="col-md-3 col-form-label">AI 분석 결과</label>
+                      <div class="col-md-9">
+                        <!--아래 항목들 결과로 받아온 것대로 기입-->
+                        <p name="preMainCat" id="result1_o">Main Category: ..</p>
+                        <p name="preSubCat" id="result2_o">Sub Category: ..</p>
+                        <p name="preStyle" id="result3_o">Style: ..</p>
+                        <p name="prePattern" id="result4_o">Pattern: ..</p>
+                        <p>
+                          Main Color: 
+                          <canvas name="preColor" style="width: 30px; height: 30px; background-color: rgb(40,42,57);">
+                        </p>
+                    </div>
+                    <div id="semi_result4" class="mb-3 row" style="visibility: hidden;">
+                      <label class="col-md-3 col-form-label">AI 분석 결과</label>
+                      <div class="col-md-9">
+                        <!--아래 항목들 결과로 받아온 것대로 기입-->
+                        <p name="preMainCat" id="result1_a">Main Category: ..</p>
+                        <p name="preSubCat" id="result2_a">Sub Category: ..</p>
+                        <p name="preStyle" id="result3_a">Style: ..</p>
+                        <p name="prePattern" id="result4_a">Pattern: ..</p>
                         <p>
                           Main Color: 
                           <canvas name="preColor" style="width: 30px; height: 30px; background-color: rgb(40,42,57);"></div>
                         </p>
-                      </div>
                     </div>
                   </form>
                 </div>
@@ -279,7 +367,60 @@
             }
 
             function printResult() {
+              var result = document.getElementById('semi_buttons');
+              result.style.visibility = "visible"
+              <?php  
+                if(file_exists("./json/Top.json")){
+                  echo "var result = document.getElementById('topbtn');
+                  result.style.visibility = 'visible'";}
+                if(file_exists("./json/Bottom.json")){
+                  echo "var result = document.getElementById('btmbtn');
+                  result.style.visibility = 'visible'";}
+                if(file_exists("./json/Outer.json")){
+                  echo "var result = document.getElementById('outbtn');
+                  result.style.visibility = 'visible'";}
+                if(file_exists("./json/Overall.json")){
+                  echo "var result = document.getElementById('overbtn');
+                  result.style.visibility = 'visible'";}   ?>
+            }
+            function printResult1() {
               var result = document.getElementById('semi_result');
+              result.style.visibility = "visible"
+              var result = document.getElementById('semi_result2');
+              result.style.visibility = "hidden"
+              var result = document.getElementById('semi_result3');
+              result.style.visibility = "hidden"
+              var result = document.getElementById('semi_result4');
+              result.style.visibility = "hidden"
+            }
+            function printResult2() {
+              var result = document.getElementById('semi_result');
+              result.style.visibility = "hidden"
+              var result = document.getElementById('semi_result2');
+              result.style.visibility = "visible"
+              var result = document.getElementById('semi_result3');
+              result.style.visibility = "hidden"
+              var result = document.getElementById('semi_result4');
+              result.style.visibility = "hidden"
+            }
+            function printResult3() {
+              var result = document.getElementById('semi_result');
+              result.style.visibility = "hidden"
+              var result = document.getElementById('semi_result2');
+              result.style.visibility = "hidden"
+              var result = document.getElementById('semi_result3');
+              result.style.visibility = "visible"
+              var result = document.getElementById('semi_result4');
+              result.style.visibility = "hidden"
+            }
+            function printResult4() {
+              var result = document.getElementById('semi_result');
+              result.style.visibility = "hidden"
+              var result = document.getElementById('semi_result2');
+              result.style.visibility = "hidden"
+              var result = document.getElementById('semi_result3');
+              result.style.visibility = "hidden"
+              var result = document.getElementById('semi_result4');
               result.style.visibility = "visible"
             }
         </script>
