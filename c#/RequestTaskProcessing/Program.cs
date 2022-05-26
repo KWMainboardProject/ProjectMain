@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 using System.Threading;
 using RequestTaskProcessing.StrategyOperator;
+using RequestTaskProcessing.StrategyOperator.SubCategory;
 
 namespace RequestTaskProcessing
 {
@@ -78,7 +79,7 @@ namespace RequestTaskProcessing
         }
         static void TestSubCategory()
         {
-            TopClassification tc = TopClassification.GetInstance();
+            //TopClassification tc = TopClassification.GetInstance();
             TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
             
             const int iterNum = 10;
@@ -90,11 +91,11 @@ namespace RequestTaskProcessing
                 message.resource = new StringContainer("img_path", @"C:\Users\vbmrk\Downloads/hud.jpg");//file name
                 message.type = MessageType.Request_FindSubCategory_Top_ImagePath;
 
-                tc.SetResource(message);
-                tc.Work();
-                TaskMessage m = tc.GetMessage();
-                m.Print();
-                tc.ClearResource();
+                //tc.SetResource(message);
+                //tc.Work();
+                //TaskMessage m = tc.GetMessage();
+                //m.Print();
+                //tc.ClearResource();
             }
         }
         static void TestJsonFile()
