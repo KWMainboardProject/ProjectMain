@@ -79,7 +79,7 @@ namespace RequestTaskProcessing.StrategyOperator.Pattern
                                        .OrderByDescending(x => x.Confidence)
                                        .Take(1);
 
-            Console.WriteLine("Top 1 predictions for ResNet34 v2...");
+            Console.WriteLine("Pattern predictions for ResNet34 v2...");
             Console.WriteLine("--------------------------------------------------------------");
             foreach (var t in top10)
             {
@@ -191,8 +191,7 @@ namespace RequestTaskProcessing.StrategyOperator.Pattern
             //보내는 메세지
             lock (Holder.instance)
             {
-                TaskMessage taskMessage = new TaskMessage(requestMessage);
-                taskMessage.type = MessageType.Receive_Container_SubCategory_Top;        //set
+                TaskMessage taskMessage = new TaskMessage(requestMessage);     //set
                 switch (taskMessage.type) 
                 {
                     case MessageType.Request_FindPattern_Top_ImagePath:

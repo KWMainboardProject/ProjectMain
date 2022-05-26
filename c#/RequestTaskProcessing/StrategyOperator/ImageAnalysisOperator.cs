@@ -141,12 +141,12 @@ namespace RequestTaskProcessing.StrategyOperator
             }
 
             //request style
-            TaskMessage styM = new TaskMessage(requestMessage);
-            styM.type = MessageType.Request_FindStyle_ImagePath;        //set
-            styM.productor = GetProductor();                                   //set
-            styM.resource = rbimgPath;                                         //set
-            waitMessage.Add(MessageType.Receive_Container_Style);     //받을 메세지 추가
-            requester.GetProductor().Product(styM);                                          //request
+            //TaskMessage styM = new TaskMessage(requestMessage);
+            //styM.type = MessageType.Request_FindStyle_ImagePath;        //set
+            //styM.productor = GetProductor();                                   //set
+           // styM.resource = rbimgPath;                                         //set
+           // waitMessage.Add(MessageType.Receive_Container_Style);     //받을 메세지 추가
+            //requester.GetProductor().Product(styM);                                          //request
 
             //calc color
 
@@ -243,7 +243,7 @@ namespace RequestTaskProcessing.StrategyOperator
         public void OpenMessage(TaskMessage message)
         {
             //delete wait message
-            waitMessage.Remove(message.type);
+               waitMessage.Remove(message.type);
             //message.Print();
             //open & input to container
             switch (message.type)
@@ -272,7 +272,7 @@ namespace RequestTaskProcessing.StrategyOperator
                     break;
                 case MessageType.Receive_Container_SubCategory_Overall:
                 case MessageType.Receive_Container_Pattern_Overall:
-                    container.overall.SetAtribute(message.resource);        //attach
+                    container.overall.SetAtribute(message.resource);        //attach 
                     break;
                 case MessageType.Receive_Container_Style:
                     foreach(CompoundContainer obj in container.GetList())

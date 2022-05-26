@@ -80,7 +80,7 @@ namespace RequestTaskProcessing.StrategyOperator.Style
                                        .OrderByDescending(x => x.Confidence)
                                        .Take(1);
 
-            Console.WriteLine("Top 1 predictions for ResNet34 v2...");
+            Console.WriteLine("Style predictions for ResNet34 v2...");
             Console.WriteLine("--------------------------------------------------------------");
             foreach (var t in top10)
             {
@@ -197,7 +197,7 @@ namespace RequestTaskProcessing.StrategyOperator.Style
                 taskMessage.productor = null;                                   //set
                 taskMessage.resource = container;
                 return taskMessage;
-            
+            }
         }
 
         public void SetResource(TaskMessage message)

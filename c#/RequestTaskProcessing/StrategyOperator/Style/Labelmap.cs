@@ -8,7 +8,9 @@
             "dandy",
             "formal",
             "girlish",
-            "sports"
+            "romantic",
+            "sports",
+            "street"
         };
     }
 }

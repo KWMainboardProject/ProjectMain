@@ -86,7 +86,12 @@ namespace RequestTaskProcessing
 			{
 				foreach (IJObjectUseAbleContainer container in containers)
 				{
-					value.Add(container.GetKey(), container.GetValue());
+					try
+					{
+						value.Add(container.GetKey(), container.GetValue());
+
+					}
+					catch { }
 				}
 			}
 
@@ -487,7 +492,7 @@ namespace RequestTaskProcessing
 			SetAtribute(color);
 			SetAtribute(subcategory);
 			SetAtribute(pattern);
-			SetAtribute(style);
+			//SetAtribute(style);
 		}
 		public override string GetKey()
 		{

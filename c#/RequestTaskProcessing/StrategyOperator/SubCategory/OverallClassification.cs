@@ -80,7 +80,7 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
                                        .OrderByDescending(x => x.Confidence)
                                        .Take(1);
 
-            Console.WriteLine("Top 1 predictions for ResNet50 v2...");
+            Console.WriteLine("Overall 1 predictions for ResNet50 v2...");
             Console.WriteLine("--------------------------------------------------------------");
             foreach (var t in top10)
             {
