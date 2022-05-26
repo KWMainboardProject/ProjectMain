@@ -27,9 +27,39 @@ namespace RequestTaskProcessing
             //TestSubCategory();
             //Myftp.Run_server();
             //TestSharePath();
-            TestYolo();
+            //TestYolo();
+            TestClassification();
         }
+        static void TestClassification()
+        {
+            TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
+            GPUWorker worker = new GPUWorker();
+            worker.Start();
+            sender.Start();
 
+            IMessageProductAble p = worker.GetProductor();
+            foreach (var file in ShareWorkPath.GetFileList(ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH))
+            {
+                var fname = Path.GetFileName(file);
+                TaskMessage m = new TaskMessage(
+                    fname,
+                    sender.GetProductor(),
+                    MessageType.Request_FindSubCategory_Top_ImagePath,
+                    new StringContainer("img_path", file));
+                p.Product(m);
+            }
+
+            worker.SetTimeOutThreshold();
+            Console.WriteLine("Join taskManager");
+            worker.Join();
+
+            sender.SetTimeOutThreshold();
+            Console.WriteLine("Set Time out task manager");
+            sender.Join();
+
+            Console.WriteLine("complete##################################################");
+
+        }
         static void TestYolo()
         {
             
@@ -77,27 +107,27 @@ namespace RequestTaskProcessing
         {
             ShareWorkPath swp = ShareWorkPath.GetInstance();
         }
-        //static void TestSubCategory()
-        //{
-        //    TopClassification tc = TopClassification.GetInstance();
-        //    TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
+        static void TestSubCategory()
+        {
+            TopClassification tc = TopClassification.GetInstance();
+            TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
             
-        //    const int iterNum = 10;
-        //    for(int i=0; i<iterNum; i++)
-        //    {
-        //        TaskMessage message = new TaskMessage();
-        //        message.ip.Value = "top" + i.ToString();
-        //        message.productor = sender.GetProductor();
-        //        message.resource = new StringContainer("img_path", @"C:\Users\vbmrk\Downloads/hud.jpg");//file name
-        //        message.type = MessageType.Request_FindSubCategory_Top_ImagePath;
+            const int iterNum = 10;
+            for(int i=0; i<iterNum; i++)
+            {
+                TaskMessage message = new TaskMessage();
+                message.ip.Value = "top" + i.ToString();
+                message.productor = sender.GetProductor();
+                message.resource = new StringContainer("img_path", @"C:\Users\vbmrk\Downloads/hud.jpg");//file name
+                message.type = MessageType.Request_FindSubCategory_Top_ImagePath;
 
-        //        tc.SetResource(message);
-        //        tc.Work();
-        //        TaskMessage m = tc.GetMessage();
-        //        m.Print();
-        //        tc.ClearResource();
-        //    }
-        //}
+                tc.SetResource(message);
+                tc.Work();
+                TaskMessage m = tc.GetMessage();
+                m.Print();
+                tc.ClearResource();
+            }
+        }
         static void TestJsonFile()
         {
             DetectedObjectsContainer fashion = new DetectedObjectsContainer();
@@ -452,9 +482,10 @@ namespace RequestTaskProcessing
                     
                     //Success consume
                     Console.WriteLine(thread.ToString()+" : resource");
-                    FashionObjectsContainer fc = new FashionObjectsContainer();
-                    fc.SetJObject(m.resource.GetJObject());
-                    Console.WriteLine(fc.GetJObject().ToString());
+                    m.Print();
+                    //SubCategoryContainer fc = new SubCategoryContainer();
+                    //fc.SetJObject(m.resource.GetJObject());
+                    //Console.WriteLine(fc.GetJObject().ToString());
                 }
             }
             public override void SetTimeOutThreshold(int time = 5000)

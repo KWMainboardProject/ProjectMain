@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using RequestTaskProcessing;
+using RequestTaskProcessing.StrategyOperator.SubCategory;
 
 namespace RequestTaskProcessing.StrategyOperator
 {
