@@ -90,6 +90,7 @@ namespace RequestTaskProcessing.StrategyOperator
             //save croped img - crop된 이미지를 저장해서 각 객체 밑에 croped save img path를 추가해 준다.
             SaveCropImg();
             //request subcategory * (0,4) 
+            //request pattern * (0,4)
             foreach (CompoundContainer c in container.GetList())
             {
                 MainCategoryContainer mc = c as MainCategoryContainer;
@@ -99,25 +100,52 @@ namespace RequestTaskProcessing.StrategyOperator
                     subM = new TaskMessage(requestMessage);
                     ptnM = new TaskMessage(requestMessage);
 
+                    subM.productor = GetProductor();
+                    ptnM.productor = GetProductor();
+
+                    subM.resource = mc.cropimgPath;
+                    ptnM.resource = mc.cropimgPath;
+
                     //Console.WriteLine(mc.GetJObject().ToString());
                     switch (mc.GetKey())
                     {
                         case "Top":
+                            waitMessage.Add(MessageType.Receive_Container_Pattern_Top);     //받을 메세지 추가
+                            waitMessage.Add(MessageType.Receive_Container_SubCategory_Top);     //받을 메세지 추가
+                            subM.type = MessageType.Request_FindSubCategory_Top_ImagePath;
+                            ptnM.type = MessageType.Request_FindPattern_Top_ImagePath;
                             break;
                         case "Bottom":
+                            waitMessage.Add(MessageType.Receive_Container_Pattern_Bottom);     //받을 메세지 추가
+                            waitMessage.Add(MessageType.Receive_Container_SubCategory_Bottom);     //받을 메세지 추가
+                            subM.type = MessageType.Request_FindSubCategory_Bottom_ImagePath;
+                            ptnM.type = MessageType.Request_FindPattern_Bottom_ImagePath;
                             break;
                         case "Overall":
+                            waitMessage.Add(MessageType.Receive_Container_Pattern_Overall);     //받을 메세지 추가
+                            waitMessage.Add(MessageType.Receive_Container_SubCategory_Overall);     //받을 메세지 추가
+                            subM.type = MessageType.Request_FindSubCategory_Overall_ImagePath;
+                            ptnM.type = MessageType.Request_FindPattern_Overall_ImagePath;
                             break;
                         case "Outer":
+                            waitMessage.Add(MessageType.Receive_Container_Pattern_Outer);     //받을 메세지 추가
+                            waitMessage.Add(MessageType.Receive_Container_SubCategory_Outer);     //받을 메세지 추가
+                            subM.type = MessageType.Request_FindSubCategory_Outer_ImagePath;
+                            ptnM.type = MessageType.Request_FindPattern_Outer_ImagePath;
                             break;
                     }
+
+                    requester.GetProductor().Product(subM);
+                    requester.GetProductor().Product(ptnM);
                 }
             }
-
-
-            //request pattern * (0,4)
-
             //request style
+            TaskMessage styM = new TaskMessage(requestMessage);
+            styM.type = MessageType.Request_FindMainCategory_ImagePath;        //set
+            styM.productor = GetProductor();                                   //set
+            styM.resource = rbimgPath;                                         //set
+            waitMessage.Add(MessageType.Request_FindStyle_ImagePath);     //받을 메세지 추가
+            requester.GetProductor().Product(styM);                                          //request
 
             //calc color
 
@@ -161,8 +189,6 @@ namespace RequestTaskProcessing.StrategyOperator
                     }
                 }
             }
-            Console.WriteLine("Test SaveCropImg");
-            Console.WriteLine(container.GetJObject().ToString());
         }
         /// <summary>
         /// 
