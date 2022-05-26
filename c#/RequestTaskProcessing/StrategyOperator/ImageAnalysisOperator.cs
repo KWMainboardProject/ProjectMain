@@ -139,18 +139,21 @@ namespace RequestTaskProcessing.StrategyOperator
                     requester.GetProductor().Product(ptnM);
                 }
             }
+
             //request style
             TaskMessage styM = new TaskMessage(requestMessage);
-            styM.type = MessageType.Request_FindMainCategory_ImagePath;        //set
+            styM.type = MessageType.Request_FindStyle_ImagePath;        //set
             styM.productor = GetProductor();                                   //set
             styM.resource = rbimgPath;                                         //set
-            waitMessage.Add(MessageType.Request_FindStyle_ImagePath);     //받을 메세지 추가
+            waitMessage.Add(MessageType.Receive_Container_Style);     //받을 메세지 추가
             requester.GetProductor().Product(styM);                                          //request
 
             //calc color
 
             //wait returned resources
-
+            Start(); // Set container
+            Join();
+            InitThread();
             //merge resource
 
             //save resource
@@ -241,6 +244,7 @@ namespace RequestTaskProcessing.StrategyOperator
         {
             //delete wait message
             waitMessage.Remove(message.type);
+            //message.Print();
             //open & input to container
             switch (message.type)
             {

@@ -4,6 +4,7 @@ using System.Text;
 using RequestTaskProcessing;
 using RequestTaskProcessing.StrategyOperator.SubCategory;
 
+
 namespace RequestTaskProcessing.StrategyOperator
 {
     /// <summary>
@@ -45,19 +46,19 @@ namespace RequestTaskProcessing.StrategyOperator
                         strategyOperator = OverallClassification.GetInstance();
                         break;
                     case MessageType.Request_FindPattern_Top_ImagePath:
-                        throw new NotImplementedException();
+                        strategyOperator = Pattern.PatternClassification.GetInstance();
                         break;
                     case MessageType.Request_FindPattern_Bottom_ImagePath:
-                        throw new NotImplementedException();
+                        strategyOperator = Pattern.PatternClassification.GetInstance();
                         break;
                     case MessageType.Request_FindPattern_Outer_ImagePath:
-                        throw new NotImplementedException();
+                        strategyOperator = Pattern.PatternClassification.GetInstance();
                         break;
                     case MessageType.Request_FindPattern_Overall_ImagePath:
-                        throw new NotImplementedException();
+                        strategyOperator = Pattern.PatternClassification.GetInstance();
                         break;
                     case MessageType.Request_FindStyle_ImagePath:
-                        throw new NotImplementedException();
+                        strategyOperator = Style.StyleClassification.GetInstance();
                         break;
                 }
                 return strategyOperator;
