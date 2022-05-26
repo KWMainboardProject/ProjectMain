@@ -171,17 +171,17 @@ namespace RequestTaskProcessing.StrategyOperator
                     JArray box = mc.boundboxContainer.GetValue() as JArray;
                     try
                     {
-
                         //Crop img
-                        Mat cropImg = src.SubMat(
-                            (int)box[0], (int)box[1],
-                            (int)box[2], (int)box[3]);
+                        using (Mat cropImg = src.SubMat(
+                                (int)box[0], (int)box[1],
+                                (int)box[2], (int)box[3]))
+                        {
+                            //Set img name
+                            mc.cropimgPath.Value = workingPath + @"\croped_" + mc.GetKey() + @".jpg";
 
-                        //Set img name
-                        mc.cropimgPath.Value = workingPath + @"\croped_" + mc.GetKey() + @".jpg";
-
-                        //Write crop img
-                        cropImg.ImWrite(mc.cropimgPath.Value);
+                            //Write crop img
+                            cropImg.ImWrite(mc.cropimgPath.Value);
+                        }
                     }
                     catch(Exception ex)
                     {
