@@ -25,10 +25,10 @@ namespace RequestTaskProcessing
             //TestTaskMessage();
             //TestJsonFile();
             //TestSubCategory();
-            //Myftp.Run_server();
+            Myftp.Run_server();
             //TestSharePath();
             //TestYolo();
-            TestClassification();
+            //TestClassification();
         }
         static void TestClassification()
         {

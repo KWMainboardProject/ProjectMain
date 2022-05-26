@@ -93,54 +93,23 @@ namespace RequestTaskProcessing
                             case "Overall": end = "_a.json"; break;
                             default: throw new NullReferenceException();
                         }
-                        string sub = "";
-                        switch (f.GetKey())
-                        {
-                            case "Top": sub = "Pullover"; break;
-                            case "Bottom": sub = "Jogger Pants"; break;
-                            case "Outer": sub = "Short Blouson"; break;
-                            case "Overall": sub = "OnePieceDress"; break;
-                            default: throw new NullReferenceException();
-                        }
-                        string pat = "";
-                        switch (f.GetKey())
-                        {
-                            case "Top": pat = "solid"; break;
-                            case "Bottom": pat = "solid"; break;
-                            case "Outer": pat = "solid"; break;
-                            case "Overall": pat = "solid"; break;
-                            default: throw new NullReferenceException();
-                        }
-                        string stl = "";
-                        switch (f.GetKey())
-                        {
-                            case "Top": stl = "casual"; break;
-                            case "Bottom": stl = "casual"; break;
-                            case "Outer": stl = "casual"; break;
-                            case "Overall": stl = "casual"; break;
-                            default: throw new NullReferenceException();
-                        }
 
                         MainCategoryContainer mc = new MainCategoryContainer(f.GetKey());
                         mc.SetBoundbox((JArray)f.boundbox.GetValue());
-                        f.subcategory.classficationContainer.SetClassfication(sub);///////////////////
                         mc.SetAtribute(f.subcategory);
-                        f.color.main.SetDumi();///////////////////////////////////////////////////////////////
                         mc.SetAtribute(f.color.main);
-                        f.color.sub.SetDumi();///////////////////////////////////////////////////////////////
                         mc.SetAtribute(f.color.sub);
-                        f.pattern.classficationContainer.SetClassfication(pat);/////////////////////////
                         mc.SetAtribute(f.pattern);
-                        f.style.classficationContainer.SetClassfication(stl);//////////////////////
                         mc.SetAtribute(f.style);
 
                         Console.WriteLine(mc.GetJObject().ToString());
-                        File.WriteAllText(dir + @"\result\" + file_name + end, mc.GetJObject().ToString());
-                        Myftp.Upload(dir + @"\result\" + file_name + end, file_name + end);
-                        File.Delete(dir + @"\result\" + file_name + end);
+                        File.WriteAllText(ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + file_name + end, mc.GetJObject().ToString());
+                        Myftp.Upload(ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + file_name + end, file_name + end);
+                        Console.WriteLine("Delete : ");
+                        File.Delete(ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + file_name + end);
                     }
                 }
-                File.Delete(dir + @"\image\" + m.ip.Value);
+                File.Delete(ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH + @"\" + file_name + ".jpg");
             }
         }
         public override void SetTimeOutThreshold(int time = 5000)
@@ -158,7 +127,7 @@ namespace RequestTaskProcessing
         public static void GetKey()
         {
             string str = null;
-            using (StreamReader sr = new StreamReader(@"C:\key\key.json"))
+            using (StreamReader sr = new StreamReader(ShareWorkPath.GetInstance().KEY_PATH +@"\key.json"))
             {
                 str = sr.ReadToEnd();
             }
@@ -296,16 +265,24 @@ namespace RequestTaskProcessing
                     foreach (string file in file_list)
                         if (!file.Equals(".") && !file.Equals(".."))
                         {
-                            Download(file, dir + @"\image\" + file);
+                            string[] name_buffer = file.Split('.');
+                            string file_name = "";
+                            for (int i = 0; i < name_buffer.Length - 1; i++)
+                            {
+                                file_name += name_buffer[i];
+                                if (i < name_buffer.Length - 2)
+                                    file_name += ".";
+                            }
+                            Download(file, ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH + @"\" + file_name + ".jpg");
                             Console.WriteLine("download " + file);
                             Remove(file);
                             Console.WriteLine("remove " + file);
 
                             TaskMessage m = new TaskMessage(
-                                file,
+                                file_name + ".jpg",
                                 sender.GetProductor(),
                                 MessageType.Request_ImageAnalysis_ImagePath,
-                                new StringContainer(file, dir + @"\image\" + file));
+                                new StringContainer(file_name + ".jpg", ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH + @"\" + file_name + ".jpg"));
                             p.Product(m);
                         }
             }
