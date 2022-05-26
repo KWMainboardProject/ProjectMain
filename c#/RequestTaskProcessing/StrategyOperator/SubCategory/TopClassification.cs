@@ -46,7 +46,7 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
             bool isAuto = true;
 
             Mat img = Cv2.ImRead(imageFilePath);
-            img.Resize(224, 224);
+            Cv2.Resize(img, img, imgSize);
             var letterimg = CreateLetterbox(img, imgSize, padColor, out ratio, out diff1, out diff2, auto: isAuto, scaleFill: !isAuto);
             letterimg.ConvertTo(imageFloat, MatType.CV_32FC3, (float)(1 / 255.0));
             Mat data = Mat.Zeros(letterimg.Size(), MatType.CV_32FC3);
@@ -161,10 +161,10 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
                 dh2 = dH - dH_h * 2;
             }
 
-            //if (newImage.Width != newUnpad.Width || newImage.Height != newUnpad.Height)
-            //{
-            //    Cv2.Resize(newImage, newImage, newUnpad);
-            //}
+            if (newImage.Width != newUnpad.Width || newImage.Height != newUnpad.Height)
+            {
+                Cv2.Resize(newImage, newImage, newUnpad);
+            }
             Cv2.CopyMakeBorder(newImage, newImage, dH_h + dh2, dH_h, dW_h + dw2, dW_h, BorderTypes.Constant, color);
             diff = new OpenCvSharp.Point(dW_h, dH_h);
             diff2 = new OpenCvSharp.Point(dw2, dh2);
@@ -208,9 +208,7 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
         }
         protected TaskMessage requestMessage = null;
         protected SubCategoryContainer container;
-        protected Microsoft.Scripting.Hosting.ScriptEngine engine = null;
-        protected Microsoft.Scripting.Hosting.ScriptScope scope = null;
-        protected Microsoft.Scripting.Hosting.ScriptSource source = null;
+        
 
         public void Work()
         {

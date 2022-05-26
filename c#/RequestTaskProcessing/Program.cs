@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 using System.Threading;
 using RequestTaskProcessing.StrategyOperator;
+using RequestTaskProcessing.StrategyOperator.SubCategory;
 
 namespace RequestTaskProcessing
 {
@@ -24,11 +25,41 @@ namespace RequestTaskProcessing
             //TestTaskMessage();
             //TestJsonFile();
             //TestSubCategory();
-            Myftp.Run_server();
+            //Myftp.Run_server();
             //TestSharePath();
             //TestYolo();
+            TestClassification();
         }
+        static void TestClassification()
+        {
+            TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
+            GPUWorker worker = new GPUWorker();
+            worker.Start();
+            sender.Start();
 
+            IMessageProductAble p = worker.GetProductor();
+            foreach (var file in ShareWorkPath.GetFileList(ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH))
+            {
+                var fname = Path.GetFileName(file);
+                TaskMessage m = new TaskMessage(
+                    fname,
+                    sender.GetProductor(),
+                    MessageType.Request_FindSubCategory_Top_ImagePath,
+                    new StringContainer("img_path", file));
+                p.Product(m);
+            }
+
+            worker.SetTimeOutThreshold();
+            Console.WriteLine("Join taskManager");
+            worker.Join();
+
+            sender.SetTimeOutThreshold();
+            Console.WriteLine("Set Time out task manager");
+            sender.Join();
+
+            Console.WriteLine("complete##################################################");
+
+        }
         static void TestYolo()
         {
             
@@ -451,9 +482,10 @@ namespace RequestTaskProcessing
                     
                     //Success consume
                     Console.WriteLine(thread.ToString()+" : resource");
-                    FashionObjectsContainer fc = new FashionObjectsContainer();
-                    fc.SetJObject(m.resource.GetJObject());
-                    Console.WriteLine(fc.GetJObject().ToString());
+                    m.Print();
+                    //SubCategoryContainer fc = new SubCategoryContainer();
+                    //fc.SetJObject(m.resource.GetJObject());
+                    //Console.WriteLine(fc.GetJObject().ToString());
                 }
             }
             public override void SetTimeOutThreshold(int time = 5000)
