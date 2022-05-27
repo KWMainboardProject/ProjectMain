@@ -199,6 +199,8 @@ namespace RequestTaskProcessing.StrategyOperator.Pattern
                         break;
                     case MessageType.Request_FindPattern_Bottom_ImagePath:
                         taskMessage.type = MessageType.Receive_Container_Pattern_Bottom;
+                        container.confidenceContainer.SetConfidence(1);
+                        container.classficationContainer.SetClassfication(LabelMap.Labels[7]);
                         break;
                     case MessageType.Request_FindPattern_Overall_ImagePath:
                         taskMessage.type = MessageType.Receive_Container_Pattern_Overall;

@@ -100,16 +100,23 @@ namespace RequestTaskProcessing
                         mc.SetAtribute(f.color.main);
                         mc.SetAtribute(f.color.sub);
                         mc.SetAtribute(f.pattern);
-                        mc.SetAtribute(f.style);
-
+                        //mc.SetAtribute(f.style);
                         Console.WriteLine(mc.GetJObject().ToString());
                         File.WriteAllText(ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + file_name + end, mc.GetJObject().ToString());
                         Myftp.Upload(ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + file_name + end, file_name + end);
-                        Console.WriteLine("Delete : ");
                         File.Delete(ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + file_name + end);
                     }
                 }
                 File.Delete(ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH + @"\" + file_name + ".jpg");
+                if (lll == 0)
+                {
+                    string end = "_t.json";
+                    Console.WriteLine(fc.top.GetJObject().ToString());
+                    File.WriteAllText(ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + file_name + end, fc.top.GetJObject().ToString());
+                    Myftp.Upload(ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + file_name + end, file_name + end);
+                    File.Delete(ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + file_name + end);
+                }
+                Console.WriteLine("Wait Next File...");
             }
         }
         public override void SetTimeOutThreshold(int time = 5000)
@@ -288,7 +295,6 @@ namespace RequestTaskProcessing
                             p.Product(m);
                         }
                     }
-                    Console.WriteLine("Wait Next File...");
                 }
             }
         }
