@@ -661,9 +661,17 @@ namespace RequestTaskProcessing
 		{
 			currentPath.Value = Environment.CurrentDirectory;
 			rootPath.Value = System.IO.Directory.GetParent(currentPath.Value).ToString();
-			for (int i = 0; i < 4; i++)
-			{
-				rootPath.Value = System.IO.Directory.GetParent(rootPath.Value).ToString();
+			string target = "ProjectMain";
+			for(int i=0; i<6; i++)
+            {
+                try
+                {
+					rootPath.Value = System.IO.Directory.GetParent(rootPath.Value).ToString();
+				}
+                catch { }
+				Console.WriteLine(System.IO.Directory.GetParent(rootPath.Value).ToString());
+				if (target == System.IO.Path.GetFileName(rootPath.Value))
+					break;
 			}
 			weightPath.Value = rootPath.Value + @"\weight";
 			pythonPath.Value = rootPath.Value + @"\python";
