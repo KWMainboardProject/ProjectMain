@@ -217,6 +217,7 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
                 //절대 경로
                 string img_abs_path = requestMessage.resource.GetValue().ToString();
 
+                Console.WriteLine("Top category img path : " + img_abs_path);
                 classification(img_abs_path);
 
                 //결과 (conf, class)

@@ -12,13 +12,17 @@ namespace RequestTaskProcessing.StrategyOperator
     {
         protected YoloDetector yolo = null;
         protected Mat img = null;
+        protected TaskMessage requestMessage = null;
+        protected EmptyDetectedObjectsContainer container;
 
         protected ClothesObjectDetectOperatorYolov5()
         {
             //plz set gpu device
-            Console.WriteLine("Loading : " + ShareWorkPath.GetInstance().WEIGHT_PATH + @"\FashionDetector.onnx");
-            yolo = new YoloDetector(ShareWorkPath.GetInstance().WEIGHT_PATH + @"\FashionDetector.onnx");
-            Console.WriteLine("Complete load FashionDetector.onnx");
+            string nlpName = @"\FashionDetector.onnx";
+            Console.WriteLine("Loading : " + ShareWorkPath.GetInstance().WEIGHT_PATH + nlpName);
+            yolo = new YoloDetector(ShareWorkPath.GetInstance().WEIGHT_PATH + nlpName);
+            Console.WriteLine("Complete load " + nlpName);
+
             ClearResource();
         }
 
@@ -49,8 +53,6 @@ namespace RequestTaskProcessing.StrategyOperator
 
         }
         
-        protected TaskMessage requestMessage = null;
-        protected EmptyDetectedObjectsContainer container;
         public void Work()
         {
             lock (Holder.instance)

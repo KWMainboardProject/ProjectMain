@@ -275,7 +275,7 @@ namespace RequestTaskProcessing.StrategyOperator.Yolov5
             return array;
         }
 
-        public static Box CalcRescaleBox(Box dBox, Size orgImage, Size resizeImage, Point diff1, Point diff2)
+        public static Box CalcRescaleBox(Box dBox, Size targetImage, Size currintImage, Point diff1, Point diff2)
         {
             Box rescaleBox = new Box {
                 Xmin = 0,
@@ -284,14 +284,14 @@ namespace RequestTaskProcessing.StrategyOperator.Yolov5
                 Ymax = 0
             };
             Point rImgStart = new Point(diff1.X + diff2.X, diff1.Y + diff2.Y);
-            Point rImgEnd = new Point(resizeImage.Width - rImgStart.X, resizeImage.Height - rImgStart.Y);
+            Point rImgEnd = new Point(currintImage.Width - rImgStart.X, currintImage.Height - rImgStart.Y);
 
-            var ratio_x = orgImage.Width / (float)(rImgEnd.X - rImgStart.X);
-            var ratio_y = orgImage.Height / (float)(rImgEnd.Y - rImgStart.Y);
+            var ratio_x = targetImage.Width / (float)(rImgEnd.X - rImgStart.X);
+            var ratio_y = targetImage.Height / (float)(rImgEnd.Y - rImgStart.Y);
             rescaleBox.Xmin = Math.Max(0, ratio_x * (dBox.Xmin - rImgStart.X));
-            rescaleBox.Xmax = Math.Min(resizeImage.Width, ratio_x * (dBox.Xmax - rImgStart.X));
+            rescaleBox.Xmax = Math.Min(targetImage.Width-1, ratio_x * (dBox.Xmax - rImgStart.X));
             rescaleBox.Ymin = Math.Max(0, ratio_y * (dBox.Ymin - rImgStart.Y));
-            rescaleBox.Ymax = Math.Min(resizeImage.Height ,ratio_y * (dBox.Ymax - rImgStart.Y));
+            rescaleBox.Ymax = Math.Min(targetImage.Height-1 ,ratio_y * (dBox.Ymax - rImgStart.Y));
             return rescaleBox;
         }
 
