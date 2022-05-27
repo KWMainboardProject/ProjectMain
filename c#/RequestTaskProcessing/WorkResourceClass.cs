@@ -364,10 +364,10 @@ namespace RequestTaskProcessing
 		public void SetBoundBox(int x_min, int x_max, int y_min, int y_max)
 		{
 			boundbox = new JArray();
-			this.boundbox.Add(x_min);
-			this.boundbox.Add(x_max);
-			this.boundbox.Add(y_min);
-			this.boundbox.Add(y_max);
+			this.boundbox.Add(Math.Max(x_min, 0));
+			this.boundbox.Add(Math.Max(x_max, 0));
+			this.boundbox.Add(Math.Max(y_min, 0));
+			this.boundbox.Add(Math.Max(y_max, 0));
 		}
 		public void SetDumi()
 		{

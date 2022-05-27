@@ -255,7 +255,7 @@ namespace RequestTaskProcessing.StrategyOperator
                     break;
                 case MessageType.Receive_Container_DetectedObjects:
                     //Console.WriteLine(this.ToString() + "-> Open Message Detected Objects");
-                    //message.Print();
+                    message.Print();
                     container.SetJObject(message.resource.GetJObject()); //clone
                     break;
                 case MessageType.Receive_Container_SubCategory_Top:

@@ -153,8 +153,8 @@ namespace RequestTaskProcessing.StrategyOperator.Yolov5
                                 Box = new Box {
                                     Xmin = detected_mat[idx][0],
                                     Ymin = detected_mat[idx][1],
-                                    Xmax = detected_mat[idx][2],
-                                    Ymax = detected_mat[idx][3] },
+                                    Xmax = Math.Min(imgSize.Width, detected_mat[idx][2]),
+                                    Ymax = Math.Min(imgSize.Height, detected_mat[idx][3]) },
                                 Label = LabelMap.Labels[(int)cls],
                                 Id = (int)cls,
                                 Confidence = confi
@@ -194,9 +194,9 @@ namespace RequestTaskProcessing.StrategyOperator.Yolov5
 
             var ratio_x = target.Width / (float)current.Width;
             var ratio_y = target.Height / (float)current.Height;
-            rescaleBox.Xmin = ratio_x * (dBox.Xmin);
+            rescaleBox.Xmin = Math.Max(0, ratio_x * (dBox.Xmin));
             rescaleBox.Xmax = ratio_x * (dBox.Xmax);
-            rescaleBox.Ymin = ratio_y * (dBox.Ymin);
+            rescaleBox.Ymin = Math.Max(0, ratio_y * (dBox.Ymin));
             rescaleBox.Ymax = ratio_y * (dBox.Ymax);
             return rescaleBox;
         }

@@ -262,7 +262,9 @@ namespace RequestTaskProcessing
                 Thread.Sleep(100);
                 file_list = (string[])GetFileList().Clone();
                 if (file_list.Length > 2)
+                {
                     foreach (string file in file_list)
+                    {
                         if (!file.Equals(".") && !file.Equals(".."))
                         {
                             string[] name_buffer = file.Split('.');
@@ -285,6 +287,9 @@ namespace RequestTaskProcessing
                                 new StringContainer(file_name + ".jpg", ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH + @"\" + file_name + ".jpg"));
                             p.Product(m);
                         }
+                    }
+                    Console.WriteLine("Wait Next File...");
+                }
             }
         }
     }
