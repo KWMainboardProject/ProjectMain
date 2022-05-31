@@ -7,6 +7,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 using OpenCvSharp;
 using OpenCvSharp.Dnn;
+using System.Diagnostics;
 
 namespace RequestTaskProcessing.StrategyOperator
 {
@@ -22,6 +23,7 @@ namespace RequestTaskProcessing.StrategyOperator
             ShareWorkPath.CreateDirectory(workingPath);
         }
         protected string workingPath = null;
+        public Stopwatch stopwatch = new Stopwatch();
         /// <summary>
         /// 
         /// </summary>
@@ -32,6 +34,8 @@ namespace RequestTaskProcessing.StrategyOperator
         /// </param>
         public void SetResource(TaskMessage message)
         {
+            stopwatch.Restart();
+
             requestMessage = new TaskMessage(message);
             try
             {
@@ -213,6 +217,8 @@ namespace RequestTaskProcessing.StrategyOperator
         {
             Console.WriteLine("plz removed img delete");
             Console.WriteLine("plz croped img delete");
+            stopwatch.Stop();
+            System.Console.WriteLine(requestMessage.ip.Value +" run time : " + stopwatch.Elapsed + "ms");
         }
         /// <summary>
         /// Thread는 한번씩 밖에 start를 못하니
@@ -255,7 +261,7 @@ namespace RequestTaskProcessing.StrategyOperator
                     break;
                 case MessageType.Receive_Container_DetectedObjects:
                     //Console.WriteLine(this.ToString() + "-> Open Message Detected Objects");
-                    message.Print();
+                    //message.Print();
                     container.SetJObject(message.resource.GetJObject()); //clone
                     break;
                 case MessageType.Receive_Container_SubCategory_Top:
@@ -321,9 +327,9 @@ namespace RequestTaskProcessing.StrategyOperator
                 //Get message
                 //Get message
                 TaskMessage m = null;
-                m = Consume();
-                //try { m = Consume(); }
-                //catch (TimeoutException e) { StopAndClear(); }
+                //m = Consume();
+                try { m = Consume(); }
+                catch (TimeoutException e) { Console.WriteLine("Stop and Clear (ImageAnalysis)"); StopAndClear(); }
                 if (!qTF || m == null)//fali consume
                 {
                     continue;

@@ -10,6 +10,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using RequestTaskProcessing.StrategyOperator;
 using RequestTaskProcessing.StrategyOperator.SubCategory;
+using System.Diagnostics;
 
 namespace RequestTaskProcessing
 {
@@ -25,9 +26,9 @@ namespace RequestTaskProcessing
             //TestTaskMessage();
             //TestJsonFile();
             //TestSubCategory();
-            Myftp.Run_server();
+            //Myftp.Run_server();
             //TestSharePath();
-            //TestYolo();
+            TestYolo();
             //TestClassification();
         }
         static void TestClassification()
@@ -62,7 +63,8 @@ namespace RequestTaskProcessing
         }
         static void TestYolo()
         {
-            
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Restart();
             TestTaskManager.TestSenderManager sender = new TestTaskManager.TestSenderManager();
             TaskManager taskManager = TaskManager.GetInstance();
             GPUWorkManager gpuManager = GPUWorkManager.GetInstance();
@@ -87,20 +89,20 @@ namespace RequestTaskProcessing
             }
             Console.WriteLine("Complete Create Message");
 
-
-            taskManager.SetTimeOutThreshold();
-            Console.WriteLine("Set Time out task manager");
-            taskManager.Join();
-
-            Console.WriteLine("Join taskManager");
-
-            sender.SetTimeOutThreshold();
+            sender.SetTimeOutThreshold(15000);
             Console.WriteLine("Set Time out task manager");
             sender.Join();
 
-            gpuManager.SetTimeOutThreshold();
-            gpuManager.Join();
             Console.WriteLine("complete##################################################");
+            stopwatch.Stop();
+            System.Console.WriteLine("run time : " + stopwatch.Elapsed);
+
+            Console.WriteLine("Set Time out task manager & gpu manager");
+            gpuManager.SetTimeOutThreshold(5000);
+            taskManager.SetTimeOutThreshold(5000);
+
+            taskManager.Join();
+            gpuManager.Join();
         }
 
         static void TestSharePath()
@@ -460,7 +462,11 @@ namespace RequestTaskProcessing
                         {
                             do
                             {
-                                Consume();
+                                try
+                                {
+                                    Consume();
+                                }
+                                catch { Console.WriteLine("Clear Q"); }
                                 //clear Q
                             } while (!qTF);
 
@@ -473,16 +479,30 @@ namespace RequestTaskProcessing
                     }
 
                     //Get message
-                    TaskMessage m = Consume();
+
+                    TaskMessage m=null;
+                    try
+                    {
+                        m = Consume();
+                    }
+                    catch (TimeoutException ex)
+                    {
+                        StopAndClear();
+                        Console.WriteLine("stop sender");
+                    }
                     if (!qTF || m == null)//fali consume
                     {
                         //Console.WriteLine("Wait Messamge - TestSender");
                         continue;
                     }
-                    
+
                     //Success consume
-                    Console.WriteLine(thread.ToString()+" : resource");
-                    m.Print();
+                    string filename = ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + m.ip.Value+".json";
+                    File.WriteAllText(filename, m.resource.GetJObject().ToString());
+
+                    //Console.WriteLine(thread.ToString()+" : resource");
+                    //m.Print();
+
                     //SubCategoryContainer fc = new SubCategoryContainer();
                     //fc.SetJObject(m.resource.GetJObject());
                     //Console.WriteLine(fc.GetJObject().ToString());

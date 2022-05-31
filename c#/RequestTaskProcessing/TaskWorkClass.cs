@@ -56,7 +56,8 @@ namespace RequestTaskProcessing
             {
                 timeout.ResetTimeOut();//성공 시 timeout reset
             }
-            else if (timeoutTF) throw new TimeoutException();//message가 계속 없을 때, time out으로 멈춤
+            else if (timeoutTF)
+                throw new TimeoutException();//message가 계속 없을 때, time out으로 멈춤
 
             //time start
             timeout.StartTime();
@@ -134,9 +135,13 @@ namespace RequestTaskProcessing
                     {
                         do
                         {
-                            Consume();
+                            try
+                            {
+                                Consume();
+                            }
+                            catch { Console.WriteLine(this.ToString()+" - end"); return; }
                             //clear Q
-                        } while (!qTF);
+                        } while (!qTF) ;
 
                         stopAndClearTF = false;
 
@@ -177,8 +182,8 @@ namespace RequestTaskProcessing
                     strategy.SetResource(m);
                     //Console.WriteLine(this.ToString() + "-> Work");
                     strategy.Work();
-                    //Console.WriteLine(this.ToString() + "-> GetMessage");
-                    //strategy.GetMessage().Print();
+                                                                           // Console.WriteLine(this.ToString() + "-> GetMessage");
+                                                                           // strategy.GetMessage().Print();
                     sender.Product(strategy.GetMessage());
                     //Console.WriteLine(this.ToString() + "-> ClearResource");
                     strategy.ClearResource();
@@ -298,7 +303,7 @@ namespace RequestTaskProcessing
     /// </summary>
     public class TaskManager : WorkManager
     {
-        const int THREAD_COUNT = 1;
+        const int THREAD_COUNT = 3;
 
         /// <summary>
         /// child process에서 counsume 해줌
@@ -337,8 +342,8 @@ namespace RequestTaskProcessing
     /// singleton pattern
     /// </summary>
     public class GPUWorkManager : WorkManager
-    {
-        const int THREAD_COUNT = 1;
+   {
+        const int THREAD_COUNT = 3;
 
         int messageCount = 0;
         public override void SchedulingTaskProcess()

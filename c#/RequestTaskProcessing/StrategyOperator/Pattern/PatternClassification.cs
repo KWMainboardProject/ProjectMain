@@ -182,7 +182,7 @@ namespace RequestTaskProcessing.StrategyOperator.Pattern
 
         public void ClearResource()
         {
-            container = new SubCategoryContainer();
+            container = new PatternContainer();
         }
 
 
@@ -223,7 +223,7 @@ namespace RequestTaskProcessing.StrategyOperator.Pattern
             requestMessage = new TaskMessage(message);  //메세지 열어서 내용 확인
         }
         protected TaskMessage requestMessage = null;
-        protected SubCategoryContainer container;
+        protected PatternContainer container;
 
         public void Work()
         {

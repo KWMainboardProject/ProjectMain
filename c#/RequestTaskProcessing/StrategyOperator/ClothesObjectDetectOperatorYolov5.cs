@@ -48,7 +48,7 @@ namespace RequestTaskProcessing.StrategyOperator
 
         public void SetResource(TaskMessage message)
         {
-            Console.WriteLine("\tplz Set resource");
+            //Console.WriteLine("\tplz Set resource");
             requestMessage = new TaskMessage(message);
 
         }

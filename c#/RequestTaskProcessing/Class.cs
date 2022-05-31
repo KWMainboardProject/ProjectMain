@@ -77,7 +77,7 @@ namespace RequestTaskProcessing
 
                 FashionObjectsContainer fc = new FashionObjectsContainer();
                 fc.SetJObject(m.resource.GetJObject());
-
+                int lll = 0;
                 //Console.WriteLine(fc.GetJObject().ToString());
                 foreach (CompoundContainer c in fc.GetList())
                 {
@@ -105,6 +105,7 @@ namespace RequestTaskProcessing
                         File.WriteAllText(ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + file_name + end, mc.GetJObject().ToString());
                         Myftp.Upload(ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + file_name + end, file_name + end);
                         File.Delete(ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + file_name + end);
+                        lll++;
                     }
                 }
                 File.Delete(ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH + @"\" + file_name + ".jpg");
