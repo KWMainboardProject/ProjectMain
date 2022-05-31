@@ -47,7 +47,8 @@ namespace RequestTaskProcessing.StrategyOperator.Yolov5
             //Set cuda (gpu) device
             //option.AppendExecutionProvider_CUDA(device_num);
 
-            sess = new InferenceSession(model_path, option);
+            sess = new InferenceSession(model_path, option);// SessionOptions.MakeSessionOptionWithCudaProvider(deviceId: 0)); //
+
 
             InitResource();
             MinConfidence = 0.2f;
@@ -91,6 +92,7 @@ namespace RequestTaskProcessing.StrategyOperator.Yolov5
                 {
                     NamedOnnxValue.CreateFromTensor("images", input)
                 };
+
 
                 using (var results = sess.Run(inputs))
                 {
