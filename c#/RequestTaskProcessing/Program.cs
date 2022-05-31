@@ -26,9 +26,9 @@ namespace RequestTaskProcessing
             //TestTaskMessage();
             //TestJsonFile();
             //TestSubCategory();
-            //Myftp.Run_server();
+            Myftp.Run_server();
             //TestSharePath();
-            TestYolo();
+            //TestYolo();
             //TestClassification();
         }
         static void TestClassification()
