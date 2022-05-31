@@ -20,8 +20,6 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
 
         InferenceSession session = null;
 
-        private 
-
         protected TopClassification()
         {
             //plz set gpu device
