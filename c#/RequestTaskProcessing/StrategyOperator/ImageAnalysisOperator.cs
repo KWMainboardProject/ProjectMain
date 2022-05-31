@@ -68,13 +68,13 @@ namespace RequestTaskProcessing.StrategyOperator
             //Console.WriteLine("Pass Join");
             InitThread();
 
-            //Console.WriteLine("Set Removed img And Start Yolo Operator");
+
 
             //request yolo v5
             TaskMessage yoloM = new TaskMessage(requestMessage);
             yoloM.type = MessageType.Request_FindMainCategory_ImagePath;        //set
             yoloM.productor = GetProductor();                                   //set
-            yoloM.resource = rbimgPath;                                         //set
+            yoloM.resource = rbimgPath.imgPath;                                         //set
             waitMessage.Add(MessageType.Receive_Container_DetectedObjects);     //받을 메세지 추가
             requester.GetProductor().Product(yoloM);                                          //request
 
@@ -165,7 +165,7 @@ namespace RequestTaskProcessing.StrategyOperator
 
         protected void SaveCropImg()
         {
-            Mat src = Cv2.ImRead(rbimgPath.GetValue().ToString()); 
+            Mat src = Cv2.ImRead(rbimgPath.imgPath.Value); 
             foreach (CompoundContainer c in container.GetList())
             {
                 MainCategoryContainer mc = c as MainCategoryContainer;
@@ -237,7 +237,7 @@ namespace RequestTaskProcessing.StrategyOperator
         }
 
         protected DetectedObjectsContainer container = new DetectedObjectsContainer();
-        protected StringContainer rbimgPath = null;
+        protected RemoveBGContainer rbimgPath = null;
         protected List<MessageType> waitMessage = new List<MessageType>();
 
         public void OpenMessage(TaskMessage message)
@@ -251,7 +251,7 @@ namespace RequestTaskProcessing.StrategyOperator
                 case MessageType.Receive_ImagePath_RemoveBG:
                     // Console.WriteLine(this.ToString() + "-> Open Message RemoveBG");
                     // message.Print();
-                    rbimgPath = message.resource as StringContainer; //clone
+                    rbimgPath = message.resource as RemoveBGContainer; //clone
                     break;
                 case MessageType.Receive_Container_DetectedObjects:
                     //Console.WriteLine(this.ToString() + "-> Open Message Detected Objects");

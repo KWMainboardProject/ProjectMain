@@ -11,18 +11,16 @@ namespace RequestTaskProcessing.StrategyOperator
         protected RembgU2Net rmbg = null;
         protected Mat img = null;
         protected TaskMessage requestMessage = null;
-        protected StringContainer container;
+        protected RemoveBGContainer container;
         protected string workingPath = null;
 
         protected RemoveBackgroundOperatorU2Net()
         {
-            string nlpName = @"\u2net.onnx";
+            string nlpName = @"\u2net_human_seg.onnx";
             Console.WriteLine("Loading : " + ShareWorkPath.GetInstance().WEIGHT_PATH + nlpName);
             rmbg = new RembgU2Net(ShareWorkPath.GetInstance().WEIGHT_PATH + nlpName);
             Console.WriteLine("Complete load " + nlpName);
             ClearResource();
-
-            workingPath = ShareWorkPath.GetInstance().WORKER_PATH + @"\REMOVE_BG\";
             ShareWorkPath.CreateDirectory(workingPath);
         }
         public void SetResource(TaskMessage message)
@@ -31,12 +29,13 @@ namespace RequestTaskProcessing.StrategyOperator
             requestMessage = new TaskMessage(message);
             try
             {
-                workingPath = workingPath + @"\" + System.IO.Path.GetFileNameWithoutExtension(message.ip.Value) + ".jpg";
+                workingPath = workingPath + @"\" + System.IO.Path.GetFileNameWithoutExtension(message.ip.Value);
             }
             catch
             {
-                workingPath = workingPath + @"\" + message.ip.Value + ".jpg";
+                workingPath = workingPath + @"\" + message.ip.Value;
             }
+            ShareWorkPath.CreateDirectory(workingPath);
         }
 
         public void Work()
@@ -48,17 +47,44 @@ namespace RequestTaskProcessing.StrategyOperator
                 {
                     Console.WriteLine("Complete Open Image in rembg : " + requestMessage.resource.GetValue().ToString());
                     Console.WriteLine("Start rembg work");
-                    //Get mask Mat(1, imgSize)
-                    //Mat result = rmbg.
 
+                    var result = rmbg.objectSegmentation(img);
                     //save mask img
-
-                    //get save mask path
-                    container.Value = workingPath;
+                    SaveMaskImg(result[0], img);
                 }
                 Console.WriteLine("End rembg work");
                 return;
             }
+        }
+
+        protected void SaveMaskImg(Mat mask, Mat img)
+        {
+            const int threshold = 10;
+            //get save mask path
+            container.maskPath.Value = workingPath + @"\mask.jpg";
+            container.imgPath.Value = workingPath + @"\img.jpg";
+
+            //Save mask
+            Cv2.ImWrite(container.maskPath.Value,mask);
+
+            //merge img + mask
+            Mat mergeImg = img.Clone();
+            //Cv2.ImShow("before mergeimg", mergeImg); //test???????????
+            for(int row = 0; row <mask.Rows; row++)
+            {
+                for(int col=0; col < mask.Cols; col++)
+                {
+                    if(mask.At<byte>(row, col) < threshold)
+                    {
+                        mergeImg.Set<Vec3b>(row, col, new Vec3b(255, 255, 255));
+                    }
+                }
+            }
+            //Save merge img
+            Cv2.ImWrite(container.imgPath.Value, mergeImg);
+
+            //Cv2.ImShow("after mergeimg", mergeImg);//test???????????
+            //Cv2.WaitKey();
         }
 
         public TaskMessage GetMessage()
@@ -66,7 +92,7 @@ namespace RequestTaskProcessing.StrategyOperator
             lock (Holder.instance)
             {
                 TaskMessage taskMessage = new TaskMessage(requestMessage);
-                taskMessage.type = MessageType.Receive_Container_DetectedObjects;        //set
+                taskMessage.type = MessageType.Receive_ImagePath_RemoveBG;        //set
                 taskMessage.productor = null;                                   //set
                 taskMessage.resource = container;
                 return taskMessage;
@@ -77,7 +103,8 @@ namespace RequestTaskProcessing.StrategyOperator
         {
             rmbg.InitResource();
             img = null;
-            container = new StringContainer();
+            container = new RemoveBGContainer();
+            workingPath = ShareWorkPath.GetInstance().WORKER_PATH + @"\REMOVE_BG\";
         }
 
         /// <summary>

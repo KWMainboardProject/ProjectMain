@@ -46,8 +46,17 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
             bool isAuto = true;
 
             Mat img = Cv2.ImRead(imageFilePath);
-            Cv2.Resize(img, img, imgSize);
             var letterimg = CreateLetterbox(img, imgSize, padColor, out ratio, out diff1, out diff2, auto: isAuto, scaleFill: !isAuto);
+
+            //{
+            var dW = imgSize.Width - letterimg.Width;
+            var dH = imgSize.Height - letterimg.Height;
+            var dW_h = (int)Math.Round((float)dW / 2);
+            var dH_h = (int)Math.Round((float)dH / 2);
+            Cv2.CopyMakeBorder(letterimg, letterimg, dH_h, dH_h, dW_h, dW_h, BorderTypes.Constant, padColor);
+            //}
+            Cv2.Resize(img, img, imgSize);
+
             letterimg.ConvertTo(imageFloat, MatType.CV_32FC3, (float)(1 / 255.0));
             Mat data = Mat.Zeros(letterimg.Size(), MatType.CV_32FC3);
             using (var rgbImage = new Mat())

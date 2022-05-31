@@ -20,8 +20,6 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
 
         InferenceSession session = null;
 
-        private 
-
         protected BottomClassification()
         {
             //plz set gpu device
@@ -44,6 +42,7 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
             Point diff1 = new Point();
             Point diff2 = new Point();
             bool isAuto = true;
+
 
             Mat img = Cv2.ImRead(imageFilePath);
             var letterimg = CreateLetterbox(img, imgSize, padColor, out ratio, out diff1, out diff2, auto: isAuto, scaleFill: !isAuto);

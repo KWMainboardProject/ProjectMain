@@ -408,7 +408,31 @@ namespace RequestTaskProcessing
 		/// </summary>
 		protected JArray boundbox;
 	}
-	public class FashionObjectsContainer : CompoundContainer
+    public class RemoveBGContainer : CompoundContainer
+    {
+		public RemoveBGContainer()
+        {
+			SetAtribute(imgPath);
+			SetAtribute(maskPath);
+        }
+        public override string GetKey()
+        {
+            return "rembg";
+        }
+
+        public override void SetJObject(JObject obj)
+        {
+			if (obj == null) return;
+			JObject value = (JObject)obj[GetKey()];
+			foreach (IJObjectUseAbleContainer container in containers)
+			{
+				container.SetJObject(value);
+			}
+		}
+		public StringContainer imgPath = new StringContainer("img_path");
+		public StringContainer maskPath = new StringContainer("mask_path");
+    }
+    public class FashionObjectsContainer : CompoundContainer
 	{
 		public FashionObjectsContainer()
 		{
@@ -660,24 +684,24 @@ namespace RequestTaskProcessing
 		protected ShareWorkPath()
 		{
 			currentPath.Value = Environment.CurrentDirectory;
-			rootPath.Value = System.IO.Directory.GetParent(currentPath.Value).ToString();
-			string target = "ProjectMain";
-			for(int i=0; i<6; i++)
-            {
-                try
-                {
-					rootPath.Value = System.IO.Directory.GetParent(rootPath.Value).ToString();
-				}
-                catch { }
-				Console.WriteLine(System.IO.Directory.GetParent(rootPath.Value).ToString());
-				if (target == System.IO.Path.GetFileName(rootPath.Value))
-					break;
-			}
+			//rootPath.Value = System.IO.Directory.GetParent(currentPath.Value).ToString();
+			//string target = "ProjectMain";
+			//for(int i=0; i<6; i++)
+			//         {
+			//             try
+			//             {
+			//		rootPath.Value = System.IO.Directory.GetParent(rootPath.Value).ToString();
+			//	}
+			//             catch { }
+			//	Console.WriteLine(System.IO.Directory.GetParent(rootPath.Value).ToString());
+			//	if (target == System.IO.Path.GetFileName(rootPath.Value))
+			//		break;
+			//}
+			rootPath.Value = @"C:\Users\Public\ProjectMain";
 			weightPath.Value = rootPath.Value + @"\weight";
 			pythonPath.Value = rootPath.Value + @"\python";
-			cPath.Value = rootPath.Value + @"\c#";
 
-			string outPath = System.IO.Directory.GetParent(rootPath.Value).ToString();
+			string outPath = rootPath.Value;//System.IO.Directory.GetParent(rootPath.Value).ToString();
 
 			workerPath.Value = outPath + @"\WORKER";
 			keyPath.Value = outPath + @"\KEY";
@@ -690,7 +714,6 @@ namespace RequestTaskProcessing
 			envList.Add(rootPath);
 			envList.Add(weightPath);
 			envList.Add(pythonPath);
-			envList.Add(cPath);
 			envList.Add(workerPath);
 			envList.Add(keyPath);
 			envList.Add(resourcePath);
@@ -716,7 +739,6 @@ namespace RequestTaskProcessing
 		private StringContainer rootPath = new StringContainer("ROOT_PATH");
 		private StringContainer weightPath = new StringContainer("WEIGHT_PATH");
 		private StringContainer pythonPath = new StringContainer("PYTHON_PATH");
-		private StringContainer cPath = new StringContainer("C#_PATH");
 		private StringContainer workerPath = new StringContainer("WORKER_PATH");
 		private StringContainer keyPath = new StringContainer("KEY_PATH");
 		private StringContainer resourcePath = new StringContainer("RESOURCE_PATH");
@@ -780,10 +802,6 @@ namespace RequestTaskProcessing
 		public string PYTHON_PATH
 		{
 			get { return pythonPath.Value; }
-		}
-		public string C____PATH
-		{
-			get { return cPath.Value; }
 		}
 		/// <summary>
 		/// singleton pattern

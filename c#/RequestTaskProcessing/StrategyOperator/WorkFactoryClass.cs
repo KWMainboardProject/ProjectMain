@@ -28,7 +28,8 @@ namespace RequestTaskProcessing.StrategyOperator
                 switch (type)
                 {
                     case MessageType.Request_Removebg_ImagePath:
-                        strategyOperator = RemovebgOperator.GetInstance();
+                        //strategyOperator = RemovebgOperator.GetInstance();
+                        strategyOperator = RemoveBackgroundOperatorU2Net.GetInstance();
                         break;
                     case MessageType.Request_FindMainCategory_ImagePath:
                         strategyOperator = ClothesObjectDetectOperatorYolov5.GetInstance();
