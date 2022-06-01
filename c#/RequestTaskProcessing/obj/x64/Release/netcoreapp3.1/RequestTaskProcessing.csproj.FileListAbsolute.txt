@@ -1,0 +1,8 @@
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\x64\Release\netcoreapp3.1\dll\x64\OpenCvSharpExtern.dll
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\x64\Release\netcoreapp3.1\RequestTaskProcessing.exe
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\x64\Release\netcoreapp3.1\RequestTaskProcessing.dll
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\x64\Release\netcoreapp3.1\Microsoft.ML.OnnxRuntime.dll
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\x64\Release\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\x64\Release\netcoreapp3.1\OpenCvSharp.dll
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\x64\Release\netcoreapp3.1\runtimes\win-x64\native\onnxruntime.dll
+C:\Users\vbmrk\Documents\GitHub\ProjectMain\c#\RequestTaskProcessing\bin\x64\Release\netcoreapp3.1\runtimes\win10-x64\native\OpenCvSharpExtern.dll

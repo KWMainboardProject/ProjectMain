@@ -352,6 +352,7 @@ namespace RequestTaskProcessing
 			json.Add(GetKey(), GetValue());
 			return json;
 		}
+		
 		public void SetJObject(JObject obj)
 		{
 			try
@@ -402,6 +403,23 @@ namespace RequestTaskProcessing
 		public JToken GetValue()
 		{
 			return boundbox;
+		}
+
+		public int Xmin
+		{
+			get { return (int)boundbox[0]; }
+		}
+		public int Xmax
+		{
+			get { return (int)boundbox[1]; }
+		}
+		public int Ymin
+		{
+			get { return (int)boundbox[2]; }
+		}
+		public int Ymax
+		{
+			get { return (int)boundbox[3]; }
 		}
 		/// <summary>
 		/// 0:x_min / 1:x_max / 2:y_min / 3:y_max

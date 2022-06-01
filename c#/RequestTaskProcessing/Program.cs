@@ -11,6 +11,7 @@ using System.Threading;
 using RequestTaskProcessing.StrategyOperator;
 using RequestTaskProcessing.StrategyOperator.SubCategory;
 using System.Diagnostics;
+using OpenCvSharp;
 
 namespace RequestTaskProcessing
 {
@@ -30,6 +31,64 @@ namespace RequestTaskProcessing
             //TestSharePath();
             //TestYolo();
             //TestClassification();
+            //TestYoloBoundbox();
+        }
+
+        static void TestYoloBoundbox()
+        {
+            Console.Write("target img path : ");
+            string imgPath = @"C:\Users\vbmrk\Desktop\image\img_2.jpg";//Console.ReadLine();
+
+            //Set prepare
+            ConcurrentQueue<TaskMessage> q = new ConcurrentQueue<TaskMessage>();
+            SimpleMessageProductor mp = new SimpleMessageProductor();
+            mp.SetQueue(q);
+
+            TaskMessage m = new TaskMessage(imgPath, mp, MessageType.Request_ImageAnalysis_ImagePath, new StringContainer("img_path", imgPath));
+
+            // analysis Work
+            ImageAnalysisOperator analysis = new ImageAnalysisOperator();
+            analysis.SetResource(m);
+            analysis.Work();
+            TaskMessage rm = analysis.GetMessage();
+            analysis.ClearResource();
+            //rm.Print();
+
+            //Get path
+            string rootPath = System.IO.Directory.GetParent(imgPath).ToString();
+            string resultName = System.IO.Path.GetFileNameWithoutExtension(imgPath) + "_result.jpg";
+
+            using (Mat img = Cv2.ImRead(imgPath))
+            {
+                FashionObjectsContainer fobject = new FashionObjectsContainer();
+                fobject.SetJObject(rm.resource.GetJObject());
+                int i = 0;
+                foreach (var obj in fobject.GetList())
+                {
+                    FashionObjectContainer f = obj as FashionObjectContainer;
+                    if (f != null && !f.IsEmpty)
+                    {
+                        string Label = f.GetKey() + "." + f.subcategory.classficationContainer.GetValue().ToString();
+                        Cv2.Rectangle(img, 
+                            new Point(f.boundbox.Ymin, f.boundbox.Xmin), 
+                            new Point(f.boundbox.Ymax, f.boundbox.Xmax),
+                            new Scalar(((i % 2) * 173)%255, (((i+1) % 3) * 173) % 255, (((i+2) % 4) * 173) % 255), 2);
+                        Cv2.PutText(img, Label, new Point(f.boundbox.Ymin, f.boundbox.Xmin - 5), 
+                            HersheyFonts.HersheySimplex, 1,
+                            new Scalar(((i % 2) * 173) % 255, (((i + 1) % 3) * 173) % 255, (((i + 2) % 4) * 173) % 255), 2);
+                        Console.WriteLine(i.ToString()+":"+(((i % 7) * 173) % 255).ToString());
+
+                        i++;
+                    }
+                }
+                Cv2.ImWrite(rootPath+@"\"+resultName, img);
+                using(var smallMat = new Mat())
+                {
+                    Cv2.Resize(img, smallMat,new Size(1000,1000),1,1);
+                    Cv2.ImShow(imgPath, smallMat);
+                    Cv2.WaitKey();
+                }
+            }
         }
         static void TestClassification()
         {
