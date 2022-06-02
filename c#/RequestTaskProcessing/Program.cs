@@ -37,7 +37,7 @@ namespace RequestTaskProcessing
         static void TestYoloBoundbox()
         {
             Console.Write("target img path : ");
-            string imgPath = @"C:\Users\vbmrk\Desktop\image\img_2.jpg";//Console.ReadLine();
+            string imgPath = Console.ReadLine();
 
             //Set prepare
             ConcurrentQueue<TaskMessage> q = new ConcurrentQueue<TaskMessage>();

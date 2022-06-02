@@ -25,7 +25,7 @@ namespace RequestTaskProcessing.StrategyOperator.Yolov5
         private Scalar padColor = new Scalar(pclr, pclr, pclr);
 
         private const int imsz = 640;
-        private const int pclr = 114;
+        private const int pclr = 255;
         public static int IMG_SIZE
         {
             get { return imsz; }

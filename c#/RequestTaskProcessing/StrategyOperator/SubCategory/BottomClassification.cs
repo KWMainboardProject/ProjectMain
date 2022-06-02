@@ -13,7 +13,7 @@ namespace RequestTaskProcessing.StrategyOperator.SubCategory
     {
         private Mat imageFloat = null;
         public Size imgSize = new Size(224, 224);
-        private Scalar padColor = new Scalar(114, 114, 114);
+        private Scalar padColor = new Scalar(255, 255, 255);
 
         private string result_label = null;
         private float result_conf = 0;

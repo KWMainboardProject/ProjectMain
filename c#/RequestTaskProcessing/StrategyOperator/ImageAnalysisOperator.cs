@@ -78,7 +78,7 @@ namespace RequestTaskProcessing.StrategyOperator
             TaskMessage yoloM = new TaskMessage(requestMessage);
             yoloM.type = MessageType.Request_FindMainCategory_ImagePath;        //set
             yoloM.productor = GetProductor();                                   //set
-            yoloM.resource = rbimgPath.imgPath;                                         //set
+            //yoloM.resource = rbimgPath.imgPath;                                         //set
             waitMessage.Add(MessageType.Receive_Container_DetectedObjects);     //받을 메세지 추가
             requester.GetProductor().Product(yoloM);                                          //request
 

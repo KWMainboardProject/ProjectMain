@@ -288,6 +288,18 @@ namespace RequestTaskProcessing
 		{
 			rgbContainer.SetDumi();
 		}
+		/// <summary>
+		/// 객체가 비었는지 아닌지 판별해줌
+		/// 비어있으면 false return
+		/// </summary>
+		public bool IsEmpty
+		{
+			get
+			{
+				return rgbContainer.IsEmpty;				
+			}
+		}
+
 
 		protected string key = null;
 		public IntigerContainer proportionContainer = new IntigerContainer();
@@ -333,6 +345,25 @@ namespace RequestTaskProcessing
 		{
 			return rgb;
 		}
+		/// <summary>
+		/// 객체가 비었는지 아닌지 판별해줌
+		/// 비어있으면 false return
+		/// </summary>
+		public bool IsEmpty
+		{
+			get
+			{
+				int sum = 0;
+				if (rgb != null)
+				{
+					sum = (int)rgb[0]
+					+ (int)rgb[1]
+					+ (int)rgb[2];
+				}
+				return (sum < threashold);
+			}
+		}
+		const int threashold = 3;
 		/// <summary>
 		/// 0:x_min / 1:x_max / 2:y_min / 3:y_max
 		/// </summary>

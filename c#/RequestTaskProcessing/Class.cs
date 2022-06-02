@@ -97,7 +97,9 @@ namespace RequestTaskProcessing
                         MainCategoryContainer mc = new MainCategoryContainer(f.GetKey());
                         mc.SetBoundbox((JArray)f.boundbox.GetValue());
                         mc.SetAtribute(f.subcategory);
+                        if(f.color.main.IsEmpty) f.color.main.SetDumi();
                         mc.SetAtribute(f.color.main);
+                        if(f.color.sub.IsEmpty) f.color.sub.SetDumi();
                         mc.SetAtribute(f.color.sub);
                         mc.SetAtribute(f.pattern);
                         //mc.SetAtribute(f.style);
