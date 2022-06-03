@@ -288,6 +288,13 @@ namespace RequestTaskProcessing
 		{
 			rgbContainer.SetDumi();
 		}
+		public string RGB
+		{
+			get
+			{
+				return rgbContainer.RGB;
+			}
+		}
 		/// <summary>
 		/// 객체가 비었는지 아닌지 판별해줌
 		/// 비어있으면 false return
@@ -345,11 +352,26 @@ namespace RequestTaskProcessing
 		{
 			return rgb;
 		}
-		/// <summary>
-		/// 객체가 비었는지 아닌지 판별해줌
-		/// 비어있으면 false return
-		/// </summary>
-		public bool IsEmpty
+		public string RGB
+        {
+            get
+            {
+				string sRgb = null;
+				if(!IsEmpty)
+                {
+					sRgb = "("+rgb[0].ToString()+
+						","+rgb[1].ToString()+
+						","+ rgb[2].ToString()+")";
+                }
+				return sRgb;
+            }
+        }
+
+        /// <summary>
+        /// 객체가 비었는지 아닌지 판별해줌
+        /// 비어있으면 false return
+        /// </summary>
+        public bool IsEmpty
 		{
 			get
 			{
@@ -648,6 +670,7 @@ namespace RequestTaskProcessing
 
 
 		public StringContainer cropimgPath = new StringContainer("img_path");
+		public StringContainer cropmaskPath = new StringContainer("mask_path");
 		public ClassficationContainer classficationContainer;
 		public BoundBoxContainer boundboxContainer;
 	}

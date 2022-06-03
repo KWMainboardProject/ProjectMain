@@ -169,30 +169,46 @@ namespace RequestTaskProcessing.StrategyOperator
 
         protected void SaveCropImg()
         {
-            Mat src = Cv2.ImRead(rbimgPath.imgPath.Value); 
-            foreach (CompoundContainer c in container.GetList())
+            using (Mat src = Cv2.ImRead(rbimgPath.imgPath.Value))
             {
-                MainCategoryContainer mc = c as MainCategoryContainer;
-                if(mc != null && !mc.IsEmpty)
+                using(Mat mask = Cv2.ImRead(rbimgPath.maskPath.Value))
                 {
-                    JArray box = mc.boundboxContainer.GetValue() as JArray;
-                    try
+                    foreach (CompoundContainer c in container.GetList())
                     {
-                        //Crop img
-                        using (Mat cropImg = src.SubMat(
-                                (int)box[0], (int)box[1],
-                                (int)box[2], (int)box[3]))
+                        MainCategoryContainer mc = c as MainCategoryContainer;
+                        if (mc != null && !mc.IsEmpty)
                         {
-                            //Set img name
-                            mc.cropimgPath.Value = workingPath + @"\croped_" + mc.GetKey() + @".jpg";
+                            JArray box = mc.boundboxContainer.GetValue() as JArray;
+                            try
+                            {
+                                //Crop img
+                                using (Mat cropImg = src.SubMat(
+                                        (int)box[0], (int)box[1],
+                                        (int)box[2], (int)box[3]))
+                                {
+                                    //Set img name
+                                    mc.cropimgPath.Value = workingPath + @"\croped_" + mc.GetKey() + @".jpg";
 
-                            //Write crop img
-                            cropImg.ImWrite(mc.cropimgPath.Value);
+                                    //Write crop img
+                                    cropImg.ImWrite(mc.cropimgPath.Value);
+                                }
+                                //Crop mask
+                                using (Mat cropmask = mask.SubMat(
+                                        (int)box[0], (int)box[1],
+                                        (int)box[2], (int)box[3]))
+                                {
+                                    //Set img name
+                                    mc.cropmaskPath.Value = workingPath + @"\mask_" + mc.GetKey() + @".jpg";
+
+                                    //Write crop img
+                                    cropmask.ImWrite(mc.cropmaskPath.Value);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("SaveCropImg Error : " + ex.Message.ToString());
+                            }
                         }
-                    }
-                    catch(Exception ex)
-                    {
-                        Console.WriteLine("SaveCropImg Error : " + ex.Message.ToString());
                     }
                 }
             }
@@ -358,5 +374,12 @@ namespace RequestTaskProcessing.StrategyOperator
         }
 
         protected Thread thread = null;
+
+
+
+
+        
     }
+
 }
+

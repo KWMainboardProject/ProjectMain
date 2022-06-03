@@ -95,12 +95,19 @@ namespace RequestTaskProcessing
                         }
 
                         MainCategoryContainer mc = new MainCategoryContainer(f.GetKey());
+                        //boundbox
                         mc.SetBoundbox((JArray)f.boundbox.GetValue());
+                        //subcategory
                         mc.SetAtribute(f.subcategory);
-                        if(f.color.main.IsEmpty) f.color.main.SetDumi();
-                        mc.SetAtribute(f.color.main);
-                        if(f.color.sub.IsEmpty) f.color.sub.SetDumi();
-                        mc.SetAtribute(f.color.sub);
+                        //main color
+                        if (f.color.main.IsEmpty) f.color.main.SetRGB((char)240, (char)240, (char)240);//f.color.main.SetDumi();
+                        StringContainer maincolor = new StringContainer("maincolor", f.color.main.RGB);
+                        mc.SetAtribute(maincolor);
+                        //sub color
+                        if(f.color.sub.IsEmpty) f.color.sub.SetRGB((char)240, (char)240, (char)240);//f.color.sub.SetDumi();
+                        StringContainer subcolor = new StringContainer("subcolor", f.color.sub.RGB);
+                        mc.SetAtribute(subcolor);
+                        //pattern
                         mc.SetAtribute(f.pattern);
                         //mc.SetAtribute(f.style);
                         Console.WriteLine(mc.GetJObject().ToString());

@@ -27,13 +27,93 @@ namespace RequestTaskProcessing
             //TestTaskMessage();
             //TestJsonFile();
             //TestSubCategory();
-            Myftp.Run_server();
+            //Myftp.Run_server();
             //TestSharePath();
             //TestYolo();
             //TestClassification();
             //TestYoloBoundbox();
+            //TestMeanshift();
+            TestColor();
         }
 
+        static void TestColor()
+        {
+            string workPath = ShareWorkPath.GetInstance().WORKER_PATH + @"\imageAnalysis\6298b267b3eed";
+            MainSubColorOperator msop = new MainSubColorOperator();
+            MainCategoryContainer mc = new MainCategoryContainer("Top");
+            mc.cropimgPath.Value = workPath + @"\croped_Top.jpg";
+            mc.cropmaskPath.Value = workPath + @"\mask_Top.jpg";
+
+            TaskMessage m = new TaskMessage("6298b267b3eed", null, MessageType.EmptyMessage, mc);
+
+            msop.SetResource(m);
+            msop.Work();
+            TaskMessage rm = msop.GetMessage();
+
+            rm.Print();
+        }
+        static void TestMeanshift()
+        {
+            string imgPath = ShareWorkPath.GetFileList(ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH)[0];
+
+            Console.WriteLine("target img path : " + imgPath);
+
+            TaskMessage m = new TaskMessage(imgPath, null, MessageType.Request_ImageAnalysis_ImagePath, new StringContainer("img_path", imgPath));
+
+            // analysis Work
+            ImageAnalysisOperator analysis = new ImageAnalysisOperator();
+            analysis.SetResource(m);
+            analysis.Work();
+            TaskMessage rm = analysis.GetMessage();
+            analysis.ClearResource();
+            rm.Print();
+
+            //Get path
+            string rootPath = System.IO.Directory.GetParent(imgPath).ToString();
+            string resultName = System.IO.Path.GetFileNameWithoutExtension(imgPath) + "_result.jpg";
+
+            using (Mat img = Cv2.ImRead(imgPath))
+            {
+                int level = 2;
+                double space_radius = 30.0;
+                double color_radius = 30.0;
+                // mean shift : ouput = nomal xyi
+                Console.WriteLine("Start MeanShift");
+                using(Mat seg = img.PyrMeanShiftFiltering(space_radius, color_radius, level,
+                    new TermCriteria(CriteriaType.Eps | CriteriaType.Count, 1000, 0.001)))
+                {
+                    Console.WriteLine("End MeanShift");
+
+                    FashionObjectsContainer fobject = new FashionObjectsContainer();
+                    fobject.SetJObject(rm.resource.GetJObject());
+                    int i = 0;
+                    foreach (var obj in fobject.GetList())
+                    {
+                        FashionObjectContainer f = obj as FashionObjectContainer;
+                        if (f != null && !f.IsEmpty)
+                        {
+                            string Label = f.GetKey() + "." + f.subcategory.classficationContainer.GetValue().ToString();
+                            Cv2.Rectangle(seg,
+                                new Point(f.boundbox.Ymin, f.boundbox.Xmin),
+                                new Point(f.boundbox.Ymax, f.boundbox.Xmax),
+                                new Scalar(((i % 2) * 173) % 255, (((i + 1) % 3) * 173) % 255, (((i + 2) % 4) * 173) % 255), 2);
+                            Cv2.PutText(seg, Label, new Point(f.boundbox.Ymin, f.boundbox.Xmin - 5),
+                                HersheyFonts.HersheySimplex, 1,
+                                new Scalar(((i % 2) * 173) % 255, (((i + 1) % 3) * 173) % 255, (((i + 2) % 4) * 173) % 255), 2);
+                            //Console.WriteLine(i.ToString()+":"+(((i % 7) * 173) % 255).ToString());
+                            i++;
+                        }
+                    }
+                    Cv2.ImWrite(rootPath + @"\" + resultName, seg);
+                    using (var smallMat = new Mat())
+                    {
+                        Cv2.Resize(seg, smallMat, new Size(1000, 1000), 1, 1);
+                        Cv2.ImShow(imgPath, smallMat);
+                        Cv2.WaitKey();
+                    }
+                }
+            }
+        }
         static void TestYoloBoundbox()
         {
             Console.Write("target img path : ");
@@ -76,8 +156,7 @@ namespace RequestTaskProcessing
                         Cv2.PutText(img, Label, new Point(f.boundbox.Ymin, f.boundbox.Xmin - 5), 
                             HersheyFonts.HersheySimplex, 1,
                             new Scalar(((i % 2) * 173) % 255, (((i + 1) % 3) * 173) % 255, (((i + 2) % 4) * 173) % 255), 2);
-                        Console.WriteLine(i.ToString()+":"+(((i % 7) * 173) % 255).ToString());
-
+                        //Console.WriteLine(i.ToString()+":"+(((i % 7) * 173) % 255).ToString());
                         i++;
                     }
                 }

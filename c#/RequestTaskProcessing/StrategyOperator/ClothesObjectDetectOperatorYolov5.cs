@@ -63,7 +63,7 @@ namespace RequestTaskProcessing.StrategyOperator
                     Console.WriteLine("Complete Open Image in yolo : " + requestMessage.resource.GetValue().ToString());
 
                     Console.WriteLine("Start yolo work");
-                    var result = yolo.objectDetection(img);
+                    var result = yolo.objectDetection(img,0.4);
 
 
                     //Set Container
