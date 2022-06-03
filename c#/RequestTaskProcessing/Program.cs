@@ -27,18 +27,108 @@ namespace RequestTaskProcessing
             //TestTaskMessage();
             //TestJsonFile();
             //TestSubCategory();
-            //Myftp.Run_server();
+            Myftp.Run_server();
             //TestSharePath();
             //TestYolo();
             //TestClassification();
             //TestYoloBoundbox();
             //TestMeanshift();
-            TestColor();
+            //TestColor();
+            //TestHsi2XYI();
+        }
+
+        static void TestHsi2XYI()
+        {
+            Vec3b hsi = new Vec3b(10, 200, 150);
+
+            Vec3d xyi = new Vec3d();
+
+            xyi = MainSubColorOperator.hsi2normalxyi(hsi);
+            Console.Write("xyi : ");
+            for(int i=0; i<3; i++)
+            {
+                Console.Write(xyi[i]+" ");
+            }
+            Console.WriteLine();
+
+
+            hsi = MainSubColorOperator.normalxyi2hsi(xyi);
+            Console.Write("hsi : ");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.Write(hsi[i] + " ");
+            }
+            Console.WriteLine();
+
+            xyi = MainSubColorOperator.hsi2normalxyi(hsi);
+            Console.Write("xyi : ");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.Write(xyi[i] + " ");
+            }
+            Console.WriteLine();
+
+
+            hsi = MainSubColorOperator.normalxyi2hsi(xyi);
+            Console.Write("hsi : ");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.Write(hsi[i] + " ");
+            }
+            Console.WriteLine();
+            xyi = MainSubColorOperator.hsi2normalxyi(hsi);
+            Console.Write("xyi : ");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.Write(xyi[i] + " ");
+            }
+            Console.WriteLine();
+
+
+            hsi = MainSubColorOperator.normalxyi2hsi(xyi);
+            Console.Write("hsi : ");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.Write(hsi[i] + " ");
+            }
+            Console.WriteLine();
+            xyi = MainSubColorOperator.hsi2normalxyi(hsi);
+            Console.Write("xyi : ");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.Write(xyi[i] + " ");
+            }
+            Console.WriteLine();
+
+
+            hsi = MainSubColorOperator.normalxyi2hsi(xyi);
+            Console.Write("hsi : ");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.Write(hsi[i] + " ");
+            }
+            Console.WriteLine();
+            xyi = MainSubColorOperator.hsi2normalxyi(hsi);
+            Console.Write("xyi : ");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.Write(xyi[i] + " ");
+            }
+            Console.WriteLine();
+
+
+            hsi = MainSubColorOperator.normalxyi2hsi(xyi);
+            Console.Write("hsi : ");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.Write(hsi[i] + " ");
+            }
+            Console.WriteLine();
         }
 
         static void TestColor()
         {
-            string workPath = ShareWorkPath.GetInstance().WORKER_PATH + @"\imageAnalysis\6298b267b3eed";
+            string workPath = ShareWorkPath.GetInstance().WORKER_PATH + @"\imageAnalysis\shirt5";
             MainSubColorOperator msop = new MainSubColorOperator();
             MainCategoryContainer mc = new MainCategoryContainer("Top");
             mc.cropimgPath.Value = workPath + @"\croped_Top.jpg";
@@ -635,11 +725,11 @@ namespace RequestTaskProcessing
                     }
 
                     //Success consume
-                    string filename = ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + m.ip.Value+".json";
-                    File.WriteAllText(filename, m.resource.GetJObject().ToString());
+                    //string filename = ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + m.ip.Value+".json";
+                    //File.WriteAllText(filename, m.resource.GetJObject().ToString());
 
-                    //Console.WriteLine(thread.ToString()+" : resource");
-                    //m.Print();
+                    Console.WriteLine(thread.ToString()+" : resource");
+                    m.Print();
 
                     //SubCategoryContainer fc = new SubCategoryContainer();
                     //fc.SetJObject(m.resource.GetJObject());

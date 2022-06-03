@@ -100,11 +100,11 @@ namespace RequestTaskProcessing
                         //subcategory
                         mc.SetAtribute(f.subcategory);
                         //main color
-                        if (f.color.main.IsEmpty) f.color.main.SetRGB((char)240, (char)240, (char)240);//f.color.main.SetDumi();
+                        if (f.color.main.IsEmpty) f.color.main.SetRGB((char)15, (char)8, (char)13);//f.color.main.SetDumi();
                         StringContainer maincolor = new StringContainer("maincolor", f.color.main.RGB);
                         mc.SetAtribute(maincolor);
                         //sub color
-                        if(f.color.sub.IsEmpty) f.color.sub.SetRGB((char)240, (char)240, (char)240);//f.color.sub.SetDumi();
+                        if(f.color.sub.IsEmpty) f.color.sub.SetRGB((char)35, (char)15, (char)7);//f.color.sub.SetDumi();
                         StringContainer subcolor = new StringContainer("subcolor", f.color.sub.RGB);
                         mc.SetAtribute(subcolor);
                         //pattern

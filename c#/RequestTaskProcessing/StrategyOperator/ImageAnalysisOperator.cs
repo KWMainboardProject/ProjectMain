@@ -148,11 +148,29 @@ namespace RequestTaskProcessing.StrategyOperator
             //TaskMessage styM = new TaskMessage(requestMessage);
             //styM.type = MessageType.Request_FindStyle_ImagePath;        //set
             //styM.productor = GetProductor();                                   //set
-           // styM.resource = rbimgPath;                                         //set
-           // waitMessage.Add(MessageType.Receive_Container_Style);     //받을 메세지 추가
+            // styM.resource = rbimgPath;                                         //set
+            // waitMessage.Add(MessageType.Receive_Container_Style);     //받을 메세지 추가
             //requester.GetProductor().Product(styM);                                          //request
 
             //calc color
+            foreach (CompoundContainer c in container.GetList())
+            {
+                MainCategoryContainer mc = c as MainCategoryContainer;
+                if (mc != null && !mc.IsEmpty)
+                {
+                    MainSubColorOperator color = new MainSubColorOperator();
+                    //Set Message
+                    TaskMessage cm = new TaskMessage(requestMessage);
+                    cm.productor = GetProductor();
+                    cm.type = MessageType.EmptyMessage;
+                    cm.resource = mc;
+                    color.SetResource(cm);
+                    //Work
+                    color.Work();
+                    cm.SetMessage(color.GetMessage());
+                    mc.SetAtribute(cm.resource);
+                }
+            }
 
             //wait returned resources
             Start(); // Set container
