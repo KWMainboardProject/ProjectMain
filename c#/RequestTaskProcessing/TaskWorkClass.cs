@@ -34,17 +34,15 @@ namespace RequestTaskProcessing
         {
             if (q == null) throw new NullReferenceException();
 
-            int elpse = timeout.EndTime();
+            int elpse = timeout.EndTime();//측정시간
+            //타임아웃여부
             bool timeoutTF = timeout.CheckTimeOut(elpse);
             
             //Consume Message
             TaskMessage message = null;
-            if (!q.IsEmpty)
-            {
-                lock (q)
-                {
-                    if (!q.IsEmpty)
-                    {
+            if (!q.IsEmpty){
+                lock (q){
+                    if (!q.IsEmpty){
                         message = new TaskMessage();
                         qTF = q.TryDequeue(out message);
                     }
@@ -52,12 +50,12 @@ namespace RequestTaskProcessing
             }
 
             //time out check and Run
-            if (message != null && qTF)
-            {
-                timeout.ResetTimeOut();//성공 시 timeout reset
-            }
+            if (message != null && qTF){
+                //성공 시 timeout reset
+                timeout.ResetTimeOut();}
             else if (timeoutTF)
-                throw new TimeoutException();//message가 계속 없을 때, time out으로 멈춤
+                //message가 계속 없을 때, time out으로 멈춤
+                throw new TimeoutException();
 
             //time start
             timeout.StartTime();

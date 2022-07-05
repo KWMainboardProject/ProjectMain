@@ -69,7 +69,6 @@ namespace RequestTaskProcessing.StrategyOperator
             //wait returned remove bg
             Start(); // Set rbimgPath
             Join();
-            //Console.WriteLine("Pass Join");
             InitThread();
 
 
@@ -86,13 +85,11 @@ namespace RequestTaskProcessing.StrategyOperator
             Start(); // Set container
             Join();
             InitThread();
-
             // Yolo postprocessing
-
-            //crop img each object
 
             //save croped img - crop된 이미지를 저장해서 각 객체 밑에 croped save img path를 추가해 준다.
             SaveCropImg();
+
             //request subcategory * (0,4) 
             //request pattern * (0,4)
             foreach (CompoundContainer c in container.GetList())

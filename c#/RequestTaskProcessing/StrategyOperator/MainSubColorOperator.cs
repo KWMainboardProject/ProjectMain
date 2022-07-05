@@ -10,9 +10,9 @@ namespace RequestTaskProcessing.StrategyOperator
 {
     public class MainSubColorOperator : IStrategyOperateAble
     {
-        const double INTENSITY_IMPRESS = 255.0 * 5;
-        const double SATUATION_IMPRESS = 255.0;
-        const double BANDWIDTH = 0.12;
+        const double INTENSITY_IMPRESS = 2.55 * 3.0;
+        const double SATUATION_IMPRESS = 2.55;
+        const double BANDWIDTH = 30.0;
         const int MAN_ITERATIONS = 1000;
 
         public void ClearResource()
@@ -123,32 +123,33 @@ namespace RequestTaskProcessing.StrategyOperator
                                     //        + " , (char)" + bgr.Item0
                                     //        + " <= P : " + labelsPropor[i] * 100);
 
-                                    //    //using(Mat color = new Mat(500, 500, MatType.CV_8UC3))
-                                    //    //{
-                                    //    //    color.SetTo(new Scalar(bgr.Item0, bgr.Item1, bgr.Item2));
-                                    //    //    Cv2.NamedWindow(i.ToString()
-                                    //    //    + ":" + bgr.Item2
-                                    //    //    + "," + bgr.Item1
-                                    //    //    + "," + bgr.Item0
-                                    //    //   + " | " + labelsPropor[i] * 100);
-
-                                    //    //    Cv2.ImShow(i.ToString()
-                                    //    //    + ":" + bgr.Item2
-                                    //    //    + "," + bgr.Item1
-                                    //    //    + "," + bgr.Item0
-                                    //    //    + " | " + labelsPropor[i] * 100,
-                                    //    //    color);
-                                    //    //}
+                                    //    using(Mat color = new Mat(500, 500, MatType.CV_8UC3))
+                                    //    {
+                                    //        color.SetTo(new Scalar(bgr.Item0, bgr.Item1, bgr.Item2));
+                                    //        Cv2.NamedWindow(i.ToString()
+                                    //        + ":" + bgr.Item2
+                                    //        + "," + bgr.Item1
+                                    //        + "," + bgr.Item0
+                                    //       + " | " + labelsPropor[i] * 100);
+                                            
+                                    //        Cv2.ImShow(i.ToString()
+                                    //        + ":" + bgr.Item2
+                                    //        + "," + bgr.Item1
+                                    //        + "," + bgr.Item0
+                                    //        + " | " + labelsPropor[i] * 100,
+                                    //        color);
+                                    //    }
                                     //}
                                 }
                                 //Cv2.ImShow("input", img);
                                 //Cv2.WaitKey();
                                 Vec3b main = rgbCenters.At<Vec3b>(0, maxIdx);
-                                container.main.SetRGB((char)main[2], (char)main[1], (char)main[0]);
+                                container.main.SetRGB((char)(main[2]), (char)(main[1]), (char)(main[0]));
                                 container.main.SetProportion((int)(labelsPropor[maxIdx] * 100));
 
+
                                 Vec3b sub = rgbCenters.At<Vec3b>(0, secnIdx);
-                                container.sub.SetRGB((char)sub[2], (char)sub[1], (char)sub[0]);
+                                container.sub.SetRGB((char)(sub[2]), (char)(sub[1]), (char)(sub[0]));
                                 container.sub.SetProportion((int)(labelsPropor[secnIdx]*100));
                             }
                         }
@@ -178,11 +179,10 @@ namespace RequestTaskProcessing.StrategyOperator
             //z = cmath.rect((hsi_color[1] / SATUATION_IMPRESS), seta)
             Complex z = Complex.FromPolarCoordinates((hsi.Item1 / SATUATION_IMPRESS),seta);
 
-
             //normalized_xyi = [z.real, z.imag, hsi_color[2] / INTENSITY_IMPRESS]#intensity 2 divide
             normalxyi.Item0 = z.Real;                            // x
             normalxyi.Item1 = z.Imaginary;                       // y
-            normalxyi.Item2 = ((double)hsi.Item2 / INTENSITY_IMPRESS);   // i
+            normalxyi.Item2 = ((double)hsi.Item2 / (INTENSITY_IMPRESS));   // i
 
             return normalxyi;
         }
@@ -196,7 +196,8 @@ namespace RequestTaskProcessing.StrategyOperator
 
             //Get phi
             double phi = z.Phase;
-            phi = (((phi * 90 / Math.PI)) + 180) % 180;
+            phi = (((phi * 90.0 / Math.PI)) + 180.0);
+            phi = (phi - (int)phi) + ((int)phi) % 180;
 
             //Get r
             double r = Complex.Abs(z);
@@ -205,8 +206,9 @@ namespace RequestTaskProcessing.StrategyOperator
             //hsi = [phi1, r, min(normalized_xyi_color[2] * INTENSITY_IMPRESS, 255)]
             hsi.Item0 = (byte)phi;                                                  // h
             hsi.Item1 = (byte)r;                                                    // s
-            hsi.Item2 = (byte)Math.Min(i * INTENSITY_IMPRESS, 255);   // i
+            hsi.Item2 = (byte)Math.Min(i * INTENSITY_IMPRESS*3, 255);   // i
 
+            //Console.WriteLine("normalxyi : " + x + "\t" + y + "\t" + i + "\tto hsi :" + hsi.Item0 + "\t" + hsi.Item1 + "\t" + hsi.Item2);
             return hsi;
         }
         static public Vec3b normalxyi2hsi(Vec3d normalxyi)

@@ -30,6 +30,7 @@ namespace RequestTaskProcessing
             Myftp.Run_server();
             //TestSharePath();
             //TestYolo();
+            //TestYolo_json();
             //TestClassification();
             //TestYoloBoundbox();
             //TestMeanshift();
@@ -37,9 +38,53 @@ namespace RequestTaskProcessing
             //TestHsi2XYI();
         }
 
+        static void TestYolo_json()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Restart();
+            TestTaskManager.TestSenderJsonManager sender = new TestTaskManager.TestSenderJsonManager();
+            TaskManager taskManager = TaskManager.GetInstance();
+            GPUWorkManager gpuManager = GPUWorkManager.GetInstance();
+
+            Console.WriteLine("Consume Message");
+            sender.Start();
+            taskManager.Start();
+
+
+            IMessageProductAble p = taskManager.GetProductor();
+            Console.WriteLine("Strat Create Message");
+            Console.WriteLine(ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH);
+            foreach (var file in ShareWorkPath.GetFileList(ShareWorkPath.GetInstance().IMAGE_RESOURCE_PATH))
+            {
+                var fname = Path.GetFileName(file);
+                TaskMessage m = new TaskMessage(
+                    fname,
+                    sender.GetProductor(),
+                    MessageType.Request_ImageAnalysis_ImagePath,
+                    new StringContainer("img_path", file));
+                p.Product(m);
+            }
+            Console.WriteLine("Complete Create Message");
+
+            sender.SetTimeOutThreshold(15000);
+            Console.WriteLine("Set Time out task manager");
+            sender.Join();
+
+            Console.WriteLine("complete##################################################");
+            stopwatch.Stop();
+            System.Console.WriteLine("run time : " + stopwatch.Elapsed);
+
+            Console.WriteLine("Set Time out task manager & gpu manager");
+            gpuManager.SetTimeOutThreshold(5000);
+            taskManager.SetTimeOutThreshold(5000);
+
+            taskManager.Join();
+            gpuManager.Join();
+        }
+
         static void TestHsi2XYI()
         {
-            Vec3b hsi = new Vec3b(10, 200, 150);
+            Vec3b hsi = new Vec3b(10, 100, 20);
 
             Vec3d xyi = new Vec3d();
 
@@ -656,6 +701,97 @@ namespace RequestTaskProcessing
 
     public class TestTaskManager
     {
+        public class TestSenderJsonManager : QTheading
+        {
+            const int SLEEP_TIME = 10;
+            public TestSenderJsonManager()
+            {
+                q = new ConcurrentQueue<TaskMessage>();
+                productor.SetQueue(q);
+            }
+
+            public override void Join()
+            {
+                thread.Join();
+            }
+
+            public override void Start()
+            {
+                thread = new Thread(() => Run());
+                thread.Start();
+            }
+
+            protected override void Run()
+            {
+                if (q == null)
+                    throw new NullReferenceException();
+                while (thread.IsAlive)
+                {
+                    Thread.Sleep(SLEEP_TIME);
+                    //stop thread and claear Q
+                    if (stopAndClearTF)
+                    {
+                        lock (q)
+                        {
+                            do
+                            {
+                                try
+                                {
+                                    Consume();
+                                }
+                                catch { Console.WriteLine("Clear Q"); }
+                                //clear Q
+                            } while (!qTF);
+
+                            stopAndClearTF = false;
+
+                            //need thread stop
+                            Console.WriteLine("\tplz thread stop at QThread.Run");
+                            break;
+                        }
+                    }
+
+                    //Get message
+
+                    TaskMessage m = null;
+                    try
+                    {
+                        m = Consume();
+                    }
+                    catch (TimeoutException ex)
+                    {
+                        StopAndClear();
+                        Console.WriteLine("stop sender");
+                    }
+                    if (!qTF || m == null)//fali consume
+                    {
+                        //Console.WriteLine("Wait Messamge - TestSender");
+                        continue;
+                    }
+
+                    //Success consume
+                    Console.WriteLine(thread.ToString() + " : resource");
+                    m.Print();
+
+                    string[] name_buffer = m.ip.Value.Split('.');
+                    string file_name = "";
+                    for (int i = 0; i < name_buffer.Length - 1; i++)
+                    {
+                        file_name += name_buffer[i];
+                        if (i < name_buffer.Length - 2)
+                            file_name += ".";
+                    }
+
+                    File.WriteAllText(ShareWorkPath.GetInstance().RESULT_RESOURCE_PATH + @"\" + file_name + ".json", m.resource.GetValue().ToString());
+                }
+            }
+            public override void SetTimeOutThreshold(int time = 5000)
+            {
+                timeout.SetThesholdTime(time);
+            }
+
+            Thread thread = null;
+        }
         public class TestSenderManager : QTheading
         {
             const int SLEEP_TIME = 10;
